@@ -21,7 +21,7 @@ exclude_patterns = [
     '.DS_Store',
 ]
 
-extensions = ['githubpages ']
+extensions = ['sphinx.ext.githubpages ']
 
 templates_path = ["_templates"]
 exclude_patterns = []
