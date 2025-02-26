@@ -42,7 +42,7 @@ jobs:
       uses: JamesIves/github-pages-deploy-action@v4
       with:
         branch: gh-pages
-        folder: docs/build/html/tadkit
+        folder: docs/build/html/
         clean: true
 
 
