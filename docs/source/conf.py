@@ -5,9 +5,6 @@
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
-import os
-import sys
-sys.path.insert(0, os.path.abspath('.'))
 
 project = "tadkit"
 copyright = "2025, IRT-SystemX"
@@ -20,6 +17,8 @@ release = "1.0"
 
 
 extensions = []
+
+master_doc = 'index'
 
 templates_path = ["_templates"]
 exclude_patterns = []
