@@ -20,7 +20,8 @@ exclude_patterns = [
     'Thumbs.db',
     '.DS_Store',
 ]
-master_doc = 'index'
+
+extensions = ['githubpages ']
 
 templates_path = ["_templates"]
 exclude_patterns = []
