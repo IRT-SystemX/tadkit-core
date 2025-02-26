@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - project_skeleton
+
   pull_request:
     branches:
       - main
@@ -36,11 +37,12 @@ jobs:
       run: |
         cd docs
         make html
+
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
       with:
         branch: gh-pages
-        folder: docs/build/html
+        folder: docs/build/html/tadkit
         clean: true
 
 
