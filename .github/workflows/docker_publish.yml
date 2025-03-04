@@ -32,4 +32,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: yanngaste/tadkit/app:latest, yanngaste/tadkit/app:0.1
+          tags: yanngaste/tadkit:latest, yanngaste/tadkit:0.1
