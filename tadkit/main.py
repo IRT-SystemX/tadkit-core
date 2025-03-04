@@ -1,5 +1,5 @@
 def hello():
-    return "Hello, Docker!"
+    return "Hello, Tadkit!"
 
 
 if __name__ == "__main__":

@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - project_skeleton
 
   pull_request:
     branches:
