@@ -1,7 +1,9 @@
 <div align="center">
     <img src="images/Logo_ConfianceAI_Blanc.png" height="200" align="">
 
-[![Online documentation](https://img.shields.io/static/v1?label=&message=Online documentation&color=0077de)]([Web site])
+[![](https://img.shields.io/static/v1?label=&message=Online%20documentation&color=0077de)]([Web site])
+
+[![Online documentation](https://img.shields.io/badge/MPL--2.0-blue)](https://opensource.org/licenses/Apache-2.0)
 
 [![License](https://img.shields.io/badge/MPL--2.0-blue)](https://opensource.org/licenses/Apache-2.0)
 <br>
@@ -13,8 +15,8 @@
 ![Activity](https://img.shields.io/github/commit-activity/m/IRT-SystemX/tadkit)
 ![Last commit](https://img.shields.io/github/last-commit/IRT-SystemX/tadkit)
 
-![test](https://github.com/IRT-SystemX/tadkit//actions/workflows/pull-request-check.yml/badge.svg)
-![Docker](https://github.com/IRT-SystemX/tadkit//actions/workflows/docker-push.yml/badge.svg)
+![python lib](https://github.com/irt-Systemx/tadkit/actions/workflows/python_lib_publish.yml/badge.svg)
+![Docker](https://github.com/IRT-SystemX/tadkit/actions/workflows/docker_publish.yml/badge.svg)
 
 </div>
 
@@ -49,14 +51,11 @@ This component is available with pip or as a Docker image. To install it, you ca
 
 # Developer Area
 
-
-## Documentation 
-
-### get started
+## Get started
 
 Please have a look at [the Sphinx documentation]
 
-### Generate docs
+## Generate docs
 
 ````
 pip install -r docs/docs_requirements.txt -r requirements.txt
@@ -64,7 +63,7 @@ sphinx-apidoc -o docs/source/generated tadkit
 sphinx-build -M html docs/source docs/build -W --keep-going
 ````
 
-### tests
+## Tests
 
 ````
 # Move into whichever directory you want to serve
@@ -74,14 +73,14 @@ cd ./docs/build/html
 python -m http.server 8080
 ````
 
-### build and locally run the docker 
+## build and locally run the docker 
 
 ````
 docker build -t tadkit .
 docker run --rm tadkit python main.py
 ````
 
-# build and locally run the python lib
+## build and locally run the python lib
 
 ````
 pip install setuptools wheel
@@ -97,8 +96,6 @@ pip list | grep tadkit
 ````
 
 
-
-
 ---
 <p align="center justify-content:space-around">
   This component is maintained by: 
@@ -106,10 +103,6 @@ pip list | grep tadkit
    <img src="https://www.irt-systemx.fr/wp-content/uploads/2013/03/system-x-logo.jpeg"  height="50">
   </a>
 </p>
-
-
-
-
 ---
 
 [Component Name]: TADkit

@@ -1,5 +1,5 @@
 
-name: tadkit publish
+name: python lib distribution
 
 on:
   push:
