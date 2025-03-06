@@ -2,9 +2,8 @@
 name: python lib distribution
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch
+
 jobs:
   pypi-publish:
     runs-on: ubuntu-latest
