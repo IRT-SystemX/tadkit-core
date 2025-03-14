@@ -10,3 +10,5 @@ force-exclude = '''
 | docs
 )/
 '''
+[tool.pytest.ini_options]
+pythonpath = '.'
