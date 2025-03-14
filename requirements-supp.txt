@@ -1,2 +1,0 @@
-modAL-python>=0.4.2
-puncc>=0.7.7
