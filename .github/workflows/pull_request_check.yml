@@ -47,12 +47,12 @@ jobs:
   python-tests: # Install dependencies and run tests with pytest
     name: Python tests
     needs:
-      [black-format-check, prettier-check, cspell-check, version-upgrade-check]
+      [black-format-check, flake8-check]
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10"]
+        python-version: ["3.12"]
 
     steps:
       - uses: actions/checkout@v3
