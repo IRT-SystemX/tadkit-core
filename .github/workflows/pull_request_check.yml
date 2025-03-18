@@ -24,9 +24,8 @@ jobs:
     - name: Install dependencies and check pylint format
       run: |
         python -m pip install --upgrade pip
-        pip install tadkit
         mkdir -p docs/build/pylint
-        pylint challenge_welding --output-format=text --exit-zero | tee docs/build/pylint/pylint.txt 
+        pylint tadkit --output-format=text --exit-zero | tee docs/build/pylint/pylint.txt 
         PYLINT_SCORE=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' docs/build/pylint/pylint.txt )
         echo "Pylint score is $PYLINT_SCORE"
 
