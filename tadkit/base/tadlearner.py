@@ -33,8 +33,7 @@ class TADLearner(Protocol):
     required_properties: Sequence[str] = []
     params_description: ParamsDescription = {}
 
-    def fit(self, X: Array, y: Optional[Array] = None) -> 'TADLearner':
-        ...
+    def fit(self, X: Array, y: Optional[Array] = None) -> "TADLearner": ...
 
     def score_samples(self, X: Array) -> Array:
         """

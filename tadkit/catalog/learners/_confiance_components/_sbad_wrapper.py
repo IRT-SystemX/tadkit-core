@@ -13,22 +13,22 @@ def get_wrapped_dilanodetectm():
     class DiLAnoDetectmWrapper(DiLAnoDetectm):
 
         def __init__(
-                self,
-                nb_atoms: int,
-                nb_blocks: int,
-                kernel_size: int,
-                nb_scales: int,
-                overlap_perc: float,
-                layers_sizes: List[int] = None,
-                activation: str = 'id',
-                wvlt_name: str = 'db2',
-                same: bool = False,
-                share_weights: bool = False,
-                soft: bool = False,
-                shrink: bool = True,
-                b: float = 1.5,
-                min_nbsegments: int = 50,
-                min_lag: int = 64,
+            self,
+            nb_atoms: int,
+            nb_blocks: int,
+            kernel_size: int,
+            nb_scales: int,
+            overlap_perc: float,
+            layers_sizes: List[int] = None,
+            activation: str = "id",
+            wvlt_name: str = "db2",
+            same: bool = False,
+            share_weights: bool = False,
+            soft: bool = False,
+            shrink: bool = True,
+            b: float = 1.5,
+            min_nbsegments: int = 50,
+            min_lag: int = 64,
         ) -> None:
             if layers_sizes is None:
                 layers_sizes = [39, 3]
@@ -56,26 +56,32 @@ def get_wrapped_dilanodetectm():
 
         def score_samples(self, x):
             x = [[x.swapaxes(0, 1)]]
-            return - super().score_samples(x)[0][0][0][:len(x)]
+            return -super().score_samples(x)[0][0][0][: len(x)]
 
     DiLAnoDetectmWrapper.required_properties = ["multiple_time_series"]
     DiLAnoDetectmWrapper.params_description = {
         "nb_atoms": {
             "description": "Number of patterns to learn.",
             "value_type": "range",
-            "start": 1, "step": 1, "stop": 100,  # @martin: stop put to 100 without any info
+            "start": 1,
+            "step": 1,
+            "stop": 100,  # @martin: stop put to 100 without any info
             "default": 2,
         },
         "nb_blocks": {
             "description": "Number of unrolled gradient steps blocks.",
             "value_type": "range",
-            "start": 1, "step": 1, "stop": 100,  # @martin: stop put to 100 without any info
+            "start": 1,
+            "step": 1,
+            "stop": 100,  # @martin: stop put to 100 without any info
             "default": 1,
         },
         "kernel_size": {
             "description": "Convolutional patterns size, must be odd.",
             "value_type": "range",
-            "start": 1, "step": 2, "stop": 100,  # @martin: stop put to 100 without any info
+            "start": 1,
+            "step": 2,
+            "stop": 100,  # @martin: stop put to 100 without any info
             "default": 5,
         },
         # "layers_sizes": {
@@ -90,13 +96,17 @@ def get_wrapped_dilanodetectm():
         "nb_scales": {
             "description": "Number of wavelet scales for decomposing time series.",
             "value_type": "range",
-            "start": 1, "step": 1, "stop": 100,  # @martin: stop put to 100 without any info
+            "start": 1,
+            "step": 1,
+            "stop": 100,  # @martin: stop put to 100 without any info
             "default": 1,
         },
         "overlap_perc": {
             "description": "Overlapping ratio between sliding windows.",
             "value_type": "range",
-            "start": 0, "step": 0.01, "stop": 1,
+            "start": 0,
+            "step": 0.01,
+            "stop": 1,
             "default": 0.98,
         },
         "same": {
@@ -122,13 +132,17 @@ def get_wrapped_dilanodetectm():
         "min_nbsegments": {
             "description": "Minimum number of segments.",
             "value_type": "range",
-            "start": 1, "step": 1, "stop": 100,  # @martin: stop put to 100 without any info
+            "start": 1,
+            "step": 1,
+            "stop": 100,  # @martin: stop put to 100 without any info
             "default": 1,
         },
         "min_lag": {
             "description": "Minimum lag.",
             "value_type": "range",
-            "start": 1, "step": 1, "stop": 100,  # @martin: stop put to 100 without any info
+            "start": 1,
+            "step": 1,
+            "stop": 100,  # @martin: stop put to 100 without any info
             "default": 2,
         },
     }

@@ -13,7 +13,7 @@ def index_has_fixed_time_step(index):
 
 
 class PandasFormalizer(Formalizer):
-    """ Transforms Data from Confiance DataProvider into standard Data for ML pipelines.
+    """Transforms Data from Confiance DataProvider into standard Data for ML pipelines.
     This particular class returns pandas DataFrames.
 
     Methods:
@@ -69,31 +69,43 @@ class PandasFormalizer(Formalizer):
 
     def _fill_query_description(self):
         self.query_description = {}
-        self.add_query_description("target_period", {
-            "description": "Time period for your query.",
-            "family": "time_interval",
-            "start": self.get_timestamps()[0],
-            "stop": self.get_timestamps()[-1],
-            "default": (self.get_timestamps()[0], self.get_timestamps()[-1])
-        })
-        self.add_query_description("target_space", {
-            "description": "List of sensors used for your query.",
-            "family": "space",
-            "set": self.get_space_set(),
-            "default": self.get_space_set(),
-        })
-        self.add_query_description("resampling", {
-            "description": "Resampling of the target query",
-            "family": "bool",
-            "default": False,
-        })
-        self.add_query_description("resampling_resolution", {
-            "description": "If resampling, resampling resolution in seconds.",
-            "family": "time",
-            "start": 60,
-            "default": 120,
-            "stop": 3600,
-        })
+        self.add_query_description(
+            "target_period",
+            {
+                "description": "Time period for your query.",
+                "family": "time_interval",
+                "start": self.get_timestamps()[0],
+                "stop": self.get_timestamps()[-1],
+                "default": (self.get_timestamps()[0], self.get_timestamps()[-1]),
+            },
+        )
+        self.add_query_description(
+            "target_space",
+            {
+                "description": "List of sensors used for your query.",
+                "family": "space",
+                "set": self.get_space_set(),
+                "default": self.get_space_set(),
+            },
+        )
+        self.add_query_description(
+            "resampling",
+            {
+                "description": "Resampling of the target query",
+                "family": "bool",
+                "default": False,
+            },
+        )
+        self.add_query_description(
+            "resampling_resolution",
+            {
+                "description": "If resampling, resampling resolution in seconds.",
+                "family": "time",
+                "start": 60,
+                "default": 120,
+                "stop": 3600,
+            },
+        )
 
     def _fit(self):
         self.data_df_ = self.data_df.copy()
@@ -104,7 +116,11 @@ class PandasFormalizer(Formalizer):
 
         fixed_time_step = {
             DataFrameType.ASYNCHRONOUS: lambda df: np.all(
-                [index_has_fixed_time_step(data.index) for _, data in df.groupby("sensor")]),
+                [
+                    index_has_fixed_time_step(data.index)
+                    for _, data in df.groupby("sensor")
+                ]
+            ),
             DataFrameType.SYNCHRONOUS: lambda df: index_has_fixed_time_step(df.index),
         }.get(self.dataframe_type_, DataFrameType.ASYNCHRONOUS)
         if fixed_time_step(self.data_df_):
@@ -121,9 +137,11 @@ class PandasFormalizer(Formalizer):
         default_query.update(query)
         resampling = default_query["resampling"]
         if self.dataframe_type_ == DataFrameType.ASYNCHRONOUS and not resampling:
-            warnings.warn(f"This data is of type {DataFrameType.ASYNCHRONOUS}, if you do not resample it"
-                          f"it probably will end up badly down the road.")
-        resampling_resolution = default_query['resampling_resolution']
+            warnings.warn(
+                f"This data is of type {DataFrameType.ASYNCHRONOUS}, if you do not resample it"
+                f"it probably will end up badly down the road."
+            )
+        resampling_resolution = default_query["resampling_resolution"]
         target_space = default_query["target_space"]
         if len(target_space) > 1:
             self.remove_available_properties("univariate_time_series")
@@ -131,7 +149,10 @@ class PandasFormalizer(Formalizer):
         elif len(target_space) == 1:
             self.remove_available_properties("multiple_time_series")
             self.add_available_properties("univariate_time_series")
-        time_start, time_stop = default_query["target_period"][0], default_query["target_period"][1]
+        time_start, time_stop = (
+            default_query["target_period"][0],
+            default_query["target_period"][1],
+        )
 
         timeseries_set = []
         df_handler = {
@@ -140,16 +161,22 @@ class PandasFormalizer(Formalizer):
         }.get(self.dataframe_type_, DataFrameType.ASYNCHRONOUS)
         for name, sensor in df_handler(self.data_df_):
             if name not in target_space:
-                warnings.warn(f"Searching for sensor {name=}, not found in {target_space=}.")
+                warnings.warn(
+                    f"Searching for sensor {name=}, not found in {target_space=}."
+                )
                 continue
             if resampling:
-                clean_sensor = sensor.resample(
-                    f"{resampling_resolution}s", origin=time_start
-                ).first().interpolate(method="piecewise_polynomial")
+                clean_sensor = (
+                    sensor.resample(f"{resampling_resolution}s", origin=time_start)
+                    .first()
+                    .interpolate(method="piecewise_polynomial")
+                )
             else:
                 clean_sensor = sensor
             clean_sensor.name = name
-            cleancut_sensor = clean_sensor[(clean_sensor.index >= time_start) & (clean_sensor.index <= time_stop)]
+            cleancut_sensor = clean_sensor[
+                (clean_sensor.index >= time_start) & (clean_sensor.index <= time_stop)
+            ]
             timeseries_set.append(cleancut_sensor)
 
         if not len(timeseries_set):

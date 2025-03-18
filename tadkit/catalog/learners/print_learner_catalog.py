@@ -3,10 +3,10 @@ import inspect
 from tadkit.base.tadlearner import TADLearner
 from tadkit.catalog.learners import learner_classes
 
-HEADER = '\033[95m'
-FAIL = '\033[91m'
-FAIL_PROP = '\033[93m'
-ENDC = '\033[0m'
+HEADER = "\033[95m"
+FAIL = "\033[91m"
+FAIL_PROP = "\033[93m"
+ENDC = "\033[0m"
 
 
 def _validate_default_init(learner_class, learner_name):
@@ -25,7 +25,9 @@ def _validate_default_init(learner_class, learner_name):
         if param_name == "self":
             continue
         if param.default is param.empty:
-            print(f"{FAIL_PROP}{learner_name}.__init__ parameter '{param_name}' must have default value.{ENDC}")
+            print(
+                f"{FAIL_PROP}{learner_name}.__init__ parameter '{param_name}' must have default value.{ENDC}"
+            )
     return
 
 
@@ -41,23 +43,31 @@ def _print_class(learner_name, detailed=False):
             if isinstance(learner_class, TADLearner):
                 print(f"{learner_name} is implicit child of TADLearner.")
             else:
-                print(f"{FAIL_PROP}{learner_name} somewhat somehow doesn't implicitly inherit from TADLearner.{ENDC}")
+                print(
+                    f"{FAIL_PROP}{learner_name} somewhat somehow doesn't implicitly inherit from TADLearner.{ENDC}"
+                )
         _validate_default_init(learner_class, learner_name)
     except ModuleNotFoundError as err:
         print(f"{FAIL}{learner_name} returns {err=}.{ENDC}")
         return
     try:
         if detailed:
-            printed_params_description = {name: str(param_description) for name, param_description in
-                                          learner_class.params_description.items()}
+            printed_params_description = {
+                name: str(param_description)
+                for name, param_description in learner_class.params_description.items()
+            }
             print(f"{learner_name} has {printed_params_description=}.")
     except AttributeError as err:
-        print(f"{FAIL_PROP}{learner_name} with signature {learner_class=} returns {err=}.{ENDC}")
+        print(
+            f"{FAIL_PROP}{learner_name} with signature {learner_class=} returns {err=}.{ENDC}"
+        )
     try:
         if detailed:
             print(f"{learner_name} has {learner_class.required_properties=}.")
     except AttributeError as err:
-        print(f"{FAIL_PROP}{learner_name} with signature {learner_class=} returns {err=}.{ENDC}")
+        print(
+            f"{FAIL_PROP}{learner_name} with signature {learner_class=} returns {err=}.{ENDC}"
+        )
 
 
 def print_catalog_classes(detailed=False):

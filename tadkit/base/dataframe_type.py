@@ -3,6 +3,7 @@ from enum import Enum
 
 class DataFrameType(Enum):
     """Data type of Dataplatform datasets."""
+
     ASYNCHRONOUS = "asynchronous"
     """All data have their own "timestamp" x-axis, sensor names are found in the "sensor" column and data is found
     in the "data" column of the provided dataframe.
@@ -19,5 +20,7 @@ class DataFrameType(Enum):
             return DataFrameType.ASYNCHRONOUS
         if name.lower() == DataFrameType.SYNCHRONOUS.value:
             return DataFrameType.SYNCHRONOUS
-        raise ValueError("In order to process input data you must know the format"
-                         "(DataFrameType.ASYNCHRONOUS or DataFrameType.SYNCHRONOUS).")
+        raise ValueError(
+            "In order to process input data you must know the format"
+            "(DataFrameType.ASYNCHRONOUS or DataFrameType.SYNCHRONOUS)."
+        )

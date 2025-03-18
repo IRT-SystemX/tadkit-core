@@ -6,8 +6,8 @@ import pandas as pd
 
 
 def query_widget_selection(
-        formalizer_name: str,
-        query_description: Dict[str, Any],
+    formalizer_name: str,
+    query_description: Dict[str, Any],
 ) -> Dict[str, Any]:
     display(formalizer_name)
 
@@ -46,7 +46,7 @@ def _create_space_widget(param_description: Dict[str, Any]):
 def _create_timeinterval_widget(param_description: Dict[str, Any]):
     start_date = param_description.get("start")
     end_date = param_description.get("stop")
-    dates = pd.date_range(start_date, end_date, freq='D')
+    dates = pd.date_range(start_date, end_date, freq="D")
     options = [(date.strftime(" %d %b %Y "), date) for date in dates]
     index = (0, len(options) - 1)
     selection_range_slider = widgets.SelectionRangeSlider(
@@ -59,8 +59,11 @@ def _create_timeinterval_widget(param_description: Dict[str, Any]):
 
 
 def _create_time_widget(param_description: Dict[str, Any]):
-    start_value = param_description.get("default") if hasattr(param_description, "default") else param_description.get(
-        "start")
+    start_value = (
+        param_description.get("default")
+        if hasattr(param_description, "default")
+        else param_description.get("start")
+    )
     time_widget = widgets.BoundedIntText(
         value=start_value,
         min=param_description.get("start"),

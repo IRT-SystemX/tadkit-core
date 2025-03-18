@@ -24,10 +24,12 @@ def numerical_domain_mapper(param_description):
 
 
 def param_distributions(
-        params_description: Dict[str, Any],
+    params_description: Dict[str, Any],
 ) -> Dict[str, Any]:
-    return {param_name: domain_mapper(param_description)(param_description) for param_name, param_description in
-            params_description.items()}
+    return {
+        param_name: domain_mapper(param_description)(param_description)
+        for param_name, param_description in params_description.items()
+    }
 
 
 def _create_integer_range_distribution(param_description: Dict[str, Any]):
@@ -39,7 +41,10 @@ def _create_integer_range_distribution(param_description: Dict[str, Any]):
 
 
 def _create_real_range_distribution(param_description: Dict[str, Any]):
-    num = int((param_description.get("stop") - param_description.get("start")) / param_description.get("step"))
+    num = int(
+        (param_description.get("stop") - param_description.get("start"))
+        / param_description.get("step")
+    )
     return np.linspace(
         start=param_description.get("start"),
         stop=param_description.get("stop"),

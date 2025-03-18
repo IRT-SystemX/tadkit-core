@@ -39,7 +39,9 @@ class Formalizer(abc.ABC):
 
     def default_query(self):
         # NB: this hints at queries having a default value for all parameters.
-        return {name: param["default"] for name, param in self.query_description.items()}
+        return {
+            name: param["default"] for name, param in self.query_description.items()
+        }
 
     @abc.abstractmethod
     def formalize(self, **query: KWParams) -> Union[Array, Sequence[Array]]:
@@ -48,10 +50,12 @@ class Formalizer(abc.ABC):
     @classmethod
     def __subclasshook__(cls, subclass):
         if not (
-                hasattr(subclass, 'formalize') and callable(subclass.formalize)
-                and hasattr(subclass, 'available_properties')
-                and not callable(subclass.available_properties)
-                and hasattr(subclass, 'query_description') and not callable(subclass.query_description)
+            hasattr(subclass, "formalize")
+            and callable(subclass.formalize)
+            and hasattr(subclass, "available_properties")
+            and not callable(subclass.available_properties)
+            and hasattr(subclass, "query_description")
+            and not callable(subclass.query_description)
         ):
             return False
         if cls is Formalizer:

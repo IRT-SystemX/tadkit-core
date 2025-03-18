@@ -9,10 +9,12 @@ from ... import Formalizer, TADLearner
 
 
 def select_matching_available_learners(
-        formalizer: Formalizer,
-        available_learners: Sequence[TADLearner],
+    formalizer: Formalizer,
+    available_learners: Sequence[TADLearner],
 ):
-    matching_available_learners = match_formalizer_learners(formalizer, available_learners).keys()
+    matching_available_learners = match_formalizer_learners(
+        formalizer, available_learners
+    ).keys()
 
     learner_widget = widgets.SelectMultiple(
         description="Learners:",

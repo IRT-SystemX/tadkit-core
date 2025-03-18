@@ -10,11 +10,14 @@ IsolationForestLearner = IsolationForest
 IsolationForestLearner.required_properties = []
 IsolationForestLearner.params_description = {
     "n_estimators": {
-        "description": "The number of base estimators in the ensemble" + ":" + str(
-            IsolationForestLearner._parameter_constraints["n_estimators"][0]),
+        "description": "The number of base estimators in the ensemble"
+        + ":"
+        + str(IsolationForestLearner._parameter_constraints["n_estimators"][0]),
         "value_type": "range",
-        "start": 1, "stop": 1000, "step": 10,
-        "default": 10
+        "start": 1,
+        "stop": 1000,
+        "step": 10,
+        "default": 10,
     }
 }
 
@@ -25,7 +28,7 @@ KernelDensityLearner.params_description = {
         "description": str(KernelDensity._parameter_constraints["kernel"][0]),
         "value_type": "choice",
         "set": list(KernelDensity._parameter_constraints["kernel"][0].options),
-        "default": "gaussian"
+        "default": "gaussian",
     }
 }
 
@@ -34,7 +37,7 @@ KernelDensity.oldfit = KernelDensity.fit
 
 def fit(self, X, y=None, sample_weight=None):
     self.oldfit(X=X, y=y)
-    contamination = .1
+    contamination = 0.1
     self.offset_ = np.percentile(self.score_samples(X), 100.0 * contamination)
     return self
 
@@ -57,19 +60,20 @@ class ScaledKernelDensityLearner(Pipeline):
 
     required_properties = []
     params_description = {
-        'scaling': {
-            'description': 'Scaling method',
-            'family': 'scaling',
-            'value_type': 'choice', 'set': ['quantile_normal', 'standard'],
+        "scaling": {
+            "description": "Scaling method",
+            "family": "scaling",
+            "value_type": "choice",
+            "set": ["quantile_normal", "standard"],
         }
     }
 
     def __init__(self, scaling="standard"):
         self.scaling = scaling
-        if scaling == 'standard':
+        if scaling == "standard":
             scaler = StandardScaler()
-        elif scaling == 'quantile_normal':
-            scaler = QuantileTransformer(output_distribution='normal')
+        elif scaling == "quantile_normal":
+            scaler = QuantileTransformer(output_distribution="normal")
         else:
-            raise ValueError('Unavailable scaling')
-        super().__init__([('scaler', scaler), ('learner', KernelDensity())])
+            raise ValueError("Unavailable scaling")
+        super().__init__([("scaler", scaler), ("learner", KernelDensity())])

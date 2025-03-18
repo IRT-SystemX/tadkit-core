@@ -5,8 +5,8 @@ from ipywidgets import HBox, Label, GridBox
 
 
 def parameter_widget_selection(
-        tad_object_name: str,
-        params_description: Dict[str, Any],
+    tad_object_name: str,
+    params_description: Dict[str, Any],
 ) -> Dict[str, Any]:
     print(f"  >>> Parameters for learner \033[1m{tad_object_name}\033[0m")
 
@@ -19,7 +19,9 @@ def parameter_widget_selection(
             "log_range": _create_logrange_widget,
             "choice": _create_choice_widget,
             "boolean": _create_bool_choice_widget,
-        }.get(param_description.get("value_type"), _create_choice_widget)(param_description)
+        }.get(param_description.get("value_type"), _create_choice_widget)(
+            param_description
+        )
 
         widget.description = param_name
 
@@ -36,10 +38,12 @@ def _create_range_widget(param_description: Dict[str, Any]):
     max_value = param_description.get("stop")
     step = param_description.get("step")
 
-    choose_int_slide: bool = all([
-        elt is None or isinstance(elt, int)
-        for elt in (value, min_value, max_value, step)
-    ])
+    choose_int_slide: bool = all(
+        [
+            elt is None or isinstance(elt, int)
+            for elt in (value, min_value, max_value, step)
+        ]
+    )
 
     if choose_int_slide:
         return widgets.IntSlider(

@@ -2,7 +2,7 @@ from typing import TypeVar, Type, Sequence, Optional
 
 from tadkit.base import TADLearner, KWParams, ParamsDescription, Array
 
-Transformer = TypeVar('Transformer')
+Transformer = TypeVar("Transformer")
 
 
 class DecomposableTADLearner(TADLearner):
@@ -12,25 +12,25 @@ class DecomposableTADLearner(TADLearner):
         self.preprocesser = self.Preprocesser(**params)
         self.learner = self.Learner()
 
-    def fit(self, X: Array, y: Optional[Array] = None) -> 'DecomposableTADLearner':
-        if hasattr(self.preprocesser, 'fit_transform'):
+    def fit(self, X: Array, y: Optional[Array] = None) -> "DecomposableTADLearner":
+        if hasattr(self.preprocesser, "fit_transform"):
             new_X = self.preprocesser.fit_transform(X, y)
         else:
-            if hasattr(self.preprocesser, 'fit'):
+            if hasattr(self.preprocesser, "fit"):
                 self.preprocesser.fit(X)
             new_X = self.embed(X)
         self.learner.fit(new_X)
         return self
 
     def embed(self, X: Array):
-        if hasattr(self.preprocesser, 'transform'):
+        if hasattr(self.preprocesser, "transform"):
             new_X = self.preprocesser.transform(X)
         else:
             new_X = self.preprocesser(X)
         return new_X
 
     def score_samples(self, X: Array) -> Array:
-        if hasattr(self.preprocesser, 'transform'):
+        if hasattr(self.preprocesser, "transform"):
             X = self.preprocesser.transform(X)
         else:
             X = self.preprocesser(X)
@@ -38,11 +38,11 @@ class DecomposableTADLearner(TADLearner):
 
 
 def decomposable_tadlearner_factory(
-        Preprocesser: Type[Transformer],
-        Learner: Type[TADLearner],
-        required_properties: Sequence[str],
-        preprocesser_params_description: ParamsDescription,
-        name: Optional[str] = None,
+    Preprocesser: Type[Transformer],
+    Learner: Type[TADLearner],
+    required_properties: Sequence[str],
+    preprocesser_params_description: ParamsDescription,
+    name: Optional[str] = None,
 ) -> Type[TADLearner]:
     """Create a TADLearner class joining a class of preprocessing an a TADLearner subclass.
 
@@ -66,10 +66,14 @@ def decomposable_tadlearner_factory(
         name = Preprocesser.__name__ + Learner.__name__
     params_description = dict(Learner.params_description)
     params_description.update(preprocesser_params_description)
-    return type(name, (DecomposableTADLearner, Learner), {
-        'Preprocesser': Preprocesser,
-        'Learner': Learner,
-        'required_properties': required_properties,
-        'params_description': preprocesser_params_description,
-        '__name__': name,
-    })
+    return type(
+        name,
+        (DecomposableTADLearner, Learner),
+        {
+            "Preprocesser": Preprocesser,
+            "Learner": Learner,
+            "required_properties": required_properties,
+            "params_description": preprocesser_params_description,
+            "__name__": name,
+        },
+    )

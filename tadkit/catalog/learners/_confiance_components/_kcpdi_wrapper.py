@@ -13,19 +13,23 @@ def get_wrapped_kcplearner():
         "description": "One of (linear, cosine, rbf)",
         "value_type": "choice",
         "set": ["linear", "cosine", "rbf"],
-        "default": "linear"
+        "default": "linear",
     }
     KcpLearner.params_description["max_n_time_points"] = {
         "description": "max_n_time_points",
         "value_type": "range",
-        "start": 1000, "stop": 10000, "step": 500,
+        "start": 1000,
+        "stop": 10000,
+        "step": 500,
         "default": 1000,
     }
     KcpLearner.params_description["expected_frac_anomaly"] = {
         "description": "expected_frac_anomaly",
         "value_type": "real_range",
-        "start": .00001, "stop": .5, "step": .0001,
-        "default": .00001,
+        "start": 0.00001,
+        "stop": 0.5,
+        "step": 0.0001,
+        "default": 0.00001,
     }
 
     KcpLearner.oldfit = KcpLearner.fit

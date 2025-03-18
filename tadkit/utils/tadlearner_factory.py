@@ -2,14 +2,14 @@ from typing import TypeVar, Sequence, Type, Optional
 
 from ..base import TADLearner, KWParams, ParamsDescription
 
-Estimator = TypeVar('Estimator')
+Estimator = TypeVar("Estimator")
 
 
 def tadlearner_factory(
-        Model: Type[Estimator],
-        required_properties: Sequence[str],
-        params_description: ParamsDescription,
-        name: Optional[str] = None,
+    Model: Type[Estimator],
+    required_properties: Sequence[str],
+    params_description: ParamsDescription,
+    name: Optional[str] = None,
 ) -> Type[TADLearner]:
     """Wrap a sklearn anomaly detection model to a TADLearner.
 
