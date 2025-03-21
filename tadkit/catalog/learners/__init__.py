@@ -1,3 +1,6 @@
+import inspect
+from .print_learner_catalog import print_catalog_classes
+
 from ._confiance_components import (
     DataReconstructionADLearner,
     DiLAnoDetectmLearner,
@@ -21,8 +24,6 @@ learner_classes = {
     "scaled-kernel-density": ScaledKernelDensityLearner,
 }
 
-import inspect
-
 installed_learner_classes = {}
 for learner_name, learner_class in learner_classes.items():
     try:
@@ -30,8 +31,6 @@ for learner_name, learner_class in learner_classes.items():
             installed_learner_classes[learner_name] = learner_class
     except ModuleNotFoundError:
         pass
-
-from .print_learner_catalog import print_catalog_classes
 
 print_catalog_classes()
 

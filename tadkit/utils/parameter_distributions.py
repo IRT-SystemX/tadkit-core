@@ -35,7 +35,8 @@ def param_distributions(
 def _create_integer_range_distribution(param_description: Dict[str, Any]):
     return np.arange(
         start=param_description.get("start"),
-        stop=param_description.get("stop") if "stop" in param_description else -1,
+        stop=param_description.get(
+            "stop") if "stop" in param_description else -1,
         step=param_description.get("step"),
     )
 

@@ -2,6 +2,7 @@ from typing import Any, Dict
 
 import ipywidgets as widgets
 from ipywidgets import HBox, Label, GridBox
+from IPython.display import display
 
 
 def parameter_widget_selection(

@@ -43,7 +43,8 @@ def synthetise_ornstein_uhlenbeck_data(n_rows=1000, n_cols_x=5):
         anomaly_duration=0.005,
         anomaly_scale=40,
     )
-    t = pd.to_datetime("2021-01-01") + pd.Timedelta(1, "h") * np.arange(t.shape[0])
+    t = pd.to_datetime("2021-01-01") + pd.Timedelta(1,
+                                                    "h") * np.arange(t.shape[0])
     X = pd.DataFrame(X, index=t, columns=[f"X{i}" for i in range(X.shape[1])])
     y = pd.DataFrame(y[:, None], index=t, columns=["y"])
     return X, y

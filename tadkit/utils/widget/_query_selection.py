@@ -2,6 +2,7 @@ from typing import Any, Dict
 
 import ipywidgets as widgets
 from ipywidgets import HBox, Label
+from IPython.display import display
 import pandas as pd
 
 
