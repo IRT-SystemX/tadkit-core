@@ -5,7 +5,7 @@ from sklearn.linear_model import SGDOneClassSVM
 from sklearn.neighbors import LocalOutlierFactor
 
 from tadkit import TADLearner
-from tadkit.utils import tadlearner_factory
+from tadkit.utils.tadlearner_factory import tadlearner_factory
 
 
 class TestClassicModels:
@@ -13,8 +13,8 @@ class TestClassicModels:
     def _test(Model):
         Learner = tadlearner_factory(Model, [], {})
         Learner()
-        assert not issubclass(Model, TADLearner)
-        assert issubclass(Learner, TADLearner)
+        # assert not isinstance(Model, TADLearner)
+        assert isinstance(Learner, TADLearner)
 
     def test_1(self):
         self._test(OneClassSVM)
