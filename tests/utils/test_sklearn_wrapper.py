@@ -4,7 +4,7 @@ from sklearn.ensemble import IsolationForest
 from sklearn.linear_model import SGDOneClassSVM
 from sklearn.neighbors import LocalOutlierFactor
 
-from tadkit import TADLearner
+from tadkit.base.tadlearner import TADLearner
 from tadkit.utils.tadlearner_factory import tadlearner_factory
 
 

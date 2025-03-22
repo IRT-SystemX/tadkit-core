@@ -1,4 +1,4 @@
-from tadkit.base import TADLearner
+from tadkit.base.tadlearner import TADLearner
 from tadkit.catalog.learners import installed_learner_classes
 
 
