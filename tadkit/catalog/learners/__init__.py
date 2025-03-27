@@ -1,7 +1,7 @@
 
 import inspect
 
-from tadkit.catalog.learners.print_learner_catalog import print_catalog_classes
+from tadkit.utils.print_learner_catalog import print_catalog_classes
 from tadkit.catalog.learners._confiance_components import (
     DataReconstructionADLearner,
     DiLAnoDetectmLearner,
@@ -33,7 +33,7 @@ for learner_name, learner_class in learner_classes.items():
     except ModuleNotFoundError:
         pass
 
-print_catalog_classes()
+print_catalog_classes(learner_classes)
 
 
 __all__ = [

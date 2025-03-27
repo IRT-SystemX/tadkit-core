@@ -5,7 +5,7 @@ from typing import Sequence
 import ipywidgets as widgets
 from IPython.display import display
 
-from tadkit.catalog.learners.match_formalizer_learners import match_formalizer_learners
+from tadkit.utils.match_formalizer_learners import match_formalizer_learners
 
 from tadkit.base.formalizer import Formalizer
 from tadkit.base.tadlearner import TADLearner

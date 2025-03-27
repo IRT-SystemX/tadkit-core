@@ -1,7 +1,6 @@
 import inspect
 
 from tadkit.base.tadlearner import TADLearner
-from tadkit.catalog.learners import learner_classes
 
 HEADER = "\033[95m"
 FAIL = "\033[91m"
@@ -31,7 +30,7 @@ def _validate_default_init(learner_class, learner_name):
     return
 
 
-def _print_class(learner_name, detailed=False):
+def _print_class(learner_name, learner_classes, detailed=False):
     if learner_name not in learner_classes:
         print(f"target {HEADER}{learner_name=}{ENDC} not registered in TADKit.")
         return
@@ -70,7 +69,7 @@ def _print_class(learner_name, detailed=False):
         )
 
 
-def print_catalog_classes(detailed=False):
+def print_catalog_classes(learner_classes, detailed=False):
     print("[TADKit-Catalog]")
     for learner_name in learner_classes.keys():
-        _print_class(learner_name, detailed=detailed)
+        _print_class(learner_name, learner_classes=learner_classes, detailed=detailed)
