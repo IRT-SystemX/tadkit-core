@@ -1,14 +1,15 @@
-import inspect
-from .print_learner_catalog import print_catalog_classes
 
-from ._confiance_components import (
+import inspect
+
+from tadkit.catalog.learners.print_learner_catalog import print_catalog_classes
+from tadkit.catalog.learners._confiance_components import (
     DataReconstructionADLearner,
     DiLAnoDetectmLearner,
     KcpLearner,
     TopologicalAnomalyDetector,
 )
 
-from ._sklearn_learners import (
+from tadkit.catalog.learners._sklearn_learners import (
     IsolationForestLearner,
     KernelDensityLearner,
     ScaledKernelDensityLearner,

@@ -1,7 +1,7 @@
 import abc
 from typing import Sequence, Union
 
-from .typing import KWParams, ParamsDescription, Array
+from tadkit.base.typing import KWParams, ParamsDescription, Array
 
 
 class Formalizer(abc.ABC):

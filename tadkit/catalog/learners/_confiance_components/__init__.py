@@ -1,8 +1,8 @@
-from ....utils import NotImportedWrapper
-from ._cnndrad_wrapper import get_wrapped_datareconstructionad
-from ._kcpdi_wrapper import get_wrapped_kcplearner
-from ._sbad_wrapper import get_wrapped_dilanodetectm
-from ._tdaad_wrapper import get_wrapped_topolad_pp
+from tadkit.utils._not_imported_wrapper import NotImportedWrapper
+from tadkit.catalog.learners._confiance_components._cnndrad_wrapper import get_wrapped_datareconstructionad
+from tadkit.catalog.learners._confiance_components._kcpdi_wrapper import get_wrapped_kcplearner
+from tadkit.catalog.learners._confiance_components._sbad_wrapper import get_wrapped_dilanodetectm
+from tadkit.catalog.learners._confiance_components._tdaad_wrapper import get_wrapped_topolad_pp
 
 try:
     DataReconstructionADLearner = get_wrapped_datareconstructionad()

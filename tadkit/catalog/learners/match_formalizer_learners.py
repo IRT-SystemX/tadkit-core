@@ -1,6 +1,7 @@
 from typing import Sequence
 
-from ... import Formalizer, TADLearner
+from tadkit.base.formalizer import Formalizer
+from tadkit.base.tadlearner import TADLearner
 
 
 def match_formalizer_learners(

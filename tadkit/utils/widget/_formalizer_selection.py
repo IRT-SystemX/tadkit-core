@@ -2,7 +2,7 @@ from typing import Any, Dict
 
 import ipywidgets as widgets
 
-from ... import Formalizer
+from tadkit.base.formalizer import Formalizer
 
 
 def select_formalizer(formalizers: Dict[str, Formalizer]) -> Dict[str, Any]:

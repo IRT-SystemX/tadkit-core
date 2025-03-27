@@ -1,3 +1,4 @@
+
 class NotImportedWrapper:
     """Exception handler in case Confiance.AI dependencies are not available."""
 

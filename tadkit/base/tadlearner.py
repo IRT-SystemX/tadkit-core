@@ -1,6 +1,6 @@
 from typing import Sequence, Optional, Protocol, runtime_checkable
 
-from .typing import ParamsDescription, Array
+from tadkit.base.typing import ParamsDescription, Array
 
 
 @runtime_checkable

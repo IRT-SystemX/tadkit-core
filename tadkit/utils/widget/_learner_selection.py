@@ -7,7 +7,8 @@ from IPython.display import display
 
 from tadkit.catalog.learners.match_formalizer_learners import match_formalizer_learners
 
-from ... import Formalizer, TADLearner
+from tadkit.base.formalizer import Formalizer
+from tadkit.base.tadlearner import TADLearner
 
 
 def select_matching_available_learners(

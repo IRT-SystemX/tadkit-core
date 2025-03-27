@@ -4,7 +4,9 @@ import warnings
 import numpy as np
 import pandas as pd
 
-from ...base import Formalizer, KWParams, ParamsDescription, DataFrameType
+from tadkit.base.dataframe_type import DataFrameType
+from tadkit.base.formalizer import Formalizer
+from tadkit.base.typing import ParamsDescription, KWParams
 
 
 def index_has_fixed_time_step(index):

@@ -1,6 +1,7 @@
 from typing import TypeVar, Sequence, Type, Optional
 
-from ..base import TADLearner, KWParams, ParamsDescription
+from tadkit.base.tadlearner import TADLearner
+from tadkit.base.typing import KWParams, ParamsDescription
 
 Estimator = TypeVar("Estimator")
 
