@@ -1,120 +1,169 @@
-<div align="center">
-    <img src="images/Logo_ConfianceAI_Blanc.png" height="200" align="">
+![tadkit logo](/images/TADkit.png "Tadkit Logo")
 
-[![](https://img.shields.io/static/v1?label=&message=Online%20documentation&color=0077de)]([Web site])
+`TADkit`: **Time-series Anomaly Detection kit** is a set of tools for anomaly detection of time series data.
 
-[![Online documentation](https://img.shields.io/badge/MPL--2.0-blue)](https://opensource.org/licenses/Apache-2.0)
+The `tadkit` python package provides **interfaces for anomaly detection** that allows coherent and concurrent use of the various **time-series anomaly detection methods** developed in Confiance.ai (TDAAD, SBAD, KCPD, CNNDRAD, ...). It also show how to use them for more elaborate purposes (e.g. **active learning**, **conformal calibration** with CAD, **aggregation** and **optimisation** with MetaTAD, ...).
 
-[![License](https://img.shields.io/badge/MPL--2.0-blue)](https://opensource.org/licenses/Apache-2.0)
-<br>
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Code style: Pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/pylint-dev)
-[![Code style: flake8](https://img.shields.io/badge/code%20style-flake8-1c4a6c.svg)](https://flake8.pycqa.org/en/latest/)
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+The **interfaces for anomaly detection** consist in a `Formalizer` abstract class for preparing raw data into machine-learning format,
+and in a `TADLearner` abstract class implementing `.fit(X)`, `.score_samples(X)` and `.predict(X)` routines for the unsupervised machine learning task of anomaly detection. We provide more details in the [TADkit: Interfaces and Confiance methods catalog Section](#TADkit-Interfaces-and-Confiance-methods-catalog) and [in the docstring](/docs/build/html/generated/tadkit.base.html#module-tadkit.base.formalizer).
 
-![Activity](https://img.shields.io/github/commit-activity/m/IRT-SystemX/tadkit)
-![Last commit](https://img.shields.io/github/last-commit/IRT-SystemX/tadkit)
+The **time-series anomaly detection methods** contained in TADkit are either from standard libraries such as [scikit-learn](https://scikit-learn.org/), or are autonomous Confiance.ai components. They are made available through the component as a dictionary of classes `from tadkit.catalog.learners import installed_learner_classes`, to be instantiated with the right parameters - and all parameters come with default values.
+The package has been designed with the following philosophy:
+- if installed, the relevant Confiance.ai anomaly detection components are imported and made ready to use as a `TADLearner`,
+- else the component will simply not appear in the tadkit installed learner set.
 
-![python lib](https://github.com/irt-Systemx/tadkit/actions/workflows/python_lib_publish.yml/badge.svg)
-![Docker](https://github.com/IRT-SystemX/tadkit/actions/workflows/docker_publish.yml/badge.svg)
+We provide more details in the [Tadkit Anomaly Detection Confiance Methods Section](#Tadkit-Anomaly-Detection-Confiance-Methods)
 
-</div>
-
-##  TADKit
-
-Time-series Anomaly Detection Kit with Interactivity and Tools
-
-A toolkit integrating and wrapping all anomaly detection components with a possibility to: interact between the various components (preprocessing, engeering, modeling) interact with a visualization/annotation tool (e.g. Debiai) via an API intended for expert-in-the-loop iterations
-
-The component is referenced by the [European Trustworthy AI Foundation] in its [catalog]
-
-## Documentation
-
-The full documentation is available in the [web site]
-
-## Code of Conduct
-
-Everyone interacting in the project's codebases, issue trackers, chat rooms, and mailing lists is expected to follow the [Code of Conduct](CODE_OF_CONDUCT_v2.md).
-
-## Quality check
-
-Several tools are used for maintaining the quality of the python library, such as code formatting, linting, testing, documentation, and security analysis:
-1. Code Formatting: [Black] is an opinionated Python code formatter that automatically formats your code to make it consistent. It helps reduce debates about code style by enforcing a standard format.
-2. Linting (Code Quality Checks): [Flake8] is A wrapper around PyFlakes, pycodestyle, and mccabe that provides an easy-to-use interface for linting Python code.
-[//]: # ([Pylint] is a widely used linter for Python that checks for errors in Python code, enforces coding standards, and looks for potential code smells.)
-3. Testing: [pytest] is a framework that makes it easy to write simple as well as scalable test cases. It also supports fixtures, parameterization, and many plugins.
-
-## Installation
-
-This component is available with pip or as a Docker image. To install it, you can follow the [installation guide].
+The `tadkit` python package contains multiple introductory or example notebooks using these interfaces and methods, for crafting a unique [univariate anomaly detection method](/examples/highlights/unidim_ad_example.ipynb), [using and chosing anomaly detectors concurrently](/examples/highlights/interactive_ad_demo.ipynb).
 
 
-# Developer Area
+The `tadkit` python package also provides external and internal components for various forms of supervised or semi-supervised learning, such as **active learning** (hosted within the component, see the [active learning README](/tadkit/active/README) and demonstrated [here](/docs/build/html/generated/examples/demo_active_learning.ipynb)), **aggregation, optimization and reinforcement learning** with the [MetaTAD component](https://git.irt-systemx.fr/confianceai/ec_5/ec5_as3/reinforcement-time-series-anomaly-detection/-/tree/main/metaTAD?ref_type=heads), and conformal calibration with [CAD](https://git.irt-systemx.fr/confianceai/ec_5/ec5_as3/cad/), see an example [here](/examples/tadkit_conformal_ad.ipynb). Because those classes can be used in a broader context than that of timeseries, they remain here temporarily but are in fact designed for the [modAL active learning library](https://github.com/modAL-python/modAL).
 
-## Get started
+The following scheme represents the TADkit "galaxy" as it stands currently.
+![tadkit scheme](/images/tadkit-galaxy.png "TADkit Galaxy")
+ An _imported_ arrows means that the external Confiance.ai component will be found in TADkit if installed, and a _to be integrated_ arrow means that that Confiance.ai component cannot be found _through_ TADkit yet, awaiting further developments.
 
-Please have a look at [the Sphinx documentation]
 
-## Generate docs
+## 🚀 Install
 
-````
+This library requires python 3.8 or later, and is accessible with
+
+```
+import tadkit
+```
+
+after having:
+
+- installed it via pip, e.g. by a `pip install <tadkit_dir>` after cloning,
+- or added this project's directory to the Python path, e.g. `sys.path.insert(0, <tadkit_dir>)` after cloning.
+
+They can be installed with the following command:
+```
+pip install -r <tadkit_dir>/requirements.txt
+```
+
+## 🎮 Basic TADkit: run anomaly detection Confiance methods on your data
+
+TADkit's primary function is to allow you to test several Confiance.ai anomaly detection methods on your dataset at the same time.
+
+The simplest way to use TADkit is to run [the highlights notebook](/examples/highlights/interactive_ad_demo.ipynb), then plug in your data and tune the targetted anomaly detection methods. The widgets allow to choose methods that are compatible with your data type and calibrate methods with sliders and buttons.
+
+A more general basic procedure for using TADkit is the following:
+1) Prepare your `data`: it should be a `pandas.DataFrame` with timestamps as index, and be organised like one of the types in the following picture (top: `dataframe_type="synchronous"`, bottom: `dataframe_type="asynchronous"`):
+![dataframe types](/images/dataframe_types.png "DataFrame types")
+2) Load data and dataframe_type into the default `PandasFormalizer` formalizer, e.g.:
+```
+from tadkit.catalog.formalizers import PandasFormalizer
+my_formalizer = PandasFormalizer(data_df=data, dataframe_type="synchronous")
+```
+3) Select your target data for training learners onto (e.g. data whose behaviour you want to _learn_)retrieve your machine-learning formatted query like so:
+```
+base_query = formalizer.default_query()
+X = formalizer.formalize(**base_query)
+base_query["target_period"] = (data.index[0], cut1)
+X_train = formalizer.formalize(**base_query)
+```
+Using the `PandasFormalizer`, the queries have four main attribute for defining your target data: you can change the time period of interest with `target_period`, the columns/sensors of interest with `target_space`, if you want resampling or not with `resampling` and the resampling resolution `resampling_resolution` if needed.
+4) Retrieve the learners that match the type of data you're interested in (e.g. multidimensional or unidimensional, ...) like so:
+```
+from tadkit.catalog.learners import installed_learner_classes
+from tadkit.catalog.learners.match_formalizer_learners import match_formalizer_learners
+
+matching_available_learners = match_formalizer_learners(formalizer, installed_learner_classes)
+```
+5) Instantiate your models:
+```
+models = {learner_class_name: available_learner() for learner_class_name, available_learner in matching_available_learners.items()}
+```
+and if necessary change the default parameters looking at `available_learner.params_description`. You can add your own model here if they are compliant with the `TADLearner` interface.
+
+6) Train and test your models on the target data:
+```
+for name, model in models.items():
+    model.fit(X_train)
+    y_score = -model.score_samples(X)
+```
+If instead of anomaly scores you want to predict labels (anomaly / no anomaly), you can use `model.predict` instead of `model.score_samples`.
+
+## TADkit Interfaces and Confiance methods catalog
+
+### TADkit Formalizer interface for formatting your data into anomaly detection methods
+
+TADkit uses a `Formalizer` abstract class that makes the connection between data and models, and a simple instanciation of the class: the `PandasFormalizer` introduced above that should be used for basic tasks, and a specific `Formalizer` should be crafted for more complex task or when a specific data formatting is required by a learning method of your choice.
+
+The following concepts have been incorporated into the API: a `Formalizer` has the property or attribute `available_properties`, a list of strings that are tags and allow automatic matching of compatible a `Formalizer` and a `TADLearner`. It also has the property or attribute `query_description`, which describes the parameters of the `formalize` method. This description has the following form:
+
+```
+{
+    <first_param_name>: {
+        'description': <a str describing the parameter>,
+        'family': <a str tag allowing classification of parameters, e.g. 'time', 'space', 'preprocessing'>
+        'value_type': <a str tag of the type of value of the parameters, e.g. 'interval_element', 'set_element', 'subset'>
+        ... # other keys, specifics to the value_type, describing possibles values
+    },
+    ... # other parameters
+}
+```
+
+The `formalize` method  takes a `query` formatted after `query_description` and returns the corresponding query data. The structure of the property and parameter descriptions is fixed, but there is no canonical list of tags and value_type yet.
+
+### TADkit Anomaly Detection Interface and Confiance methods
+
+TADkit uses an abstract class `TADLearner` for formatting anomaly detection methods API.
+This interface requires implementing `.fit(X)` for calibrating the method, `.score_samples(X)` for producing anomaly scores and `.predict(X)` for producing anomaly labels (1 for normal, -1 for abnormal). A `TADLearner` must have a `required_properties` list attribute for ensuring compatibility with the `Formalizer`, that is elements in the list must appear in the `Formalizer`'s `available_properties` in order for the two to be a match. Lastly a `TADLearner` must include a `params_description` attribute, a dictionary describing the method's parameters.
+
+TADkit offers a catalog of Confiance methods (as well as standard methods) to use in an anomaly detection procedure.
+
+Currently integrated in TADkit are the following autonomous libraries in `TADLearner` format:
+- CNNDRAD: a two-step method for anomaly detection using deep 1D-CNN architectures: use pretext tasks to learn a representation of the data, then produce reconstruction score.
+- TDAAD: topological data embedding combined with a minimum covariance determinant analysis of the resulting vectorization.
+- KCPD: anomaly detection from a Kernel Change Point analysis.
+- SBAD: counterfactual analysis based unsupervised anomaly detection and diagnosis: compute a multivariate time series that is as close as possible to the input time series, while lowering the global anomaly score.
+
+They can be installed using the [req_integrated_libraries.txt](/req_integrated_libraries.txt) file.
+
+In addition, to simplify the making of one own's `TADLearner`, TADkit has the following tools:
+- a `sklearn_tadlearner_factory` class factory (function returning a class) wrapping a sklearn model into a learner.
+- a `decomposable_tadlearner_factory`class factory creating a learner pipeline from a preprocessor and a learner.
+
+They are used in the [univariate anomaly detection method notebook](/examples/highlights/unidim_ad_example.ipynb) for demonstration purposes.
+
+
+## Structure of the project
+
+### The tadkit package
+
+The package is the `tadkit` folder, broken down into two parts, `tadkit/base` containing the API and `tadkit/utils` containing the wrappers and composers. The `tadkit/catalog` folder contains wraper for external anomaly detectors and a basic pandas Formalizer. The `tadkit/active` folder contains the classes for active learning functionalities.
+
+
+### Example
+
+The `examples\ornstein_uhlenbeck_anomaly.ipynb` notebook contains ilustrations of the basic use of tadkit's main features. The data used are simulations of an Ornstein Uhlenbeck process perturbed by a few anomalies.
+
+The purpose of this example is to help understand the use of the API and helpers and to serve as a system test.
+
+### Demo Notebook
+
+The `demonstrators\air_liquide\airliquide_demonstrator.ipynb` demonstrator implements the UC air_liquide formalizer and a minimal version of the demonstrator diagram.
+
+### Unit tests
+
+These are located in the `tests` folder and follow the library folder tree. Tests are performed in the `pytest` framework and can be run with the following command
+
+```
+pytest <tadkit_dir>
+```
+
+## Document generation
+
+To regenerate the documentation, rerun the following commands from the project root, adapting if
+necessary:
+
+```
 pip install -r docs/docs_requirements.txt -r requirements.txt
 sphinx-apidoc -o docs/source/generated tadkit
 sphinx-build -M html docs/source docs/build -W --keep-going
-````
+```
 
-## Tests
+## License
 
-````
-# Move into whichever directory you want to serve
-cd ./docs/build/html
-
-# Start the http server 
-python -m http.server 8080
-````
-
-## build and locally run the docker 
-
-````
-docker build -t tadkit .
-docker run --rm tadkit python main.py
-````
-
-## build and locally run the python lib
-
-````
-pip install setuptools wheel
-
-# installs your library in "editable" mode, 
-# meaning changes you make to the code will be immediately reflected without needing to reinstall.
-pip install -e .
-# OR 
-pip install .
-
-# check if the library is successfully installed 
-pip list | grep tadkit
-````
-
-
----
-<p align="center justify-content:space-around">
-  This component is maintained by: 
-  <a href="https://www.irt-systemx.fr/" title="IRT SystemX">
-   <img src="https://www.irt-systemx.fr/wp-content/uploads/2013/03/system-x-logo.jpeg"  height="50">
-  </a>
-</p>
----
-
-[Component Name]: TADkit
-[IRT-SystemX]: https://github.com/IRT-SystemX
-[PSF Code of Conduct]: https://policies.python.org/python.org/code-of-conduct/
-[Support]: support@irt-systemx.fr
-[web site]: https://IRT-SystemX.github.io/tadkit/
-[installation guide]: https://IRT-SystemX.github.io/tadkit/
-[European Trustworthy AI Foundation]:https://www.confiance.ai/foundation/
-[catalog]: https://catalog.confiance.ai/records/sa1gd-1s022
-[Black]: https://black.readthedocs.io/
-[Pylint]: https://pylint.readthedocs.io/
-[pytest]: https://docs.pytest.org/en/stable/
-[Flake8]: https://flake8.pycqa.org/
-[the Sphinx documentation]: https://www.sphinx-doc.org/fr/master/tutorial/getting-started.html#
