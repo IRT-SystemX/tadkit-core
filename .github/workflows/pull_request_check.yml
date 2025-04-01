@@ -28,10 +28,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install pylint pylint-exit pylint-gitlab anybadge
           mkdir -p docs/lint_results
-          pylint neural_de --output-format=text --exit-zero | tee docs/lint_results/pylint.txt
+          pylint tadkit --output-format=text --exit-zero | tee docs/lint_results/pylint.txt
           PYLINT_SCORE=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' docs/lint_results/pylint.txt)
           echo "Pylint score is $PYLINT_SCORE"
-          pylint neural_de --output-format=pylint_gitlab.GitlabPagesHtmlReporter --exit-zero > docs/lint_results/index.html 
+          pylint tadkit --output-format=pylint_gitlab.GitlabPagesHtmlReporter --exit-zero > docs/lint_results/index.html 
           anybadge --overwrite --label pylint --value=$PYLINT_SCORE --file=docs/lint_results/pylint.svg 4=red 6=orange 8=yellow 10=green
           if PYLINT_SCORE <8; then exit 1; fi
           
@@ -40,7 +40,7 @@ jobs:
           sudo apt-get update && sudo apt-get install -y libxml2-utils
           pip install flake8 flake8-html
           mkdir -p docs/flake8
-          flake8 neural_de  --format=html --htmldir=docs/flake8 --exit-zero 
+          flake8 tadkit  --format=html --htmldir=docs/flake8 --exit-zero 
           SEVERITY=$(xmllint --html --xpath "//*[@id='masthead']" ./docs/flake8/index.html | awk -F 'class="|"/>' '{print $2}')
           if [ "$SEVERITY" = "sev-1" ]; then FLAKE8_COLOR="red"
           elif [ "$SEVERITY" = "sev-2" ]; then FLAKE8_COLOR="orange"

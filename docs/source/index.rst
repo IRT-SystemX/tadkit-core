@@ -6,12 +6,16 @@
 Welcome to tadkit's documentation!
 ==================================
 
+.. include:: ../../README.md
+   :parser: myst_parser.sphinx_
+   :end-before: ## 🚀 Install
+
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
    guidelines
-   interactive_demo
    generated/tadkit
 
 

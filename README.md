@@ -1,18 +1,34 @@
-![tadkit logo](/_static/TADkit.png "Tadkit Logo")
+<div align="center">
+    <img src="_static/TADkit.png" width="60%" alt="Tadkit Logo" />
+    <h1 style="font-size: large; font-weight: bold;">TADkit</h1>
+</div>
+
+<div align="center">
+    <a href="#">
+        <img src="https://img.shields.io/badge/Python-3.12-efefef">
+    </a>
+    <a href="#">
+        <img src="https://img.shields.io/badge/License-MPL-2">
+    </a>
+
+[![Code style: Pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/pylint-dev)
+[![Code style: flake8](https://img.shields.io/badge/code%20style-flake8-1c4a6c.svg)](https://flake8.pycqa.org/en/latest/)
+
+</div>
 
 `TADkit`: **Time-series Anomaly Detection kit** is a set of tools for anomaly detection of time series data.
 
 The `tadkit` python package provides **interfaces for anomaly detection** that allows coherent and concurrent use of the various **time-series anomaly detection methods** developed in Confiance.ai (TDAAD, SBAD, KCPD, CNNDRAD, ...). It also show how to use them for more elaborate purposes (e.g. **active learning**, **conformal calibration** with CAD, **aggregation** and **optimisation** with MetaTAD, ...).
 
 The **interfaces for anomaly detection** consist in a `Formalizer` abstract class for preparing raw data into machine-learning format,
-and in a `TADLearner` abstract class implementing `.fit(X)`, `.score_samples(X)` and `.predict(X)` routines for the unsupervised machine learning task of anomaly detection. We provide more details in the [TADkit: Interfaces and Confiance methods catalog Section](#TADkit-Interfaces-and-Confiance-methods-catalog) and [in the docstring](/docs/build/html/generated/tadkit.base.html#module-tadkit.base.formalizer).
+and in a `TADLearner` abstract class implementing `.fit(X)`, `.score_samples(X)` and `.predict(X)` routines for the unsupervised machine learning task of anomaly detection. We provide more details in the [TADkit: Interfaces and Confiance methods catalog Section](#TADkit-Interfaces-and-Confiance-methods-catalog) and [in the docstring](docs/build/html/generated/tadkit.base.html).
 
 The **time-series anomaly detection methods** contained in TADkit are either from standard libraries such as [scikit-learn](https://scikit-learn.org/), or are autonomous Confiance.ai components. They are made available through the component as a dictionary of classes `from tadkit.catalog.learners import installed_learner_classes`, to be instantiated with the right parameters - and all parameters come with default values.
 The package has been designed with the following philosophy:
 - if installed, the relevant Confiance.ai anomaly detection components are imported and made ready to use as a `TADLearner`,
 - else the component will simply not appear in the tadkit installed learner set.
 
-We provide more details in the [Tadkit Anomaly Detection Confiance Methods Section](#Tadkit-Anomaly-Detection-Confiance-Methods)
+We provide more details in the [Tadkit Anomaly Detection Confiance Methods Section](###TADkit-Anomaly-Detection-Interface-and-Confiance-methods)
 
 The `tadkit` python package contains multiple introductory or example notebooks using these interfaces and methods, for crafting a unique [univariate anomaly detection method](examples/highlights/unidim_ad_example.ipynb), [using and chosing anomaly detectors concurrently](examples/highlights/interactive_ad_demo.ipynb).
 
@@ -20,9 +36,9 @@ The `tadkit` python package contains multiple introductory or example notebooks 
 [//]: # (The `tadkit` python package also provides external and internal components for various forms of supervised or semi-supervised learning, such as **active learning** &#40;hosted within the component, see the [active learning README]&#40;/tadkit/active/README&#41; and demonstrated [here]&#40;/docs/build/html/generated/examples/demo_active_learning.ipynb&#41;&#41;, **aggregation, optimization and reinforcement learning** with the [MetaTAD component]&#40;https://git.irt-systemx.fr/confianceai/ec_5/ec5_as3/reinforcement-time-series-anomaly-detection/-/tree/main/metaTAD?ref_type=heads&#41;, and conformal calibration with [CAD]&#40;https://git.irt-systemx.fr/confianceai/ec_5/ec5_as3/cad/&#41;, see an example [here]&#40;/examples/tadkit_conformal_ad.ipynb&#41;. Because those classes can be used in a broader context than that of timeseries, they remain here temporarily but are in fact designed for the [modAL active learning library]&#40;https://github.com/modAL-python/modAL&#41;.)
 
 The following scheme represents the TADkit "galaxy" as it stands currently.
+
 ![tadkit scheme](_static/tadkit-galaxy.png "TADkit Galaxy")
  An _imported_ arrows means that the external Confiance.ai component will be found in TADkit if installed, and a _to be integrated_ arrow means that that Confiance.ai component cannot be found _through_ TADkit yet, awaiting further developments.
-
 
 ## 🚀 Install
 
@@ -138,7 +154,12 @@ Currently integrated in TADkit are the following autonomous libraries in `TADLea
 - KCPD: anomaly detection from a Kernel Change Point analysis.
 - SBAD: counterfactual analysis based unsupervised anomaly detection and diagnosis: compute a multivariate time series that is as close as possible to the input time series, while lowering the global anomaly score.
 
-They can be installed using the [req_integrated_libraries.txt](/req_integrated_libraries.txt) file.
+These libraries are not opensource yet. They can be found in the confiance.ai catalog but the download is restricted
+to users with specific access
+- CNNDRAD: https://catalog.confiance.ai/records/af2ab-hw426
+- TDAAD: https://catalog.confiance.ai/records/ve158-h4h60
+- KCPD: https://catalog.confiance.ai/records/6atzy-3yn05
+- SBAD : https://catalog.confiance.ai/records/npea5-hhw40
 
 In addition, to simplify the making of one own's `TADLearner`, TADkit has the following tools:
 - a `sklearn_tadlearner_factory` class factory (function returning a class) wrapping a sklearn model into a learner.
