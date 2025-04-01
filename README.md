@@ -21,7 +21,7 @@
 The `tadkit` python package provides **interfaces for anomaly detection** that allows coherent and concurrent use of the various **time-series anomaly detection methods** developed in Confiance.ai (TDAAD, SBAD, KCPD, CNNDRAD, ...). It also show how to use them for more elaborate purposes (e.g. **active learning**, **conformal calibration** with CAD, **aggregation** and **optimisation** with MetaTAD, ...).
 
 The **interfaces for anomaly detection** consist in a `Formalizer` abstract class for preparing raw data into machine-learning format,
-and in a `TADLearner` abstract class implementing `.fit(X)`, `.score_samples(X)` and `.predict(X)` routines for the unsupervised machine learning task of anomaly detection. We provide more details in the [TADkit: Interfaces and Confiance methods catalog Section](#TADkit-Interfaces-and-Confiance-methods-catalog) and [in the docstring](docs/build/html/generated/tadkit.base.html).
+and in a `TADLearner` abstract class implementing `.fit(X)`, `.score_samples(X)` and `.predict(X)` routines for the unsupervised machine learning task of anomaly detection. We provide more details in the [TADkit: Interfaces and Confiance methods catalog Section](#TADkit-Interfaces-and-Confiance-methods-catalog) and in the docstring.
 
 The **time-series anomaly detection methods** contained in TADkit are either from standard libraries such as [scikit-learn](https://scikit-learn.org/), or are autonomous Confiance.ai components. They are made available through the component as a dictionary of classes `from tadkit.catalog.learners import installed_learner_classes`, to be instantiated with the right parameters - and all parameters come with default values.
 The package has been designed with the following philosophy:
@@ -155,11 +155,11 @@ Currently integrated in TADkit are the following autonomous libraries in `TADLea
 - SBAD: counterfactual analysis based unsupervised anomaly detection and diagnosis: compute a multivariate time series that is as close as possible to the input time series, while lowering the global anomaly score.
 
 These libraries are not opensource yet. They can be found in the confiance.ai catalog but the download is restricted
-to users with specific access
-- CNNDRAD: https://catalog.confiance.ai/records/af2ab-hw426
-- TDAAD: https://catalog.confiance.ai/records/ve158-h4h60
-- KCPD: https://catalog.confiance.ai/records/6atzy-3yn05
-- SBAD : https://catalog.confiance.ai/records/npea5-hhw40
+to users with specific access using the following links.
+- [CNNDRAD](https://catalog.confiance.ai/records/af2ab-hw426)
+- [TDAAD](https://catalog.confiance.ai/records/ve158-h4h60)
+- [KCPD](https://catalog.confiance.ai/records/6atzy-3yn05)
+- [SBAD](https://catalog.confiance.ai/records/npea5-hhw40)
 
 In addition, to simplify the making of one own's `TADLearner`, TADkit has the following tools:
 - a `sklearn_tadlearner_factory` class factory (function returning a class) wrapping a sklearn model into a learner.
