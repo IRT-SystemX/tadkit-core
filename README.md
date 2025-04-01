@@ -1,4 +1,4 @@
-![tadkit logo](/images/TADkit.png "Tadkit Logo")
+![tadkit logo](/_static/TADkit.png "Tadkit Logo")
 
 `TADkit`: **Time-series Anomaly Detection kit** is a set of tools for anomaly detection of time series data.
 
@@ -14,43 +14,61 @@ The package has been designed with the following philosophy:
 
 We provide more details in the [Tadkit Anomaly Detection Confiance Methods Section](#Tadkit-Anomaly-Detection-Confiance-Methods)
 
-The `tadkit` python package contains multiple introductory or example notebooks using these interfaces and methods, for crafting a unique [univariate anomaly detection method](/examples/highlights/unidim_ad_example.ipynb), [using and chosing anomaly detectors concurrently](/examples/highlights/interactive_ad_demo.ipynb).
+The `tadkit` python package contains multiple introductory or example notebooks using these interfaces and methods, for crafting a unique [univariate anomaly detection method](examples/highlights/unidim_ad_example.ipynb), [using and chosing anomaly detectors concurrently](examples/highlights/interactive_ad_demo.ipynb).
 
 
-The `tadkit` python package also provides external and internal components for various forms of supervised or semi-supervised learning, such as **active learning** (hosted within the component, see the [active learning README](/tadkit/active/README) and demonstrated [here](/docs/build/html/generated/examples/demo_active_learning.ipynb)), **aggregation, optimization and reinforcement learning** with the [MetaTAD component](https://git.irt-systemx.fr/confianceai/ec_5/ec5_as3/reinforcement-time-series-anomaly-detection/-/tree/main/metaTAD?ref_type=heads), and conformal calibration with [CAD](https://git.irt-systemx.fr/confianceai/ec_5/ec5_as3/cad/), see an example [here](/examples/tadkit_conformal_ad.ipynb). Because those classes can be used in a broader context than that of timeseries, they remain here temporarily but are in fact designed for the [modAL active learning library](https://github.com/modAL-python/modAL).
+[//]: # (The `tadkit` python package also provides external and internal components for various forms of supervised or semi-supervised learning, such as **active learning** &#40;hosted within the component, see the [active learning README]&#40;/tadkit/active/README&#41; and demonstrated [here]&#40;/docs/build/html/generated/examples/demo_active_learning.ipynb&#41;&#41;, **aggregation, optimization and reinforcement learning** with the [MetaTAD component]&#40;https://git.irt-systemx.fr/confianceai/ec_5/ec5_as3/reinforcement-time-series-anomaly-detection/-/tree/main/metaTAD?ref_type=heads&#41;, and conformal calibration with [CAD]&#40;https://git.irt-systemx.fr/confianceai/ec_5/ec5_as3/cad/&#41;, see an example [here]&#40;/examples/tadkit_conformal_ad.ipynb&#41;. Because those classes can be used in a broader context than that of timeseries, they remain here temporarily but are in fact designed for the [modAL active learning library]&#40;https://github.com/modAL-python/modAL&#41;.)
 
 The following scheme represents the TADkit "galaxy" as it stands currently.
-![tadkit scheme](/images/tadkit-galaxy.png "TADkit Galaxy")
+![tadkit scheme](_static/tadkit-galaxy.png "TADkit Galaxy")
  An _imported_ arrows means that the external Confiance.ai component will be found in TADkit if installed, and a _to be integrated_ arrow means that that Confiance.ai component cannot be found _through_ TADkit yet, awaiting further developments.
 
 
 ## 🚀 Install
 
-This library requires python 3.8 or later, and is accessible with
+## Set up a clean virtual environnement
+
+Linux setting:
 
 ```
-import tadkit
+pip install virtualenv
+virtualenv myenv
+source myenv/bin/activate
 ```
 
-after having:
+Windows setting:
 
-- installed it via pip, e.g. by a `pip install <tadkit_dir>` after cloning,
-- or added this project's directory to the Python path, e.g. `sys.path.insert(0, <tadkit_dir>)` after cloning.
-
-They can be installed with the following command:
 ```
-pip install -r <tadkit_dir>/requirements.txt
+pip install virtual env 
+virtualenv myenv 
+.\myenv\Scripts\activate
 ```
 
+## Install the library (restricted access)
+
+You can install it by a direct downloading from PyPi using the command 
+
+````
+pip install tadkit
+````
+
+You can installing it from it github sources by launching the following command
+````
+pip install git+https://github.com/IRT-SystemX/tadkit/
+````
+If you got the source code as a zip file, you can install the library from the root directory of the archive by typing : 
+```
+pip install .
+```
 ## 🎮 Basic TADkit: run anomaly detection Confiance methods on your data
 
 TADkit's primary function is to allow you to test several Confiance.ai anomaly detection methods on your dataset at the same time.
 
-The simplest way to use TADkit is to run [the highlights notebook](/examples/highlights/interactive_ad_demo.ipynb), then plug in your data and tune the targetted anomaly detection methods. The widgets allow to choose methods that are compatible with your data type and calibrate methods with sliders and buttons.
+The simplest way to use TADkit is to run [the highlights notebook](examples/highlights/interactive_ad_demo.ipynb), then plug in your data and tune the targetted anomaly detection methods. The widgets allow to choose methods that are compatible with your data type and calibrate methods with sliders and buttons.
 
 A more general basic procedure for using TADkit is the following:
 1) Prepare your `data`: it should be a `pandas.DataFrame` with timestamps as index, and be organised like one of the types in the following picture (top: `dataframe_type="synchronous"`, bottom: `dataframe_type="asynchronous"`):
-![dataframe types](/images/dataframe_types.png "DataFrame types")
+![dataframe types](_static/dataframe_types.png "DataFrame types")
 2) Load data and dataframe_type into the default `PandasFormalizer` formalizer, e.g.:
 ```
 from tadkit.catalog.formalizers import PandasFormalizer
@@ -126,7 +144,7 @@ In addition, to simplify the making of one own's `TADLearner`, TADkit has the fo
 - a `sklearn_tadlearner_factory` class factory (function returning a class) wrapping a sklearn model into a learner.
 - a `decomposable_tadlearner_factory`class factory creating a learner pipeline from a preprocessor and a learner.
 
-They are used in the [univariate anomaly detection method notebook](/examples/highlights/unidim_ad_example.ipynb) for demonstration purposes.
+They are used in the [univariate anomaly detection method notebook](examples/highlights/unidim_ad_example.ipynb) for demonstration purposes.
 
 
 ## Structure of the project

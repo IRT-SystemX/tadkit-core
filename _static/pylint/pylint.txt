@@ -1,0 +1,110 @@
+************* Module tadkit.base.dataframe_type
+tadkit\base\dataframe_type.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+************* Module tadkit.base.formalizer
+tadkit\base\formalizer.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+tadkit\base\formalizer.py:32:4: C0116: Missing function or method docstring (missing-function-docstring)
+tadkit\base\formalizer.py:37:4: C0116: Missing function or method docstring (missing-function-docstring)
+tadkit\base\formalizer.py:40:4: C0116: Missing function or method docstring (missing-function-docstring)
+tadkit\base\formalizer.py:47:4: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module tadkit.base.tadlearner
+tadkit\base\tadlearner.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+tadkit\base\tadlearner.py:36:4: C0116: Missing function or method docstring (missing-function-docstring)
+tadkit\base\tadlearner.py:54:8: W2301: Unnecessary ellipsis constant (unnecessary-ellipsis)
+tadkit\base\tadlearner.py:72:8: W2301: Unnecessary ellipsis constant (unnecessary-ellipsis)
+************* Module tadkit.base.typing
+tadkit\base\typing.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+************* Module tadkit.catalog.formalizers._standard_formalizers
+tadkit\catalog\formalizers\_standard_formalizers.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+tadkit\catalog\formalizers\_standard_formalizers.py:12:0: C0116: Missing function or method docstring (missing-function-docstring)
+tadkit\catalog\formalizers\_standard_formalizers.py:43:4: C0116: Missing function or method docstring (missing-function-docstring)
+tadkit\catalog\formalizers\_standard_formalizers.py:47:4: C0116: Missing function or method docstring (missing-function-docstring)
+tadkit\catalog\formalizers\_standard_formalizers.py:59:4: C0116: Missing function or method docstring (missing-function-docstring)
+tadkit\catalog\formalizers\_standard_formalizers.py:62:4: C0116: Missing function or method docstring (missing-function-docstring)
+tadkit\catalog\formalizers\_standard_formalizers.py:69:4: C0116: Missing function or method docstring (missing-function-docstring)
+tadkit\catalog\formalizers\_standard_formalizers.py:184:11: C1802: Do not use `len(SEQUENCE)` without comparison to determine if a sequence is empty (use-implicit-booleaness-not-len)
+************* Module tadkit.catalog.formalizers
+tadkit\catalog\formalizers\__init__.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+************* Module tadkit.catalog.learners._sklearn_learners
+tadkit\catalog\learners\_sklearn_learners.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+tadkit\catalog\learners\_sklearn_learners.py:15:14: W0212: Access to a protected member _parameter_constraints of a client class (protected-access)
+tadkit\catalog\learners\_sklearn_learners.py:28:27: W0212: Access to a protected member _parameter_constraints of a client class (protected-access)
+tadkit\catalog\learners\_sklearn_learners.py:30:20: W0212: Access to a protected member _parameter_constraints of a client class (protected-access)
+tadkit\catalog\learners\_sklearn_learners.py:38:0: C0116: Missing function or method docstring (missing-function-docstring)
+tadkit\catalog\learners\_sklearn_learners.py:38:25: W0613: Unused argument 'sample_weight' (unused-argument)
+tadkit\catalog\learners\_sklearn_learners.py:48:0: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module tadkit.catalog.learners
+tadkit\catalog\learners\__init__.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+tadkit\catalog\learners\__init__.py:49:4: E0603: Undefined variable name 'match_formalizer_learners' in __all__ (undefined-all-variable)
+************* Module tadkit.catalog.learners._confiance_components._cnndrad_wrapper
+tadkit\catalog\learners\_confiance_components\_cnndrad_wrapper.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+tadkit\catalog\learners\_confiance_components\_cnndrad_wrapper.py:10:4: C0415: Import outside toplevel (cnndrad.DataReconstructionAD) (import-outside-toplevel)
+tadkit\catalog\learners\_confiance_components\_cnndrad_wrapper.py:37:4: W0102: Dangerous default value [True] * 3 (builtins.list) as argument (dangerous-default-value)
+************* Module tadkit.catalog.learners._confiance_components._kcpdi_wrapper
+tadkit\catalog\learners\_confiance_components\_kcpdi_wrapper.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+tadkit\catalog\learners\_confiance_components\_kcpdi_wrapper.py:10:4: C0415: Import outside toplevel (kcpdi.kcp_ss_learner.KcpLearner) (import-outside-toplevel)
+tadkit\catalog\learners\_confiance_components\_kcpdi_wrapper.py:38:29: W0613: Unused argument 'sample_weight' (unused-argument)
+************* Module tadkit.catalog.learners._confiance_components._sbad_wrapper
+tadkit\catalog\learners\_confiance_components\_sbad_wrapper.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+tadkit\catalog\learners\_confiance_components\_sbad_wrapper.py:11:4: C0415: Import outside toplevel (sbad_fnn.models.DiLAnoDetectm) (import-outside-toplevel)
+tadkit\catalog\learners\_confiance_components\_sbad_wrapper.py:13:4: C0115: Missing class docstring (missing-class-docstring)
+tadkit\catalog\learners\_confiance_components\_sbad_wrapper.py:53:8: C0116: Missing function or method docstring (missing-function-docstring)
+tadkit\catalog\learners\_confiance_components\_sbad_wrapper.py:57:8: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module tadkit.catalog.learners._confiance_components._tdaad_wrapper
+tadkit\catalog\learners\_confiance_components\_tdaad_wrapper.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+tadkit\catalog\learners\_confiance_components\_tdaad_wrapper.py:8:4: C0415: Import outside toplevel (tdaad.anomaly_detectors.TopologicalAnomalyDetector) (import-outside-toplevel)
+tadkit\catalog\learners\_confiance_components\_tdaad_wrapper.py:13:34: W0212: Access to a protected member _parameter_constraints of a client class (protected-access)
+************* Module tadkit.catalog.learners._confiance_components
+tadkit\catalog\learners\_confiance_components\__init__.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+************* Module tadkit.utils.decomposable_tadlearner
+tadkit\utils\decomposable_tadlearner.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+tadkit\utils\decomposable_tadlearner.py:3:0: E0611: No name 'KWParams' in module 'tadkit.base' (no-name-in-module)
+tadkit\utils\decomposable_tadlearner.py:3:0: E0611: No name 'ParamsDescription' in module 'tadkit.base' (no-name-in-module)
+tadkit\utils\decomposable_tadlearner.py:3:0: E0611: No name 'Array' in module 'tadkit.base' (no-name-in-module)
+tadkit\utils\decomposable_tadlearner.py:8:0: E0239: Inheriting 'TADLearner', which is not a class. (inherit-non-class)
+tadkit\utils\decomposable_tadlearner.py:15:4: C0116: Missing function or method docstring (missing-function-docstring)
+tadkit\utils\decomposable_tadlearner.py:25:4: C0116: Missing function or method docstring (missing-function-docstring)
+tadkit\utils\decomposable_tadlearner.py:32:4: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module tadkit.utils.match_formalizer_learners
+tadkit\utils\match_formalizer_learners.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+tadkit\utils\match_formalizer_learners.py:7:0: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module tadkit.utils.parameter_distributions
+tadkit\utils\parameter_distributions.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+tadkit\utils\parameter_distributions.py:6:0: C0116: Missing function or method docstring (missing-function-docstring)
+tadkit\utils\parameter_distributions.py:16:0: C0116: Missing function or method docstring (missing-function-docstring)
+tadkit\utils\parameter_distributions.py:26:0: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module tadkit.utils.print_learner_catalog
+tadkit\utils\print_learner_catalog.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+tadkit\utils\print_learner_catalog.py:11:0: R1711: Useless return at end of function or method (useless-return)
+tadkit\utils\print_learner_catalog.py:72:0: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module tadkit.utils.synthetic_ornstein_uhlenbeck
+tadkit\utils\synthetic_ornstein_uhlenbeck.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+tadkit\utils\synthetic_ornstein_uhlenbeck.py:34:0: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module tadkit.utils.tadlearner_factory
+tadkit\utils\tadlearner_factory.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+tadkit\utils\tadlearner_factory.py:31:4: W0612: Unused variable '__init__' (unused-variable)
+************* Module tadkit.utils._not_imported_wrapper
+tadkit\utils\_not_imported_wrapper.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+************* Module tadkit.utils.widget._formalizer_selection
+tadkit\utils\widget\_formalizer_selection.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+************* Module tadkit.utils.widget._learner_selection
+tadkit\utils\widget\_learner_selection.py:14:0: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module tadkit.utils.widget._parameter_selection
+tadkit\utils\widget\_parameter_selection.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+tadkit\utils\widget\_parameter_selection.py:8:0: C0116: Missing function or method docstring (missing-function-docstring)
+tadkit\utils\widget\_parameter_selection.py:42:29: R1729: Use a generator instead 'all(elt is None or isinstance(elt, int) for elt in (value, min_value, max_value, step))' (use-a-generator)
+************* Module tadkit.utils.widget._query_selection
+tadkit\utils\widget\_query_selection.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+tadkit\utils\widget\_query_selection.py:9:0: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module tadkit.utils.widget.__init__
+tadkit\utils\widget\__init__.py:1:0: R0801: Similar lines in 2 files
+==tadkit.catalog.learners._confiance_components._cnndrad_wrapper:[26:31]
+==tadkit.catalog.learners._confiance_components._tdaad_wrapper:[42:47]
+        "value_type": "range",
+        "start": 10,
+        "stop": 100,
+        "step": 10,
+        "default": 10, (duplicate-code)
+
+------------------------------------------------------------------
+Your code has been rated at 8.15/10 (previous run: 6.94/10, +1.21)
+
