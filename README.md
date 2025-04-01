@@ -18,22 +18,17 @@
 
 `TADkit`: **Time-series Anomaly Detection kit** is a set of tools for anomaly detection of time series data.
 
-The `tadkit` python package provides **interfaces for anomaly detection** that allows coherent and concurrent use of the various **time-series anomaly detection methods** developed in Confiance.ai (TDAAD, SBAD, KCPD, CNNDRAD, ...). It also show how to use them for more elaborate purposes (e.g. **active learning**, **conformal calibration** with CAD, **aggregation** and **optimisation** with MetaTAD, ...).
+The `tadkit` python package provides **interfaces for anomaly detection** that allows coherent and concurrent use of the various **time-series anomaly detection methods** developed in Confiance.ai (TDAAD, SBAD, KCPD, CNNDRAD, ...). 
 
 The **interfaces for anomaly detection** consist in a `Formalizer` abstract class for preparing raw data into machine-learning format,
-and in a `TADLearner` abstract class implementing `.fit(X)`, `.score_samples(X)` and `.predict(X)` routines for the unsupervised machine learning task of anomaly detection. We provide more details in the [TADkit: Interfaces and Confiance methods catalog Section](#TADkit-Interfaces-and-Confiance-methods-catalog) and in the docstring.
+and in a `TADLearner` abstract class implementing `.fit(X)`, `.score_samples(X)` and `.predict(X)` routines for the unsupervised machine learning task of anomaly detection. You can find more detail in next sections and in the docstring.
 
 The **time-series anomaly detection methods** contained in TADkit are either from standard libraries such as [scikit-learn](https://scikit-learn.org/), or are autonomous Confiance.ai components. They are made available through the component as a dictionary of classes `from tadkit.catalog.learners import installed_learner_classes`, to be instantiated with the right parameters - and all parameters come with default values.
 The package has been designed with the following philosophy:
 - if installed, the relevant Confiance.ai anomaly detection components are imported and made ready to use as a `TADLearner`,
 - else the component will simply not appear in the tadkit installed learner set.
 
-We provide more details in the [Tadkit Anomaly Detection Confiance Methods Section](###TADkit-Anomaly-Detection-Interface-and-Confiance-methods)
-
 The `tadkit` python package contains multiple introductory or example notebooks using these interfaces and methods, for crafting a unique [univariate anomaly detection method](examples/highlights/unidim_ad_example.ipynb), [using and chosing anomaly detectors concurrently](examples/highlights/interactive_ad_demo.ipynb).
-
-
-[//]: # (The `tadkit` python package also provides external and internal components for various forms of supervised or semi-supervised learning, such as **active learning** &#40;hosted within the component, see the [active learning README]&#40;/tadkit/active/README&#41; and demonstrated [here]&#40;/docs/build/html/generated/examples/demo_active_learning.ipynb&#41;&#41;, **aggregation, optimization and reinforcement learning** with the [MetaTAD component]&#40;https://git.irt-systemx.fr/confianceai/ec_5/ec5_as3/reinforcement-time-series-anomaly-detection/-/tree/main/metaTAD?ref_type=heads&#41;, and conformal calibration with [CAD]&#40;https://git.irt-systemx.fr/confianceai/ec_5/ec5_as3/cad/&#41;, see an example [here]&#40;/examples/tadkit_conformal_ad.ipynb&#41;. Because those classes can be used in a broader context than that of timeseries, they remain here temporarily but are in fact designed for the [modAL active learning library]&#40;https://github.com/modAL-python/modAL&#41;.)
 
 The following scheme represents the TADkit "galaxy" as it stands currently.
 
