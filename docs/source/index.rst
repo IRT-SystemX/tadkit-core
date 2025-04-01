@@ -16,6 +16,7 @@ Welcome to tadkit's documentation!
    :caption: Contents:
 
    guidelines
+   changelog
    generated/tadkit
 
 
