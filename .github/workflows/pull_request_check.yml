@@ -22,7 +22,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v1
         with:
-          python-version: 3.9
+          python-version: 3.12
       - name: Run pylint and export quality score
         run: |
           python -m pip install --upgrade pip
@@ -49,36 +49,36 @@ jobs:
           anybadge --overwrite --label flake8 --value="report" --file=docs/flake8/flake8.svg --color $FLAKE8_COLOR
           
     
-  # python-tests: # Install dependencies and run tests with pytest
-    # name: Python tests
-    # needs:
-      # [quality-check]
-    # runs-on: ubuntu-latest
+  python-tests: # Install dependencies and run tests with pytest
+     name: Python tests
+     needs:
+       [quality-check]
+     runs-on: ubuntu-latest
 
-    # strategy:
-      # matrix:
-        # python-version: ["3.9"]
+     strategy:
+       matrix:
+         python-version: ["3.12"]
 
-    # steps:
-      # - uses: actions/checkout@v3
-      # - name: Set up Python ${{ matrix.python-version }}
-        # uses: actions/setup-python@v4
-        # with:
-          # python-version: ${{ matrix.python-version }}
-      # - name: Install dependencies
-        # run: |
-          # python -m pip install --upgrade pip
-          # pip install .
-          # pip install pytest coverage
-      # - name: Test with pytest
-        # run: |
-         # coverage run -m pytest tests
-         # coverage report > coverage_report.txt
-         # mkdir -p docs/coverage  
-         # COVERAGE_SCORE=$(grep 'TOTAL' coverage_report.txt | awk '{print $4}' | sed 's/%//')
-         # echo "Coverage score is $COVERAGE_SCORE"
-         # anybadge --overwrite --label coverage --value=$COVERAGE_SCORE --file=docs/coverage/coverage.svg 50=red 60=orange 75=yellow 100=green
-         # coverage html -d docs/coverage
+     steps:
+       - uses: actions/checkout@v3
+       - name: Set up Python ${{ matrix.python-version }}
+         uses: actions/setup-python@v4
+         with:
+           python-version: ${{ matrix.python-version }}
+       - name: Install dependencies
+         run: |
+           python -m pip install --upgrade pip
+           pip install .
+           pip install pytest coverage
+       - name: Test with pytest
+         run: |
+          coverage run -m pytest tests
+          coverage report > coverage_report.txt
+          mkdir -p docs/coverage  
+          COVERAGE_SCORE=$(grep 'TOTAL' coverage_report.txt | awk '{print $4}' | sed 's/%//')
+          echo "Coverage score is $COVERAGE_SCORE"
+          anybadge --overwrite --label coverage --value=$COVERAGE_SCORE --file=docs/coverage/coverage.svg 50=red 60=orange 75=yellow 100=green
+          coverage html -d docs/coverage
 
 #  docker-build-check: # Build the docker image and check that it can run
 #    name: Docker build check
