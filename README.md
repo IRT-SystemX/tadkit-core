@@ -172,18 +172,13 @@ They are used in the [univariate anomaly detection method notebook](examples/hig
 
 ### The tadkit package
 
-The package is the `tadkit` folder, broken down into two parts, `tadkit/base` containing the API and `tadkit/utils` containing the wrappers and composers. The `tadkit/catalog` folder contains wraper for external anomaly detectors and a basic pandas Formalizer. The `tadkit/active` folder contains the classes for active learning functionalities.
+The package is the `tadkit` folder, broken down into two parts, `tadkit/base` containing the API and `tadkit/utils` containing the wrappers and composers. The `tadkit/catalog` folder contains wraper for external anomaly detectors and a basic pandas Formalizer.
 
 
 ### Example
 
-The `examples\ornstein_uhlenbeck_anomaly.ipynb` notebook contains ilustrations of the basic use of tadkit's main features. The data used are simulations of an Ornstein Uhlenbeck process perturbed by a few anomalies.
-
-The purpose of this example is to help understand the use of the API and helpers and to serve as a system test.
-
-### Demo Notebook
-
-The `demonstrators\air_liquide\airliquide_demonstrator.ipynb` demonstrator implements the UC air_liquide formalizer and a minimal version of the demonstrator diagram.
+The ```\examples\highlights``` folder contains 2 examples notebooks that notebook contains ilustrations of the basic use of tadkit's main features. The data used are simulations of an Ornstein Uhlenbeck process perturbed by a few anomalies.
+The purpose of these examples is to help understand the use of the API and helpers and to serve as a system test.
 
 ### Unit tests
 
