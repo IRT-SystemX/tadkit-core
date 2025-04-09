@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to tadkit’s documentation! &mdash; TADKit 1.1.0 documentation</title>
+  <title>Welcome to tadkit-core’s documentation! &mdash; tadkit-core 1.1.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
@@ -32,7 +32,7 @@
           
           
           <a href="#" class="icon icon-home">
-            TADKit
+            tadkit-core
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -46,7 +46,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="guidelines.html">📖 Guidelines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">🔄 Changelog</a></li>
-<li class="toctree-l1"><a class="reference internal" href="generated/tadkit.html">🎡 Tadkit package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/tadkit.html">🎡 tadkit-core package</a></li>
 </ul>
 
         </div>
@@ -55,7 +55,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">TADKit</a>
+          <a href="#">tadkit-core</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -63,7 +63,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Welcome to tadkit’s documentation!</li>
+      <li class="breadcrumb-item active">Welcome to tadkit-core’s documentation!</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -73,11 +73,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="welcome-to-tadkit-s-documentation">
-<h1>Welcome to tadkit’s documentation!<a class="headerlink" href="#welcome-to-tadkit-s-documentation" title="Link to this heading"></a></h1>
+  <section id="welcome-to-tadkit-core-s-documentation">
+<h1>Welcome to tadkit-core’s documentation!<a class="headerlink" href="#welcome-to-tadkit-core-s-documentation" title="Link to this heading"></a></h1>
 <div align="center">
     <img src="_static/TADkit.png" width="60%" alt="Tadkit Logo" />
-    <h1 style="font-size: large; font-weight: bold;">TADkit</h1>
+    <h1 style="font-size: large; font-weight: bold;">tadkit-core</h1>
 </div>
 <div align="center">
     <a href="#">
@@ -90,7 +90,7 @@
 <a class="reference external" href="https://flake8.pycqa.org/en/latest/"><img alt="Code style: flake8" src="https://img.shields.io/badge/code%20style-flake8-1c4a6c.svg" /></a></p>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">TADkit</span></code>: <strong>Time-series Anomaly Detection kit</strong> is a set of tools for anomaly detection of time series data.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">tadkit</span></code> python package provides <strong>interfaces for anomaly detection</strong> that allows coherent and concurrent use of the various <strong>time-series anomaly detection methods</strong> developed in Confiance.ai (TDAAD, SBAD, KCPD, CNNDRAD, …).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">tadkit-core</span></code> python package provides <strong>interfaces for anomaly detection</strong> that allows coherent and concurrent use of the various <strong>time-series anomaly detection methods</strong> developed in Confiance.ai (TDAAD, SBAD, KCPD, CNNDRAD, …).</p>
 <p>The <strong>interfaces for anomaly detection</strong> consist in a <code class="docutils literal notranslate"><span class="pre">Formalizer</span></code> abstract class for preparing raw data into machine-learning format,
 and in a <code class="docutils literal notranslate"><span class="pre">TADLearner</span></code> abstract class implementing <code class="docutils literal notranslate"><span class="pre">.fit(X)</span></code>, <code class="docutils literal notranslate"><span class="pre">.score_samples(X)</span></code> and <code class="docutils literal notranslate"><span class="pre">.predict(X)</span></code> routines for the unsupervised machine learning task of anomaly detection. You can find more detail in next sections and in the docstring.</p>
 <p>The <strong>time-series anomaly detection methods</strong> contained in TADkit are either from standard libraries such as <a class="reference external" href="https://scikit-learn.org/">scikit-learn</a>, or are autonomous Confiance.ai components. They are made available through the component as a dictionary of classes <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">tadkit.catalog.learners</span> <span class="pre">import</span> <span class="pre">installed_learner_classes</span></code>, to be instantiated with the right parameters - and all parameters come with default values.
@@ -99,7 +99,7 @@ The package has been designed with the following philosophy:</p>
 <li><p>if installed, the relevant Confiance.ai anomaly detection components are imported and made ready to use as a <code class="docutils literal notranslate"><span class="pre">TADLearner</span></code>,</p></li>
 <li><p>else the component will simply not appear in the tadkit installed learner set.</p></li>
 </ul>
-<p>The <code class="docutils literal notranslate"><span class="pre">tadkit</span></code> python package contains multiple introductory or example notebooks using these interfaces and methods, for crafting a unique <a class="reference internal" href="examples/highlights/unidim_ad_example.html"><span class="std std-doc">univariate anomaly detection method</span></a>, <a class="reference internal" href="examples/highlights/interactive_ad_demo.html"><span class="std std-doc">using and chosing anomaly detectors concurrently</span></a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">tadkit-core</span></code> python package contains multiple introductory or example notebooks using these interfaces and methods, for crafting a unique <a class="reference internal" href="examples/highlights/unidim_ad_example.html"><span class="std std-doc">univariate anomaly detection method</span></a>, <a class="reference internal" href="examples/highlights/interactive_ad_demo.html"><span class="std std-doc">using and chosing anomaly detectors concurrently</span></a>.</p>
 <p>The following scheme represents the TADkit “galaxy” as it stands currently.</p>
 <p><img alt="tadkit scheme" src="_images/tadkit-galaxy.png" />
 An <em>imported</em> arrows means that the external Confiance.ai component will be found in TADkit if installed, and a <em>to be integrated</em> arrow means that that Confiance.ai component cannot be found <em>through</em> TADkit yet, awaiting further developments.</p>
@@ -120,7 +120,7 @@ An <em>imported</em> arrows means that the external Confiance.ai component will 
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v-1-1-0-2025-03-31">v 1.1.0 (2025-03-31)</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="generated/tadkit.html">🎡 Tadkit package</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="generated/tadkit.html">🎡 tadkit-core package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="generated/tadkit.html#subpackages">Subpackages</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/tadkit.html#module-tadkit">Module contents</a></li>
 </ul>

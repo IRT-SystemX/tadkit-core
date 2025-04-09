@@ -1,4 +1,4 @@
-tadkit
+tadkit-core
 ======
 
 .. toctree::

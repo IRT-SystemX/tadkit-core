@@ -1,4 +1,4 @@
-🎡 Tadkit package
+🎡 tadkit-core package
 ==============
 
 Subpackages
