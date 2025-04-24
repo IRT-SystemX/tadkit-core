@@ -1,7 +1,11 @@
-import streamlit as st
+
 import pandas as pd
 
+import streamlit as st
+import streamlit.components.v1 as components
+
 from pathlib import Path
+from skrub import TableReport
 
 from tadkit.catalog.formalizers import PandasFormalizer
 from tadkit.catalog.learners import installed_learner_classes
@@ -18,6 +22,7 @@ if uploaded_file is not None:
     X, y = dataset.iloc[:, :-1], dataset.iloc[:, -1]
 
     st.subheader('Your data looks like this')
+
     pd.options.plotting.backend = "plotly"
     fig = pd.concat([X, y], axis=1).plot()
     fig.update_layout(
@@ -47,31 +52,37 @@ if uploaded_file is not None:
     st.write("You selected:", options)
     learners = {key: matching_available_learners[key]() for key in options}
 
-    # Fit loop:
-    anomalies = pd.DataFrame(index=X.index)
-    for learner_name, learner_object in learners.items():
-        print(f"Fitting {learner_name}")
-        learner_object.fit(X_test)
+    if st.button("Detect anomalies..."):
 
-    # Score loop:
-    for learner_name, fitted_learner_object in learners.items():
-        print(f"Scoring with {learner_name}")
-        anom_score = fitted_learner_object.score_samples(X_test)
-        anomalies[str(fitted_learner_object)] = anom_score
+        # Fit loop:
+        anomalies = pd.DataFrame(index=X.index)
+        for learner_name, learner_object in learners.items():
+            print(f"Fitting {learner_name}")
+            learner_object.fit(X_test)
 
-    st.subheader('Your anomalies analysis:')
-    pd.options.plotting.backend = "plotly"
-    fig = pd.concat([anomalies.apply(lambda x: (x - x.min()) / (x.max() - x.min())), y], axis=1).plot()
-    fig.update_layout(
-        legend=dict(
-            orientation="v",
-            entrywidth=100,
-            yanchor="bottom",
-            y=1.02,
-            xanchor="right",
-            x=1
-        ),
-        width=1000,
-        height=600,
-    )
-    st.plotly_chart(fig)
+        # Score loop:
+        for learner_name, fitted_learner_object in learners.items():
+            print(f"Scoring with {learner_name}")
+            anom_score = fitted_learner_object.score_samples(X_test)
+            anomalies[str(fitted_learner_object)] = anom_score
+
+        scaled_anomalies = pd.concat([anomalies.apply(lambda x: (x - x.min()) / (x.max() - x.min())), y], axis=1)
+        st.subheader('Detected anomalies:')
+        pd.options.plotting.backend = "plotly"
+        fig = scaled_anomalies.plot()
+        fig.update_layout(
+            legend=dict(
+                orientation="v",
+                entrywidth=100,
+                yanchor="bottom",
+                y=1.02,
+                xanchor="right",
+                x=1
+            ),
+            width=1000,
+            height=600,
+        )
+        st.plotly_chart(fig)
+
+        st.write("Skrub scaled anomalies report:")
+        components.html(TableReport(scaled_anomalies).html_snippet(), height=1000)
