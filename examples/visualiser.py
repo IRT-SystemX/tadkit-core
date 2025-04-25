@@ -1,5 +1,7 @@
 
 import pandas as pd
+import plotly.graph_objs as go
+from plotly.subplots import make_subplots
 
 import streamlit as st
 import streamlit.components.v1 as components
@@ -15,6 +17,11 @@ from tadkit.utils.match_formalizer_learners import match_formalizer_learners
 from typing import Any, Dict
 
 
+@st.cache_data
+def set_state(i):
+    st.session_state.stage = i
+
+
 def widget_matcher(value_type):
     match value_type:
         case "range" | "real_range":
@@ -27,11 +34,11 @@ def widget_matcher(value_type):
 
 
 def parameter_widget_selection(name: str, params_description: Dict[str, Any]) -> Dict[str, Any]:
-    st.badge(name)
-    params = {}
-    for param_name, param_description in params_description.items():
-        creator = widget_matcher(param_description["value_type"])
-        params[param_name] = creator(param_name, param_description)
+    with st.expander(name):
+        params = {}
+        for param_name, param_description in params_description.items():
+            creator = widget_matcher(param_description["value_type"])
+            params[param_name] = creator(param_name, param_description)
     return params
 
 
@@ -66,28 +73,48 @@ def _create_bool_choice_widget(param_name: str, param_description: Dict[str, Any
     return bool_choice_widget
 
 
+@st.cache_data
+def compute_anomalies():
+    X_test = st.session_state.formalizer.formalize(**{})
+
+    # Fit loop:
+    anomalies = pd.DataFrame(index=st.X.index)
+    for learner_name, learner_object in st.session_state.learners.items():
+        st.write(f"Anomaly learning -- fitting {learner_name}")
+        learner_object.fit(X_test)
+
+    # Score loop:
+    for learner_name, fitted_learner_object in st.session_state.learners.items():
+        st.write(f"Anomaly learning -- scoring with {learner_name}")
+        anom_score = fitted_learner_object.score_samples(X_test)
+        anomalies[str(fitted_learner_object)] = anom_score
+    return anomalies
+
+
+@st.cache_data
+def convert_for_download(df):
+    return df.to_csv().encode("utf-8")
+
+
 st.set_page_config(layout="wide")
+
 st.title('Dummy tadkit app')
 
-file = Path("examples/ornhul.csv")
 
+col1, col2 = st.columns([3, 1])
+# file = Path("examples/ornhul.csv")
 
 if 'stage' not in st.session_state:
     st.session_state.stage = 1
 
 
-def set_state(i):
-    st.session_state.stage = i
-
-
 if st.session_state.stage >= 1:
-    uploaded_file = st.file_uploader("Choose a CSV file", accept_multiple_files=False)
+    uploaded_file = col1.file_uploader("Choose a CSV file", accept_multiple_files=False)
     if uploaded_file is not None:
         st.session_state.dataset = pd.read_csv(uploaded_file, header=0, index_col=0)
         st.X, st.y = st.session_state.dataset.iloc[:, :-1], -st.session_state.dataset.iloc[:, -1]
-        display_data = pd.concat([st.X, st.y], axis=1)
-        pd.options.plotting.backend = "plotly"
-        fig = display_data.plot()
+        # pd.options.plotting.backend = "plotly"
+        fig = st.X.plot()
         fig.update_layout(
             legend=dict(
                 orientation="v",
@@ -98,66 +125,58 @@ if st.session_state.stage >= 1:
                 x=1
             ),
         )
-        st.plotly_chart(fig)
-        st.write(display_data.describe())
+        col1.plotly_chart(fig)
         set_state(i=2)
 
 if st.session_state.stage >= 2:
-    st.session_state.formalizer = PandasFormalizer(data_df=st.X, dataframe_type="synchronous")
-    st.session_state.formalizer.formalize(**{})
-    st.session_state.matching_available_learners = match_formalizer_learners(
-        st.session_state.formalizer, installed_learner_classes)
+    with col2:
+        st.button("Start learning", icon="🌊", on_click=set_state, args=[3])
+        st.session_state.formalizer = PandasFormalizer(data_df=st.X, dataframe_type="synchronous")
+        st.session_state.formalizer.formalize(**{})
+        st.session_state.matching_available_learners = match_formalizer_learners(
+            st.session_state.formalizer, installed_learner_classes)
 
-    options = st.multiselect(
-        "Choose detectors for anomaly learning:",
-        st.session_state.matching_available_learners.keys(),
-        st.session_state.matching_available_learners.keys(),
-    )
+        options = st.multiselect(
+            "Choose detectors for anomaly learning:",
+            st.session_state.matching_available_learners.keys(),
+            st.session_state.matching_available_learners.keys(),
+        )
 
-    st.session_state.learners = {}
-    for option in options:
-        learner = st.session_state.matching_available_learners[option]
-        # st.write(learner.params_description)
-        params = parameter_widget_selection(name=option, params_description=learner.params_description)
-        st.session_state.learners[option] = learner(**params)
-    st.write(st.session_state.learners)
+        st.session_state.learners = {}
+        for option in options:
+            learner = st.session_state.matching_available_learners[option]
+            params = parameter_widget_selection(name=option, params_description=learner.params_description)
+            st.session_state.learners[option] = learner(**params)
 
-    if st.button("Start learning", on_click=set_state, args=[3]):
-        set_state(i=3)
 
 if st.session_state.stage >= 3:
-
-    with st.status("Anomaly learning...") as status:
-        X_test = st.session_state.formalizer.formalize(**{})
-
-        # Fit loop:
-        anomalies = pd.DataFrame(index=st.X.index)
-        for learner_name, learner_object in st.session_state.learners.items():
-            st.write(f"Anomaly learning -- fitting {learner_name}")
-            learner_object.fit(X_test)
-
-        # Score loop:
-        for learner_name, fitted_learner_object in st.session_state.learners.items():
-            st.write(f"Anomaly learning -- scoring with {learner_name}")
-            anom_score = fitted_learner_object.score_samples(X_test)
-            anomalies[str(fitted_learner_object)] = anom_score
-
-        st.session_state.scaled_anomalies = pd.concat(
-            [anomalies.apply(lambda x: (x - x.min()) / (x.max() - x.min())), st.y], axis=1)
-        st.write("Anomaly learning -- done.")
-        set_state(i=4)
+    with col2:
+        with st.status("Anomaly learning...") as status:
+            anomalies = compute_anomalies()
+            st.session_state.scaled_anomalies = pd.concat(
+                [anomalies.apply(lambda x: (x - x.min()) / (x.max() - x.min())), st.y], axis=1)
+            st.write("Anomaly learning -- done.")
+            set_state(i=4)
 
 
 if st.session_state.stage >= 4:
-    st.subheader('Detected anomalies')
 
-    pd.options.plotting.backend = "plotly"
-    fig = st.session_state.scaled_anomalies.plot()
+    st.subheader("Data anomaly scores")
+    fig = make_subplots(rows=2, cols=1, shared_xaxes=True)
+
+    data = st.X
+    for col in data.columns:
+        fig.add_trace(go.Scatter(x=data.index, y=data[col], mode='lines', name=col, showlegend=False), row=1, col=1)
+
+    for col in st.session_state.scaled_anomalies.columns:
+        fig.add_trace(go.Scatter(x=st.session_state.scaled_anomalies.index,
+                                 y=st.session_state.scaled_anomalies[col], mode='lines', name=col), row=2, col=1)
+
     fig.update_layout(
         legend=dict(
             orientation="v",
             entrywidth=100,
-            yanchor="bottom",
+            yanchor="top",
             y=1.02,
             xanchor="right",
             x=1
@@ -166,6 +185,16 @@ if st.session_state.stage >= 4:
         height=600,
     )
     st.plotly_chart(fig)
+
+    csv = convert_for_download(st.session_state.scaled_anomalies)
+
+    st.download_button(
+        label="Download anomalies CSV",
+        data=csv,
+        file_name="scaled_anomalies.csv",
+        mime="text/csv",
+        icon=":material/download:",
+    )
 
     st.write("Skrub scaled anomalies report:")
     components.html(TableReport(st.session_state.scaled_anomalies).html_snippet(), height=1000)
