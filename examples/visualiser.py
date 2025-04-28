@@ -1,4 +1,6 @@
 
+from time import sleep
+
 import pandas as pd
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
@@ -15,9 +17,9 @@ from tadkit.utils.match_formalizer_learners import match_formalizer_learners
 
 
 from typing import Any, Dict
+pd.options.plotting.backend = "plotly"
 
 
-@st.cache_data
 def set_state(i):
     st.session_state.stage = i
 
@@ -100,37 +102,49 @@ st.set_page_config(layout="wide")
 
 st.title('Dummy tadkit app')
 
+session_state_variables = [
+    "dataset",
+    "X",
+    "y",
+    "formalizer",
+    "matching_available_learners",
+    "learners",
+    "scaled_anomalies",
+]
+
+# Initialisastion des variables session state
+if "stage" not in st.session_state.keys():
+    st.session_state.stage = 1
+for var in session_state_variables:
+    if var not in st.session_state.keys():
+        st.session_state[var] = None
+
 
 col1, col2 = st.columns([3, 1])
-# file = Path("examples/ornhul.csv")
 
-if 'stage' not in st.session_state:
-    st.session_state.stage = 1
+uploaded_file = col1.file_uploader("Choose a CSV file", accept_multiple_files=False)
+econt = col1.empty().container()
 
-
-if st.session_state.stage >= 1:
-    uploaded_file = col1.file_uploader("Choose a CSV file", accept_multiple_files=False)
-    if uploaded_file is not None:
-        st.session_state.dataset = pd.read_csv(uploaded_file, header=0, index_col=0)
-        st.X, st.y = st.session_state.dataset.iloc[:, :-1], -st.session_state.dataset.iloc[:, -1]
-        # pd.options.plotting.backend = "plotly"
-        fig = st.X.plot()
-        fig.update_layout(
-            legend=dict(
-                orientation="v",
-                entrywidth=100,
-                yanchor="auto",
-                y=1.02,
-                xanchor="auto",
-                x=1
-            ),
-        )
-        col1.plotly_chart(fig)
-        set_state(i=2)
+if uploaded_file is not None:
+    set_state(i=2)
 
 if st.session_state.stage >= 2:
+    fig = make_subplots(rows=2, cols=1, shared_xaxes=True)
+    st.session_state.dataset = pd.read_csv(uploaded_file, header=0, index_col=0)
+    st.X, st.y = st.session_state.dataset.iloc[:, :-1], -st.session_state.dataset.iloc[:, -1]
+    data = st.X
+    for col in data.columns:
+        fig.add_trace(go.Scatter(x=data.index, y=data[col], mode='lines', name=col, showlegend=False), row=1, col=1)
+
     with col2:
-        st.button("Start learning", icon="🌊", on_click=set_state, args=[3])
+        ccol1, ccol2 = col2.columns([1, 1])
+        if ccol1.button("Start learning", icon="🌊"):
+            set_state(i=3)
+
+        if ccol2.button("Reset learning", icon="⚓"):
+            compute_anomalies.clear()
+            set_state(i=2)
+
         st.session_state.formalizer = PandasFormalizer(data_df=st.X, dataframe_type="synchronous")
         st.session_state.formalizer.formalize(**{})
         st.session_state.matching_available_learners = match_formalizer_learners(
@@ -150,24 +164,15 @@ if st.session_state.stage >= 2:
 
 
 if st.session_state.stage >= 3:
+    sleep(1)
     with col2:
         with st.status("Anomaly learning...") as status:
             anomalies = compute_anomalies()
             st.session_state.scaled_anomalies = pd.concat(
                 [anomalies.apply(lambda x: (x - x.min()) / (x.max() - x.min())), st.y], axis=1)
             st.write("Anomaly learning -- done.")
-            set_state(i=4)
 
-
-if st.session_state.stage >= 4:
-
-    st.subheader("Data anomaly scores")
-    fig = make_subplots(rows=2, cols=1, shared_xaxes=True)
-
-    data = st.X
-    for col in data.columns:
-        fig.add_trace(go.Scatter(x=data.index, y=data[col], mode='lines', name=col, showlegend=False), row=1, col=1)
-
+    # st.subheader("Data anomaly scores")
     for col in st.session_state.scaled_anomalies.columns:
         fig.add_trace(go.Scatter(x=st.session_state.scaled_anomalies.index,
                                  y=st.session_state.scaled_anomalies[col], mode='lines', name=col), row=2, col=1)
@@ -184,7 +189,6 @@ if st.session_state.stage >= 4:
         width=1000,
         height=600,
     )
-    st.plotly_chart(fig)
 
     csv = convert_for_download(st.session_state.scaled_anomalies)
 
@@ -198,3 +202,7 @@ if st.session_state.stage >= 4:
 
     st.write("Skrub scaled anomalies report:")
     components.html(TableReport(st.session_state.scaled_anomalies).html_snippet(), height=1000)
+
+
+if st.session_state.stage >= 2:
+    econt.plotly_chart(fig, use_container_width=True)
