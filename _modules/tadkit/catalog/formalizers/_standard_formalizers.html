@@ -89,7 +89,7 @@
 
 
 <div class="viewcode-block" id="PandasFormalizer">
-<a class="viewcode-back" href="../../../../generated/tadkit.catalog.formalizers.html#tadkit.catalog.formalizers.PandasFormalizer">[docs]</a>
+<a class="viewcode-back" href="../../../../tadkit.catalog.formalizers.html#tadkit.catalog.formalizers.PandasFormalizer">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">PandasFormalizer</span><span class="p">(</span><span class="n">Formalizer</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Transforms Data from Confiance DataProvider into standard Data for ML pipelines.</span>
 <span class="sd">    This particular class returns pandas DataFrames.</span>
@@ -117,14 +117,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">available_properties_</span> <span class="o">=</span> <span class="n">value</span>
 
 <div class="viewcode-block" id="PandasFormalizer.add_available_properties">
-<a class="viewcode-back" href="../../../../generated/tadkit.catalog.formalizers.html#tadkit.catalog.formalizers.PandasFormalizer.add_available_properties">[docs]</a>
+<a class="viewcode-back" href="../../../../tadkit.catalog.formalizers.html#tadkit.catalog.formalizers.PandasFormalizer.add_available_properties">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">add_available_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">available_properties_</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">available_properties_</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="PandasFormalizer.remove_available_properties">
-<a class="viewcode-back" href="../../../../generated/tadkit.catalog.formalizers.html#tadkit.catalog.formalizers.PandasFormalizer.remove_available_properties">[docs]</a>
+<a class="viewcode-back" href="../../../../tadkit.catalog.formalizers.html#tadkit.catalog.formalizers.PandasFormalizer.remove_available_properties">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">remove_available_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">while</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">available_properties_</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">available_properties_</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
@@ -139,13 +139,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">query_description_</span> <span class="o">=</span> <span class="n">value</span>
 
 <div class="viewcode-block" id="PandasFormalizer.add_query_description">
-<a class="viewcode-back" href="../../../../generated/tadkit.catalog.formalizers.html#tadkit.catalog.formalizers.PandasFormalizer.add_query_description">[docs]</a>
+<a class="viewcode-back" href="../../../../tadkit.catalog.formalizers.html#tadkit.catalog.formalizers.PandasFormalizer.add_query_description">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">add_query_description</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">param_description</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">query_description_</span><span class="p">[</span><span class="n">param_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">param_description</span></div>
 
 
 <div class="viewcode-block" id="PandasFormalizer.get_space_set">
-<a class="viewcode-back" href="../../../../generated/tadkit.catalog.formalizers.html#tadkit.catalog.formalizers.PandasFormalizer.get_space_set">[docs]</a>
+<a class="viewcode-back" href="../../../../tadkit.catalog.formalizers.html#tadkit.catalog.formalizers.PandasFormalizer.get_space_set">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_space_set</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="s2">&quot;sensor&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_df_</span><span class="p">:</span>
             <span class="n">space_set</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_df_</span><span class="p">[</span><span class="s2">&quot;sensor&quot;</span><span class="p">]))</span>
@@ -155,7 +155,7 @@
 
 
 <div class="viewcode-block" id="PandasFormalizer.get_timestamps">
-<a class="viewcode-back" href="../../../../generated/tadkit.catalog.formalizers.html#tadkit.catalog.formalizers.PandasFormalizer.get_timestamps">[docs]</a>
+<a class="viewcode-back" href="../../../../tadkit.catalog.formalizers.html#tadkit.catalog.formalizers.PandasFormalizer.get_timestamps">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_timestamps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_df_</span><span class="o">.</span><span class="n">index</span></div>
 
@@ -225,7 +225,7 @@
         <span class="k">return</span> <span class="bp">self</span>
 
 <div class="viewcode-block" id="PandasFormalizer.formalize">
-<a class="viewcode-back" href="../../../../generated/tadkit.catalog.formalizers.html#tadkit.catalog.formalizers.PandasFormalizer.formalize">[docs]</a>
+<a class="viewcode-back" href="../../../../tadkit.catalog.formalizers.html#tadkit.catalog.formalizers.PandasFormalizer.formalize">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">formalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">query</span><span class="p">:</span> <span class="n">KWParams</span><span class="p">):</span>
 
         <span class="n">default_query</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_query</span><span class="p">()</span>

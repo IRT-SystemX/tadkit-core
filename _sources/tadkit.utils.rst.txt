@@ -1,0 +1,69 @@
+tadkit.utils package
+====================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   tadkit.utils.widget
+
+Submodules
+----------
+
+tadkit.utils.decomposable\_tadlearner module
+--------------------------------------------
+
+.. automodule:: tadkit.utils.decomposable_tadlearner
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tadkit.utils.match\_formalizer\_learners module
+-----------------------------------------------
+
+.. automodule:: tadkit.utils.match_formalizer_learners
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tadkit.utils.parameter\_distributions module
+--------------------------------------------
+
+.. automodule:: tadkit.utils.parameter_distributions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tadkit.utils.print\_learner\_catalog module
+-------------------------------------------
+
+.. automodule:: tadkit.utils.print_learner_catalog
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tadkit.utils.synthetic\_ornstein\_uhlenbeck module
+--------------------------------------------------
+
+.. automodule:: tadkit.utils.synthetic_ornstein_uhlenbeck
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tadkit.utils.tadlearner\_factory module
+---------------------------------------
+
+.. automodule:: tadkit.utils.tadlearner_factory
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: tadkit.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:

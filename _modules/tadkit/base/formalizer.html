@@ -79,7 +79,7 @@
 
 
 <div class="viewcode-block" id="Formalizer">
-<a class="viewcode-back" href="../../../generated/tadkit.base.html#tadkit.base.formalizer.Formalizer">[docs]</a>
+<a class="viewcode-back" href="../../../tadkit.base.html#tadkit.base.formalizer.Formalizer">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Formalizer</span><span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Abstract class of data formalizer (provider).</span>
 <span class="sd">    Transforms Data from Confiance DataProvider into standard Data for ML pipelines.</span>
@@ -114,7 +114,7 @@
         <span class="k">return</span> <span class="p">{}</span>
 
 <div class="viewcode-block" id="Formalizer.default_query">
-<a class="viewcode-back" href="../../../generated/tadkit.base.html#tadkit.base.formalizer.Formalizer.default_query">[docs]</a>
+<a class="viewcode-back" href="../../../tadkit.base.html#tadkit.base.formalizer.Formalizer.default_query">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">default_query</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># NB: this hints at queries having a default value for all parameters.</span>
         <span class="k">return</span> <span class="p">{</span>
@@ -123,7 +123,7 @@
 
 
 <div class="viewcode-block" id="Formalizer.formalize">
-<a class="viewcode-back" href="../../../generated/tadkit.base.html#tadkit.base.formalizer.Formalizer.formalize">[docs]</a>
+<a class="viewcode-back" href="../../../tadkit.base.html#tadkit.base.formalizer.Formalizer.formalize">[docs]</a>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">formalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">query</span><span class="p">:</span> <span class="n">KWParams</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Array</span><span class="p">]]:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
