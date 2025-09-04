@@ -10,11 +10,31 @@
     <a href="#">
         <img src="https://img.shields.io/badge/License-MPL-2">
     </a>
-
-[![Code style: Pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/pylint-dev)
-[![Code style: flake8](https://img.shields.io/badge/code%20style-flake8-1c4a6c.svg)](https://flake8.pycqa.org/en/latest/)
+    <a href="_static/pylint/pylint.txt">
+        <img src="_static/pylint/pylint.svg" alt="Pylint Score">
+    </a>
+    <a href="_static/flake8/index.html">
+        <img src="_static/flake8/flake8.svg" alt="Flake8 Report">
+    </a>
+	<a href="_static/coverage/index.html">
+        <img src="_static/coverage/coverage.svg" alt="Coverage report">
+    </a>
 
 </div>
+<br>
+<div align="center">
+    <a href="https://github.com/IRT-SystemX/tadkit-core">
+        <img src="https://img.shields.io/badge/GitHub-Repository-181717?logo=github" alt="GitHub">
+    </a>
+    <a href="https://irt-systemx.github.io/tadkit-core/">
+        <img src="https://img.shields.io/badge/Online%20Documentation-available-0A66C2?logo=readthedocs&logoColor=white" alt="Docs">
+    </a>
+    <a href="https://pypi.org/project/tadkit-core/">
+        <img src="https://img.shields.io/pypi/v/tadkit-core?color=blue&label=PyPI&logo=pypi&logoColor=white" alt="PyPI">
+    </a>
+</div>
+
+<br>
 
 `TADkit`: **Time-series Anomaly Detection kit** is a set of tools for anomaly detection of time series data.
 
