@@ -38,6 +38,8 @@
 
 `TADkit`: **Time-series Anomaly Detection kit** is a set of tools for anomaly detection of time series data.
 
+Website: https://irt-systemx.github.io/tadkit-core/
+
 The `tadkit-core` python package provides **interfaces for anomaly detection** that allows coherent and concurrent use of the various **time-series anomaly detection methods** developed in Confiance.ai (TDAAD, SBAD, KCPD, CNNDRAD, ...). 
 
 The **interfaces for anomaly detection** consist in a `Formalizer` abstract class for preparing raw data into machine-learning format,
