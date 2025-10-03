@@ -6,7 +6,6 @@ from tadkit.catalog.formalizers import PandasFormalizer
 from tadkit.catalog.learners import installed_learner_classes
 from tadkit.utils.match_formalizer_learners import match_formalizer_learners
 
-# from ui.widgets import parameter_widget_selection
 from ui.widgets_from_metadata import render_widgets_from_metadata
 from ui.plots import plot_raw_data, plot_double_data
 from utils.session import (

@@ -1,13 +1,11 @@
 import hashlib
 import json
-from typing import Any, Dict
 from joblib import Parallel, delayed
 
 import pandas as pd
 import streamlit as st
 
 
-# ------------------------- Helper Functions -------------------------
 def prepare_learner_configs(learner_names, learner_params, available_learners):
     learner_configs = []
     for name in learner_names:
@@ -50,44 +48,3 @@ def compute_anomalies_parallel(X, _learner_configs, cache_key):
     return pd.DataFrame(
         {display_name: scores for _, display_name, scores in results}, index=X.index
     )
-
-
-# ------------------------- Widget creators -------------------------
-def widget_factory(value_type: str):
-    return {
-        "range": _create_range_widget,
-        "real_range": _create_range_widget,
-        "choice": _create_choice_widget,
-        "boolean": _create_bool_choice_widget,
-    }.get(value_type, _create_bool_choice_widget)
-
-
-def parameter_widget_selection(
-    name: str, params_description: Dict[str, Any]
-) -> Dict[str, Any]:
-    with st.expander(name):
-        return {
-            param_name: widget_factory(desc["value_type"])(param_name, desc)
-            for param_name, desc in params_description.items()
-        }
-
-
-def _create_range_widget(param_name: str, desc: Dict[str, Any]):
-    return st.slider(
-        label=param_name,
-        value=desc.get("default"),
-        min_value=desc.get("start"),
-        max_value=desc.get("stop"),
-        step=desc.get("step"),
-        format="%i"
-        if isinstance(desc.get("step"), int)
-        else f"%0.{len(str(desc.get('step')).split('.')[-1])}f",
-    )
-
-
-def _create_choice_widget(param_name: str, desc: Dict[str, Any]):
-    return st.radio(label=param_name, options=desc.get("set"))
-
-
-def _create_bool_choice_widget(param_name: str, desc: Dict[str, Any]):
-    return st.toggle(param_name)

@@ -1,4 +1,4 @@
-from tadkit.utils.klass_parser import enriched_metadata
+from tadkit.utils.learner_params_parser import enriched_metadata
 
 
 def get_wrapped_topolad_pp():

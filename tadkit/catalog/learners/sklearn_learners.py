@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.neighbors import KernelDensity
 from sklearn.ensemble import IsolationForest
 
-from tadkit.utils.klass_parser import enriched_metadata
+from tadkit.utils.learner_params_parser import enriched_metadata
 
 
 # ---------- AD Learner: IsolationForest ----------
