@@ -150,15 +150,27 @@ def parse_sklearn_constraints(parameter_constraints):
                 types.add(type(None))
 
         # Finalize
-        if options:
+        if param_name == "verbose":
             metadata[param_name] = {
                 "type": "categorical",
                 "bounds": bounds,
-                "options": sorted(options, key=lambda x: str(x)),
+                "options": [0, 1, 2, 3],
+            }
+        elif param_name == "n_jobs" and int in types and type(None) in types:
+            metadata[param_name] = {
+                "type": "categorical",
+                "bounds": bounds,
+                "options": [None],
+            }
+        elif options:
+            metadata[param_name] = {
+                "type": "categorical",
+                "bounds": bounds,
+                "options": sorted(options, key=str),
             }
         else:
             # Prefer supported types in priority order
-            for t in [int, float, str, bool, "categorical"]:
+            for t in [float, int, str, bool, "categorical"]:
                 if t in types:
                     selected = t
                     break
