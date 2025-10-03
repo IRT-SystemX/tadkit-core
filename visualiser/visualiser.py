@@ -1,6 +1,4 @@
 import pandas as pd
-import plotly.graph_objs as go
-from plotly.subplots import make_subplots
 
 import streamlit as st
 
@@ -9,29 +7,25 @@ from tadkit.catalog.learners import installed_learner_classes
 from tadkit.utils.match_formalizer_learners import match_formalizer_learners
 
 from ui.widgets import parameter_widget_selection
-from utils.session import set_stage, convert_for_download
+from ui.plots import plot_raw_data, plot_double_data
+from utils.session import (
+    init_session_state,
+    reset_session,
+    set_stage,
+    convert_for_download,
+)
 from utils.learning import (
     prepare_learner_configs,
     compute_anomalies_parallel,
 )
 
 
+init_session_state()
+
 # ------------------------- Global Settings -------------------------
 pd.options.plotting.backend = "plotly"
 st.set_page_config(layout="wide")
 st.title("TADkit Timeseries App")
-
-# ------------------------- Session Initialization -------------------------
-DEFAULTS = {
-    "stage": 1,
-    "uploaded_filename": None,
-    "dataset": None,
-    "selected_learners": None,
-    "learner_params": None,
-}
-
-for k, v in DEFAULTS.items():
-    st.session_state.setdefault(k, v)
 
 
 # ------------------------- Main App -------------------------
@@ -39,7 +33,7 @@ def main():
     plot_container = st.empty().container()
     uploaded_file = st.file_uploader("Choose a CSV file", accept_multiple_files=False)
 
-    # --- Stage 1: Wait for File Upload ---
+    # ---------- Stage 1: Wait for File Upload ----------
     if uploaded_file:
         current_filename = uploaded_file.name
         # If new file uploaded or changed
@@ -52,7 +46,7 @@ def main():
             set_stage(2)
 
     elif st.session_state.uploaded_filename is not None:
-        st.session_state.update(DEFAULTS)
+        reset_session()
         st.rerun()
 
     # ---------- Stage 2: Learner Configuration ----------
@@ -62,13 +56,7 @@ def main():
         target = -dataset.iloc[:, -1]
 
         # Plot original data
-        fig = make_subplots(rows=2, cols=1, shared_xaxes=True)
-        for col in data.columns:
-            fig.add_trace(
-                go.Scatter(x=data.index, y=data[col], mode="lines", showlegend=False),
-                row=1,
-                col=1,
-            )
+        fig = plot_raw_data(data)
 
         # ---- Sidebar: Learner Controls ----
         with st.sidebar:
@@ -93,9 +81,12 @@ def main():
                 list(available_learners.keys()),
                 st.session_state.selected_learners or list(available_learners.keys()),
             )
+            if not selected:
+                st.warning("Please select at least one detector to proceed.")
+                return
             if selected != st.session_state.selected_learners:
+                st.session_state.selected_learners = selected
                 set_stage(2)
-            st.session_state.selected_learners = selected
 
             # Params for each learner
             learner_params = st.session_state.learner_params or {}
@@ -116,40 +107,17 @@ def main():
                 anomalies = compute_anomalies_parallel(data, learner_configs, cache_key)
 
             # Normalize and include ground truth
-            scaled = anomalies.apply(
+            scaled_anomalies = anomalies.apply(
                 lambda col: (col - col.min()) / (col.max() - col.min())
             )
-            scaled[dataset.columns[-1]] = target
+            scaled_anomalies[dataset.columns[-1]] = target
 
-            for col in scaled.columns:
-                fig.add_trace(
-                    go.Scatter(
-                        x=scaled.index,
-                        y=scaled[col],
-                        mode="lines",
-                        name=col,
-                    ),
-                    row=2,
-                    col=1,
-                )
-
-            fig.update_layout(
-                legend=dict(
-                    orientation="v",
-                    entrywidth=100,
-                    yanchor="top",
-                    y=1.02,
-                    xanchor="right",
-                    x=1,
-                ),
-                width=1000,
-                height=600,
-            )
+            fig = plot_double_data(data, scaled_anomalies)
 
             # Download Button
             st.download_button(
                 label="Download anomalies CSV",
-                data=convert_for_download(scaled),
+                data=convert_for_download(scaled_anomalies),
                 file_name="scaled_anomalies.csv",
                 mime="text/csv",
                 icon=":material/download:",

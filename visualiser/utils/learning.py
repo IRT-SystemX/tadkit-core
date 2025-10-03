@@ -34,8 +34,12 @@ def compute_anomalies_parallel(X, _learner_configs, cache_key):
         LearnerClass = import_class(class_path)
         params = dict(param_items)
         learner = LearnerClass(**params)
-        learner.fit(X)
-        scores = learner.score_samples(X)
+        try:
+            learner.fit(X)
+            scores = learner.score_samples(X)
+        except Exception as e:
+            st.warning(f"Failed learner {name}: {e}")
+            scores = pd.Series([0] * len(X), index=X.index)
         return name, str(learner), scores
 
     results = Parallel(n_jobs=min(len(_learner_configs), 4))(
@@ -46,11 +50,6 @@ def compute_anomalies_parallel(X, _learner_configs, cache_key):
     return pd.DataFrame(
         {display_name: scores for _, display_name, scores in results}, index=X.index
     )
-
-
-@st.cache_data
-def convert_for_download(df: pd.DataFrame):
-    return df.to_csv().encode("utf-8")
 
 
 # ------------------------- Widget creators -------------------------
