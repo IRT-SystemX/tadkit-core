@@ -1,5 +1,3 @@
-from typing import Any, Dict
-
 import pandas as pd
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
@@ -10,215 +8,157 @@ from tadkit.catalog.formalizers import PandasFormalizer
 from tadkit.catalog.learners import installed_learner_classes
 from tadkit.utils.match_formalizer_learners import match_formalizer_learners
 
+from examples.utils import (
+    parameter_widget_selection,
+    set_stage,
+    prepare_learner_configs,
+    compute_anomalies_parallel,
+    convert_for_download,
+)
 
-# --- Global Settings ---
+
+# ------------------------- Global Settings -------------------------
 pd.options.plotting.backend = "plotly"
 st.set_page_config(layout="wide")
-st.title("TADkit Anomaly Detection App")
+st.title("TADkit Timeseries App")
 
-# --- Session Initialization ---
-default_session_vars = [
-    "uploaded_filename",
-    "dataset",
-    "X",
-    "y",
-    "formalizer",
-    "matching_available_learners",
-    "learners",
-    "scaled_anomalies",
-    "stage",
-]
+# ------------------------- Session Initialization -------------------------
+DEFAULTS = {
+    "stage": 1,
+    "uploaded_filename": None,
+    "dataset": None,
+    "selected_learners": None,
+    "learner_params": None,
+}
 
-
-for var in default_session_vars:
-    st.session_state.setdefault(var, None)
-
-if st.session_state.stage is None:
-    st.session_state.stage = 1
+for k, v in DEFAULTS.items():
+    st.session_state.setdefault(k, v)
 
 
-# --- Helper Functions ---
-def set_stage(i: int):
-    st.session_state.stage = i
-
-
-def widget_factory(value_type: str):
-    return {
-        "range": _create_range_widget,
-        "real_range": _create_range_widget,
-        "choice": _create_choice_widget,
-        "boolean": _create_bool_choice_widget,
-    }.get(value_type, _create_bool_choice_widget)
-
-
-def parameter_widget_selection(
-    name: str, params_description: Dict[str, Any]
-) -> Dict[str, Any]:
-    with st.expander(name):
-        return {
-            param_name: widget_factory(desc["value_type"])(param_name, desc)
-            for param_name, desc in params_description.items()
-        }
-
-
-def _create_range_widget(param_name: str, desc: Dict[str, Any]):
-    return st.slider(
-        label=param_name,
-        value=desc.get("default"),
-        min_value=desc.get("start"),
-        max_value=desc.get("stop"),
-        step=desc.get("step"),
-        format="%i"
-        if isinstance(desc.get("step"), int)
-        else f"%0.{len(str(desc.get('step')).split('.')[-1])}f",
-    )
-
-
-def _create_choice_widget(param_name: str, desc: Dict[str, Any]):
-    return st.radio(label=param_name, options=desc.get("set"))
-
-
-def _create_bool_choice_widget(param_name: str, desc: Dict[str, Any]):
-    return st.toggle(param_name)
-
-
-@st.cache_data
-def compute_anomalies():
-    X_formalized = st.session_state.formalizer.formalize()
-    anomalies = pd.DataFrame(index=st.X.index)
-
-    for name, learner in st.session_state.learners.items():
-        st.write(f"Fitting learner: {name}")
-        learner.fit(X_formalized)
-
-    for name, learner in st.session_state.learners.items():
-        st.write(f"Scoring with learner: {name}")
-        scores = learner.score_samples(X_formalized)
-        anomalies[str(learner)] = scores
-
-    return anomalies
-
-
-@st.cache_data
-def convert_for_download(df: pd.DataFrame):
-    return df.to_csv().encode("utf-8")
-
-
-if __name__ == "__main__":
-    # --- Layout ---
-    col_main, col_sidebar = st.columns([3, 1])
-    upload_container = col_main.empty().container()
-
-    uploaded_file = col_main.file_uploader("Upload a CSV file", type=["csv"])
+# ------------------------- Main App -------------------------
+def main():
+    plot_container = st.empty().container()
+    uploaded_file = st.file_uploader("Choose a CSV file", accept_multiple_files=False)
 
     # --- Stage 1: Wait for File Upload ---
     if uploaded_file:
         current_filename = uploaded_file.name
         # If new file uploaded or changed
-        if st.session_state.get("uploaded_filename") != current_filename:
+        if st.session_state.uploaded_filename != current_filename:
             st.session_state.uploaded_filename = current_filename
-            st.session_state.dataset = pd.read_csv(uploaded_file, header=0, index_col=0)
-            st.session_state.X = st.session_state.dataset.iloc[:, :-1]
-            st.session_state.y = -st.session_state.dataset.iloc[
-                :, -1
-            ]  # Negate if needed
+            df = pd.read_csv(uploaded_file, index_col=0)
+            st.session_state.dataset = df
+            st.session_state.X = df.iloc[:, :-1]
+            st.session_state.y = -df.iloc[:, -1]  # Adjust sign if needed
             set_stage(2)
+
     elif st.session_state.uploaded_filename is not None:
-        # File was removed
-        for var in default_session_vars:
-            if var != "stage":
-                st.session_state[var] = None
-        st.session_state.stage = 1
+        st.session_state.update(DEFAULTS)
         st.rerun()
 
-    # --- Stage 2: Select Learners & Parameters ---
-    if st.session_state.stage >= 2:
-        # Plot original time series
-        fig = make_subplots(rows=2, cols=1, shared_xaxes=True)
+    # ---------- Stage 2: Learner Configuration ----------
+    if st.session_state.stage >= 2 and st.session_state.dataset is not None:
+        dataset = st.session_state.dataset
+        data = dataset.iloc[:, :-1]
+        target = -dataset.iloc[:, -1]
 
-        for col in st.session_state.X.columns:
+        # Plot original data
+        fig = make_subplots(rows=2, cols=1, shared_xaxes=True)
+        for col in data.columns:
             fig.add_trace(
-                go.Scatter(
-                    x=st.session_state.X.index,
-                    y=st.session_state.X[col],
-                    mode="lines",
-                    name=col,
-                    showlegend=False,
-                ),
+                go.Scatter(x=data.index, y=data[col], mode="lines", showlegend=False),
                 row=1,
                 col=1,
             )
 
-        with col_sidebar:
+        # ---- Sidebar: Learner Controls ----
+        with st.sidebar:
+            st.markdown("## Learner Setup")
+
             col1, col2 = st.columns(2)
-            if col1.button("Start Learning", use_container_width=True):
+            if col1.button("Start learning", type="primary"):
                 set_stage(3)
-            if col2.button("Reset", use_container_width=True):
-                compute_anomalies.clear()
+
+            if col2.button("Reset learning"):
+                compute_anomalies_parallel.clear()
                 set_stage(2)
 
-            st.session_state.formalizer = PandasFormalizer(
-                st.session_state.X, "synchronous"
-            )
-            st.session_state.formalizer.formalize()
-
-            st.session_state.matching_available_learners = match_formalizer_learners(
-                st.session_state.formalizer, installed_learner_classes
+            formalizer = PandasFormalizer(data_df=data, dataframe_type="synchronous")
+            formalizer.formalize()
+            available_learners = match_formalizer_learners(
+                formalizer, installed_learner_classes
             )
 
-            options = st.multiselect(
-                "Select Anomaly Detectors:",
-                options=list(st.session_state.matching_available_learners.keys()),
-                default=list(st.session_state.matching_available_learners.keys()),
+            selected = st.multiselect(
+                "Choose detectors:",
+                list(available_learners.keys()),
+                st.session_state.selected_learners or list(available_learners.keys()),
             )
+            if selected != st.session_state.selected_learners:
+                set_stage(2)
+            st.session_state.selected_learners = selected
 
-            st.session_state.learners = {}
-            for learner_name in options:
-                learner_cls = st.session_state.matching_available_learners[learner_name]
-                params = parameter_widget_selection(
-                    name=learner_name, params_description=learner_cls.params_description
-                )
-                st.session_state.learners[learner_name] = learner_cls(**params)
+            # Params for each learner
+            learner_params = st.session_state.learner_params or {}
+            for learner_name in selected:
+                learner_class = available_learners[learner_name]
+                param_desc = learner_class.params_description
+                learner_params.setdefault(learner_name, {})
+                new_params = parameter_widget_selection(learner_name, param_desc)
+                learner_params[learner_name] = new_params
+            st.session_state.learner_params = learner_params
 
-    # --- Stage 3: Compute and Display Anomalies ---
-    if st.session_state.stage >= 3:
-        with col_sidebar:
-            with st.status("Running anomaly detection...", expanded=True):
-                anomalies = compute_anomalies()
-                normalized = anomalies.apply(
-                    lambda x: (x - x.min()) / (x.max() - x.min())
+        # ---------- Stage 3: Run Learners + Display ----------
+        if st.session_state.stage >= 3:
+            with st.sidebar.status("Learning in progress..."):
+                learner_configs, cache_key = prepare_learner_configs(
+                    selected, learner_params, available_learners
                 )
-                st.session_state.scaled_anomalies = pd.concat(
-                    [normalized, st.session_state.y], axis=1
-                )
-                st.success("Anomaly detection complete!")
+                anomalies = compute_anomalies_parallel(data, learner_configs, cache_key)
 
-        for col in st.session_state.scaled_anomalies.columns:
-            fig.add_trace(
-                go.Scatter(
-                    x=st.session_state.scaled_anomalies.index,
-                    y=st.session_state.scaled_anomalies[col],
-                    mode="lines",
-                    name=col,
+            # Normalize and include ground truth
+            scaled = anomalies.apply(
+                lambda col: (col - col.min()) / (col.max() - col.min())
+            )
+            scaled[dataset.columns[-1]] = target
+
+            for col in scaled.columns:
+                fig.add_trace(
+                    go.Scatter(
+                        x=scaled.index,
+                        y=scaled[col],
+                        mode="lines",
+                        name=col,
+                    ),
+                    row=2,
+                    col=1,
+                )
+
+            fig.update_layout(
+                legend=dict(
+                    orientation="v",
+                    entrywidth=100,
+                    yanchor="top",
+                    y=1.02,
+                    xanchor="right",
+                    x=1,
                 ),
-                row=2,
-                col=1,
+                width=1000,
+                height=600,
             )
 
-        fig.update_layout(
-            legend=dict(orientation="v", yanchor="top", y=1.02, xanchor="right", x=1),
-            width=1000,
-            height=600,
-        )
+            # Download Button
+            st.download_button(
+                label="Download anomalies CSV",
+                data=convert_for_download(scaled),
+                file_name="scaled_anomalies.csv",
+                mime="text/csv",
+                icon=":material/download:",
+            )
 
-        csv_data = convert_for_download(st.session_state.scaled_anomalies)
-        st.download_button(
-            label="📥 Download Results",
-            data=csv_data,
-            file_name="scaled_anomalies.csv",
-            mime="text/csv",
-        )
+        plot_container.plotly_chart(fig, use_container_width=True)
 
-    # --- Final Plot ---
-    if st.session_state.stage >= 2:
-        upload_container.plotly_chart(fig, use_container_width=True)
+
+# ------------------------- Entry Point -------------------------
+if __name__ == "__main__":
+    main()
