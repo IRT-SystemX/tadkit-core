@@ -6,7 +6,7 @@ import pandas as pd
 
 from tadkit.base.dataframe_type import DataFrameType
 from tadkit.base.formalizer import Formalizer
-from tadkit.base.typing import ParamsDescription, KWParams
+from tadkit.base.typing import ParamsDescription
 
 
 def index_has_fixed_time_step(index):
@@ -133,8 +133,7 @@ class PandasFormalizer(Formalizer):
         self._fill_query_description()
         return self
 
-    def formalize(self, **query: KWParams):
-
+    def formalize(self, **query):
         default_query = self.default_query()
         default_query.update(query)
         resampling = default_query["resampling"]

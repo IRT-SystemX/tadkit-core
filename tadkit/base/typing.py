@@ -1,11 +1,5 @@
-from typing import Sequence, TypeVar, Union, Dict
-from numbers import Number
-from datetime import datetime
+from typing import Any, Dict, TypeVar
 
-Param = Union[
-    Number, str, datetime, Sequence[Number], Sequence[str], Sequence[datetime]
-]
-KWParams = Dict[str, Param]
-ParamsDescription = Dict[str, Dict[str, Param]]
+ParamsDescription = Dict[str, Dict[str, Any]]
 Array = TypeVar("Array")
 Dataset = TypeVar("Dataset")
