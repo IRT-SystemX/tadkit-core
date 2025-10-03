@@ -3,14 +3,11 @@ import json
 from typing import Any, Dict
 from joblib import Parallel, delayed
 
+import pandas as pd
 import streamlit as st
 
 
 # ------------------------- Helper Functions -------------------------
-def set_stage(i: int):
-    st.session_state.stage = i
-
-
 def prepare_learner_configs(learner_names, learner_params, available_learners):
     learner_configs = []
     for name in learner_names:

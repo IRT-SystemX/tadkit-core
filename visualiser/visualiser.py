@@ -8,12 +8,11 @@ from tadkit.catalog.formalizers import PandasFormalizer
 from tadkit.catalog.learners import installed_learner_classes
 from tadkit.utils.match_formalizer_learners import match_formalizer_learners
 
-from examples.utils import (
-    parameter_widget_selection,
-    set_stage,
+from ui.widgets import parameter_widget_selection
+from utils.session import set_stage, convert_for_download
+from utils.learning import (
     prepare_learner_configs,
     compute_anomalies_parallel,
-    convert_for_download,
 )
 
 
