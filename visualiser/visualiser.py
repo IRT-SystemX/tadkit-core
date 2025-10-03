@@ -6,7 +6,8 @@ from tadkit.catalog.formalizers import PandasFormalizer
 from tadkit.catalog.learners import installed_learner_classes
 from tadkit.utils.match_formalizer_learners import match_formalizer_learners
 
-from ui.widgets import parameter_widget_selection
+# from ui.widgets import parameter_widget_selection
+from ui.widgets_from_metadata import render_widgets_from_metadata
 from ui.plots import plot_raw_data, plot_double_data
 from utils.session import (
     init_session_state,
@@ -92,9 +93,9 @@ def main():
             learner_params = st.session_state.learner_params or {}
             for learner_name in selected:
                 learner_class = available_learners[learner_name]
-                param_desc = learner_class.params_description
                 learner_params.setdefault(learner_name, {})
-                new_params = parameter_widget_selection(learner_name, param_desc)
+                with st.expander(learner_name):
+                    new_params = render_widgets_from_metadata(learner_class.metadata)
                 learner_params[learner_name] = new_params
             st.session_state.learner_params = learner_params
 
