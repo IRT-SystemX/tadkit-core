@@ -11,7 +11,7 @@ def get_wrapped_topolad_pp():
     from tdaad.anomaly_detectors import TopologicalAnomalyDetector
 
     metadata = enriched_metadata(TopologicalAnomalyDetector)
-    [metadata.pop(key) for key in ["contamination", "support_fraction"]]
+    [metadata.pop(key) for key in ["support_fraction"]]
     TopologicalAnomalyDetector.metadata = metadata
 
     return TopologicalAnomalyDetector

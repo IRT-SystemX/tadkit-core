@@ -60,7 +60,7 @@ def main():
 
         # ---- Sidebar: Learner Controls ----
         with st.sidebar:
-            st.markdown("## Learner Setup")
+            st.markdown("## Learner(s) Setup")
 
             col1, col2 = st.columns(2)
             if col1.button("Start learning", type="primary"):
@@ -100,24 +100,34 @@ def main():
 
         # ---------- Stage 3: Run Learners + Display ----------
         if st.session_state.stage >= 3:
-            with st.sidebar.status("Learning in progress..."):
+            with st.sidebar:
+                st.markdown("## Learning")
                 learner_configs, cache_key = prepare_learner_configs(
                     selected, learner_params, available_learners
                 )
-                anomalies = compute_anomalies_parallel(data, learner_configs, cache_key)
+                anomalies, predictions, errors = compute_anomalies_parallel(
+                    X=data,
+                    learner_configs=learner_configs,
+                    cache_key=cache_key,
+                )
+                for err in errors:
+                    st.warning(err)
+                # st.dataframe(anomalies)
 
-            # Normalize and include ground truth
-            scaled_anomalies = anomalies.apply(
-                lambda col: (col - col.min()) / (col.max() - col.min())
-            )
-            scaled_anomalies[dataset.columns[-1]] = target
+                result_type = st.segmented_control(
+                    "Select result type to display",
+                    ["Anomaly scores", "Anomalies"],
+                    default="Anomaly scores",
+                )
+                output = anomalies if result_type == "Anomaly scores" else predictions
+                output[dataset.columns[-1]] = target
 
-            fig = plot_double_data(data, scaled_anomalies)
+            fig = plot_double_data(data, output)
 
             # Download Button
             st.download_button(
                 label="Download anomalies CSV",
-                data=convert_for_download(scaled_anomalies),
+                data=convert_for_download(output),
                 file_name="scaled_anomalies.csv",
                 mime="text/csv",
                 icon=":material/download:",
