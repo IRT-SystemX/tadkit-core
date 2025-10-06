@@ -16,16 +16,21 @@ RUN python3 -m ensurepip && \
 # Add uv to PATH
 ENV PATH="/root/.local/bin:$PATH"
 
-# Copy only dependency files first to leverage Docker cache
-COPY requirements.txt ./
+RUN uv venv /venv
 
-RUN uv pip install --system -r requirements.txt
+ENV VIRTUAL_ENV=/venv
+
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 COPY . .
-COPY examples/visualiser.py /app/visualiser.py
+RUN uv pip install -r requirements.txt .
+# RUN uv pip install --system -r requirements.txt .
+RUN uv pip install git+https://github.com/IRT-SystemX/tdaad@opt
+
+ENV PYTHONPATH=/app
 
 EXPOSE 8501
 
 RUN echo "alias ll='ls -lah --color=auto'" >> ~/.bashrc
-CMD ["streamlit", "run", "visualiser.py"]
+CMD ["streamlit", "run", "visualiser/visualiser.py"]
 
