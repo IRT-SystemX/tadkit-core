@@ -1,6 +1,6 @@
 from typing import Sequence, Optional, Protocol, runtime_checkable
 
-from tadkit.base.typing import ParamsDescription, Array
+from tadkit.base.typing import Array, ParamsDescription
 
 
 @runtime_checkable
@@ -31,7 +31,7 @@ class TADLearner(Protocol):
     """
 
     required_properties: Sequence[str] = []
-    params_description: ParamsDescription = {}
+    metadata: ParamsDescription = {}
 
     def fit(self, X: Array, y: Optional[Array] = None) -> "TADLearner": ...
 

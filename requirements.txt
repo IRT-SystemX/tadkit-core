@@ -5,3 +5,4 @@ matplotlib>=3.8.0
 ipywidgets>=7.7.5
 nbformat>=4.2.0
 plotly>=6.0.0
+streamlit

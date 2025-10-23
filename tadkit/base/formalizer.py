@@ -1,7 +1,7 @@
 import abc
 from typing import Sequence, Union
 
-from tadkit.base.typing import KWParams, ParamsDescription, Array
+from tadkit.base.typing import ParamsDescription, Array
 
 
 class Formalizer(abc.ABC):
@@ -44,7 +44,7 @@ class Formalizer(abc.ABC):
         }
 
     @abc.abstractmethod
-    def formalize(self, **query: KWParams) -> Union[Array, Sequence[Array]]:
+    def formalize(self, **query) -> Union[Array, Sequence[Array]]:
         raise NotImplementedError
 
     @classmethod
