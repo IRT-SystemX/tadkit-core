@@ -1,6 +1,7 @@
 from typing import TypeVar, Type, Sequence, Optional
 
-from tadkit.base import TADLearner, KWParams, ParamsDescription, Array
+from tadkit.base.tadlearner import TADLearner
+from tadkit.base.typing import KWParams, ParamsDescription, Array
 
 Transformer = TypeVar("Transformer")
 

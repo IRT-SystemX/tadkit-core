@@ -1,4 +1,4 @@
-from typing import Sequence
+from typing import Dict
 
 from tadkit.base.formalizer import Formalizer
 from tadkit.base.tadlearner import TADLearner
@@ -6,7 +6,7 @@ from tadkit.base.tadlearner import TADLearner
 
 def match_formalizer_learners(
     formalizer: Formalizer,
-    learners: Sequence[TADLearner],
+    learners: Dict[str, TADLearner],
 ):
     matching_learners = {}
     for learner_name, learner_class in learners.items():

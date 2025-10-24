@@ -1,5 +1,6 @@
 from typing import Any, Dict, TypeVar
 
-ParamsDescription = Dict[str, Dict[str, Any]]
+KWParams = Dict[str, Any]
+ParamsDescription = Dict[str, KWParams]
 Array = TypeVar("Array")
 Dataset = TypeVar("Dataset")
