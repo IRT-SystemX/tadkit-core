@@ -1,63 +1,68 @@
-import abc
-from typing import Sequence, Union
+from abc import ABC, abstractmethod
+from typing import Any, Dict, Union, List
+import numpy as np
+import pandas as pd
 
-from tadkit.base.typing import ParamsDescription, Array
+ParamsDescription = Dict[str, Any]
+ArrayLike = Union[np.ndarray, pd.DataFrame]
 
 
-class Formalizer(abc.ABC):
-    """Abstract class of data formalizer (provider).
-    Transforms Data from Confiance DataProvider into standard Data for ML pipelines.
-
-    Methods:
-        formalize: Take a data query and return associated data.
-        no_data_leakage: Check if no leakage from a first data query to a second.
-
-    Properties:
-        query_description: Get the description of a data query.
-        available_properties: Get the properties that the formalized data satisfies.
-
-    Example of usage:
-        >>> assert issubclass(MyFormalizer, Formalizer)
-        >>> formalizer = MyFormalizer(**args_init)
-        >>> formalizer.available_properties  # The provided property of the formalized data
-        >>> formalizer.query_description  # The description of the queries
-        >>> query_train = ...  # Query to create data, following the query description
-        >>> query_test = ...
-        >>> X_test = formalizer.formalize(query_test)
-        >>> X_train = formalizer.formalize(query_train)
+class Formalizer(ABC):
+    """
+    Generic formalizer for array-like data.
+    Can handle NumPy arrays, pandas DataFrames, or any similar array-like backend.
     """
 
-    @property
-    @abc.abstractmethod
-    def available_properties(self) -> Sequence[str]:
-        return []
+    def __init__(self, data: ArrayLike = None, backend: str = "numpy"):
+        self.data = data
+        self.backend = backend  # "numpy" or "pandas"
+        self.available_properties_: List[str] = []
+        self.query_description_: ParamsDescription = {}
 
+    # -----------------------
+    # Available properties
+    # -----------------------
     @property
-    @abc.abstractmethod
+    def available_properties(self) -> List[str]:
+        return self.available_properties_
+
+    def add_property(self, name: str):
+        if name not in self.available_properties_:
+            self.available_properties_.append(name)
+
+    def remove_property(self, name: str):
+        while name in self.available_properties_:
+            self.available_properties_.remove(name)
+
+    # -----------------------
+    # Query description
+    # -----------------------
+    @property
     def query_description(self) -> ParamsDescription:
-        return {}
+        return self.query_description_
 
-    def default_query(self):
-        # NB: this hints at queries having a default value for all parameters.
-        return {
-            name: param["default"] for name, param in self.query_description.items()
-        }
+    def add_query_param(self, name: str, param_info: Dict[str, Any]):
+        self.query_description_[name] = param_info
 
-    @abc.abstractmethod
-    def formalize(self, **query) -> Union[Array, Sequence[Array]]:
-        raise NotImplementedError
+    def get_default_query(self) -> Dict[str, Any]:
+        return {k: v.get("default") for k, v in self.query_description_.items()}
 
-    @classmethod
-    def __subclasshook__(cls, subclass):
-        if not (
-            hasattr(subclass, "formalize")
-            and callable(subclass.formalize)
-            and hasattr(subclass, "available_properties")
-            and not callable(subclass.available_properties)
-            and hasattr(subclass, "query_description")
-            and not callable(subclass.query_description)
-        ):
-            return False
-        if cls is Formalizer:
-            return True
-        return NotImplemented
+    # -----------------------
+    # Abstract method
+    # -----------------------
+    @abstractmethod
+    def formalize(self, **query) -> ArrayLike:
+        """
+        Transform raw data into standard array-like format.
+        Return type depends on backend (numpy array, pandas DataFrame, etc.)
+        """
+        ...
+
+    # -----------------------
+    # Helper for backend conversion
+    # -----------------------
+    def to_backend(self, data: Any) -> ArrayLike:
+        """Convert any array-like data to the specified backend."""
+        if self.backend == "pandas":
+            return pd.DataFrame(data)
+        return np.array(data)
