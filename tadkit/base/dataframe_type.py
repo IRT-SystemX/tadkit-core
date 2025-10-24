@@ -13,7 +13,7 @@ class DataFrameType(Enum):
         self.required_columns = required_columns
 
     @staticmethod
-    def from_text(name: str):
+    def from_text(name: str | None):
         """Convert a string to a DataFrameType enum."""
         lookup = {t.value: t for t in DataFrameType}
         try:

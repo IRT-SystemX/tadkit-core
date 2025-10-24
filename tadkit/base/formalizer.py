@@ -9,13 +9,11 @@ ArrayLike = Union[np.ndarray, pd.DataFrame]
 
 class Formalizer(ABC):
     """
-    Generic formalizer for array-like data.
-    Can handle NumPy arrays, pandas DataFrames, or any similar array-like backend.
+    Abstract base class for all formalizers.
+    Provides array-agnostic interface for ML pipelines.
     """
 
-    def __init__(self, data: ArrayLike = None, backend: str = "numpy"):
-        self.data = data
-        self.backend = backend  # "numpy" or "pandas"
+    def __init__(self):
         self.available_properties_: List[str] = []
         self.query_description_: ParamsDescription = {}
 
@@ -41,11 +39,17 @@ class Formalizer(ABC):
     def query_description(self) -> ParamsDescription:
         return self.query_description_
 
-    def add_query_param(self, name: str, param_info: Dict[str, Any]):
+    def add_query_description(self, name: str, param_info: Dict[str, Any]):
         self.query_description_[name] = param_info
 
-    def get_default_query(self) -> Dict[str, Any]:
-        return {k: v.get("default") for k, v in self.query_description_.items()}
+    def default_query(self) -> Dict[str, Any]:
+        """
+        Return default query parameters based on query_description.
+        """
+        defaults = {}
+        for k, desc in self.query_description_.items():
+            defaults[k] = desc.get("default")
+        return defaults
 
     # -----------------------
     # Abstract method
@@ -57,12 +61,3 @@ class Formalizer(ABC):
         Return type depends on backend (numpy array, pandas DataFrame, etc.)
         """
         ...
-
-    # -----------------------
-    # Helper for backend conversion
-    # -----------------------
-    def to_backend(self, data: Any) -> ArrayLike:
-        """Convert any array-like data to the specified backend."""
-        if self.backend == "pandas":
-            return pd.DataFrame(data)
-        return np.array(data)
