@@ -7,7 +7,7 @@ ParamsDescription = Dict[str, Any]
 ArrayLike = Union[np.ndarray, pd.DataFrame]
 
 
-class Formalizer(ABC):
+class Formatter(ABC):
     """
     Abstract base class for all formalizers.
     Provides array-agnostic interface for ML pipelines.
@@ -55,7 +55,7 @@ class Formalizer(ABC):
     # Abstract method
     # -----------------------
     @abstractmethod
-    def formalize(self, **query) -> ArrayLike:
+    def format(self, **query) -> ArrayLike:
         """
         Transform raw data into standard array-like format.
         Return type depends on backend (numpy array, pandas DataFrame, etc.)

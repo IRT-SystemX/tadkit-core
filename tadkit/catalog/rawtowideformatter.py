@@ -2,7 +2,7 @@ from typing import Sequence, Optional, Union
 
 import numpy as np
 import pandas as pd
-from tadkit.base.formalizer import Formalizer
+from tadkit.base.formatter import Formatter
 from tadkit.base.dataframe_type import DataFrameType
 
 
@@ -30,9 +30,9 @@ def _asynchronous_to_synchronous(df):
     return df_pivot
 
 
-class UnifiedFormalizer(Formalizer):
+class RawToWideFormatter(Formatter):
     """
-    A formalizer that supports both pandas DataFrame and NumPy array outputs.
+    A Formatter that supports both pandas DataFrame and NumPy array outputs.
 
     Parameters
     ----------
@@ -64,15 +64,20 @@ class UnifiedFormalizer(Formalizer):
                 self.add_property("converted_to_synchronous")
             if "timestamp" in self.data_df_.columns:
                 self.data_df_.set_index("timestamp", inplace=True)
-            self.data_df_.index = pd.to_datetime(self.data_df_.index)
-            self.timestamps = self.data_df_.index.to_numpy()
+            self.data_df_.index = pd.to_datetime(self.data_df_.index, utc=True)
+            self.data_df_.index = self.data_df_.index.tz_convert(None)
+            self.timestamps = self.data_df_.index.to_numpy(dtype="datetime64[ns]")
             self.data_array = self.data_df_.values
             self.columns = self.data_df_.columns.tolist()
         # --- Handle numpy input ---
         elif isinstance(data, np.ndarray):
             if timestamps is None:
                 raise ValueError("NumPy input requires a 'timestamps' array.")
-            self.timestamps = pd.to_datetime(timestamps).to_numpy()
+            self.timestamps = (
+                pd.to_datetime(timestamps, utc=True)
+                .tz_convert(None)
+                .to_numpy(dtype="datetime64[ns]")
+            )
             self.data_array = data
             self.columns = (
                 columns
@@ -92,7 +97,7 @@ class UnifiedFormalizer(Formalizer):
         self.add_property("synchronous")
         self.add_property(f"{self.backend}_backend")
 
-        diffs = np.diff(self.timestamps.astype("datetime64[s]").astype("int64"))
+        diffs = np.diff(self.timestamps.astype("datetime64[s]"))
         if len(set(diffs)) == 1:
             self.add_property("fixed_time_step")
 
@@ -131,16 +136,20 @@ class UnifiedFormalizer(Formalizer):
             },
         )
 
-    def formalize(
+    def format(
         self,
         target_period=None,
         target_space=None,
         resample=False,
-        resample_freq="1S",
+        resample_freq: float = 1.0,
     ):
         """
         Slice and optionally resample the data, using backend-specific resampling.
         """
+        # reset time-series-type properties
+        self.remove_property("univariate_time_series")
+        self.remove_property("multiple_time_series")
+
         # --- target period ---
         start, stop = (
             target_period
@@ -158,10 +167,8 @@ class UnifiedFormalizer(Formalizer):
 
         # --- univariate/multivariate properties ---
         if len(selected_space) > 1:
-            self.remove_property("univariate_time_series")
             self.add_property("multiple_time_series")
         else:
-            self.remove_property("multiple_time_series")
             self.add_property("univariate_time_series")
 
         if self.backend == "numpy":
@@ -176,6 +183,5 @@ class UnifiedFormalizer(Formalizer):
                 array_slice, columns=selected_space, index=self.timestamps[mask]
             )
             if resample:
-                freq_str = f"{int(resample_freq)}s"
-                df_slice = df_slice.resample(freq_str).interpolate()
+                df_slice = df_slice.resample(f"{int(resample_freq)}s").interpolate()
             return df_slice

@@ -1,11 +1,11 @@
 from typing import Dict
 
-from tadkit.base.formalizer import Formalizer
+from tadkit.base.formatter import Formatter
 from tadkit.base.tadlearner import TADLearner
 
 
 def match_formalizer_learners(
-    formalizer: Formalizer,
+    formalizer: Formatter,
     learners: Dict[str, TADLearner],
 ):
     matching_learners = {}
