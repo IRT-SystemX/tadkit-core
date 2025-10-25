@@ -1,15 +1,12 @@
+from typing import Dict, Any
+
 import inspect
 import re
-from typing import Any, Dict
 from numbers import Integral
-from sklearn.utils._param_validation import Interval
-from sklearn.utils._param_validation import StrOptions
+from sklearn.utils._param_validation import Interval, StrOptions
 
 
 def get_default_class_values(cls) -> Dict[str, Any]:
-    """
-    Extracts default parameter values from a class's __init__ method.
-    """
     sig = inspect.signature(cls.__init__)
     return {
         k: v.default
@@ -19,9 +16,6 @@ def get_default_class_values(cls) -> Dict[str, Any]:
 
 
 def get_param_descriptions(cls) -> Dict[str, str]:
-    """
-    Parses a NumPy-style docstring of a class to extract parameter descriptions.
-    """
     doc = inspect.getdoc(cls)
     if not doc:
         return {}
@@ -31,7 +25,6 @@ def get_param_descriptions(cls) -> Dict[str, str]:
     in_params_section = False
     start_idx = -1
 
-    # Locate "Parameters" section
     for i, line in enumerate(lines):
         if line.strip().lower() == "parameters":
             if i + 1 < len(lines) and set(lines[i + 1].strip()) == {"-"}:
@@ -42,7 +35,6 @@ def get_param_descriptions(cls) -> Dict[str, str]:
     if not in_params_section:
         return {}
 
-    # Parse parameter block
     i = start_idx
     while i < len(lines):
         line = lines[i].strip()
@@ -65,7 +57,7 @@ def get_param_descriptions(cls) -> Dict[str, str]:
 
 def parse_sklearn_constraints(parameter_constraints):
     """
-    Parses sklearn-style _parameter_constraints into structured metadata.
+    Parse _parameter_constraints into a structured format for rendering.
     """
 
     def map_type(c):
@@ -100,27 +92,26 @@ def parse_sklearn_constraints(parameter_constraints):
             return ("max", float(s[2:]))
         return None
 
-    metadata = {}
+    param_spec = {}
 
     for param_name, constraints in parameter_constraints.items():
         types = set()
         options = set()
-        bounds = {"min": None, "max": None}
+        bounds = {"min": None, "max": None, "closed": "both"}
+
+        if None in constraints:
+            types.add(type(None))
 
         for c in constraints:
-            # Handle Intervals
             if isinstance(c, Interval):
                 t = map_type(c)
                 if t:
                     types.add(t)
                 bounds["min"], bounds["max"] = c.left, c.right
-
-            # Handle StrOptions (new)
+                bounds["closed"] = c.closed  # <—— new
             elif isinstance(c, StrOptions):
                 options.update(c.options)
                 types.add("categorical")
-
-            # Handle strings
             elif isinstance(c, str):
                 t = map_type(c)
                 if t:
@@ -134,79 +125,83 @@ def parse_sklearn_constraints(parameter_constraints):
                     options.add(c)
                 elif c == "boolean":
                     options.update([True, False])
-
-            # Handle type objects (e.g., Integral)
             elif isinstance(c, type):
                 t = map_type(c)
                 if t:
                     types.add(t)
-
-            # Handle categorical sets
             elif isinstance(c, set):
                 options.update(c)
                 types.add("categorical")
-
             elif c is None:
                 types.add(type(None))
 
-        # Finalize
-        if param_name == "verbose":
-            metadata[param_name] = {
-                "type": "categorical",
-                "bounds": bounds,
-                "options": [0, 1, 2, 3],
-            }
-        elif param_name == "n_jobs" and int in types and type(None) in types:
-            metadata[param_name] = {
-                "type": "categorical",
-                "bounds": bounds,
-                "options": [None],
-            }
-        elif options:
-            metadata[param_name] = {
-                "type": "categorical",
-                "bounds": bounds,
-                "options": sorted(options, key=str),
-            }
+        # Special handling for known tricky params
+        if param_name in {"verbose", "n_jobs"}:
+            if param_name == "verbose":
+                param_spec[param_name] = {
+                    "type": "multi",
+                    "options": [0, 1, 2, 3],
+                    "bounds": bounds,
+                }
+            elif param_name == "n_jobs":
+                # Keep int and None for selection
+                param_spec[param_name] = {
+                    "type": "multi",
+                    "options": [None, -1],  # allow adding numeric range if needed
+                    "bounds": bounds,
+                }
+            continue
+
+        # Finalize type
+        if options:
+            selected_type = "multi" if len(types) > 1 else "categorical"
         else:
-            # Prefer supported types in priority order
             for t in [float, int, str, bool, "categorical"]:
                 if t in types:
-                    selected = t
+                    selected_type = t
                     break
             else:
-                selected = list(types)[0] if types else None
+                selected_type = list(types)[0] if types else None
 
-            metadata[param_name] = {
-                "type": selected,
-                "bounds": bounds,
-                "options": None,
-            }
+        param_spec[param_name] = {
+            "type": selected_type,
+            "bounds": bounds,
+            "options": sorted(options, key=str) if options else None,
+            "allow_none": type(None) in types,
+        }
 
-    return metadata
+    return param_spec
 
 
-def enriched_metadata(cls) -> Dict[str, Dict[str, Any]]:
+def params_from_class(cls) -> dict:
     """
-    Combines constraints, defaults, and docstring descriptions for a sklearn-like class.
+    Return parameter info from class __init__ and _parameter_constraints.
     """
     defaults = get_default_class_values(cls)
     descriptions = get_param_descriptions(cls)
     constraints = getattr(cls, "_parameter_constraints", {})
-    metadata = parse_sklearn_constraints(constraints)
 
-    enriched = {}
-    for param in metadata.keys():
-        info = metadata.get(
-            param,
-            {
-                "type": None,
-                "bounds": {"min": None, "max": None},
-                "options": None,
-            },
-        )
-        info["default"] = defaults.get(param)
-        info["description"] = descriptions.get(param)
-        enriched[param] = info
+    params = {}
 
-    return enriched
+    for name, constraint in constraints.items():
+        info = parse_sklearn_constraints({name: constraint})[name]
+        info["default"] = defaults.get(name)
+        info["description"] = descriptions.get(name)
+
+        # Multi-type parameters: None, integers, or special strings
+        if info.get("options") and (
+            len(info["options"]) > 1 or None in info["options"]
+        ):
+            info["type"] = "multi"
+            # Default to None if allowed
+            if None in info["options"]:
+                info["default"] = None
+
+        # Special case: metric_params (dict) → treat as text input for now
+        if name == "metric_params":
+            info["type"] = dict
+            info["default"] = defaults.get(name)
+
+        params[name] = info
+
+    return params
