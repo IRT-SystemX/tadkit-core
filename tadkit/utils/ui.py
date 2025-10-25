@@ -4,16 +4,6 @@ from IPython.display import display
 import streamlit as st
 
 
-def format_bounds_text(min_val, max_val):
-    if min_val is None and max_val is None:
-        return ""
-    if min_val is None:
-        return f"≤ {max_val}"
-    if max_val is None:
-        return f"≥ {min_val}"
-    return f"{min_val}-{max_val}"
-
-
 def sanitize_default(default, min_val, max_val, ptype, closed="both", allow_none=False):
     """
     Adjusts a default value to respect open/closed bounds and optional None.
@@ -62,7 +52,7 @@ def sanitize_default(default, min_val, max_val, ptype, closed="both", allow_none
 
 def render_widgets_from_params(params: dict, frontend="ipywidgets"):
     """
-    Render widgets from params spec returned by params_from_class().
+    Render widgets from params spec (as returned by params_from_class).
     Returns (widgets_dict, get_values_fn).
     """
 
@@ -74,7 +64,6 @@ def render_widgets_from_params(params: dict, frontend="ipywidgets"):
         except json.JSONDecodeError:
             return None
 
-    # Helper for numeric widgets
     def render_numeric(
         label,
         default,
@@ -85,24 +74,43 @@ def render_widgets_from_params(params: dict, frontend="ipywidgets"):
         closed="both",
         allow_none=False,
     ):
-        if allow_none and default is None:
-            # Preserve it as None — don't sanitize into numeric
-            default = None
-        else:
-            default = sanitize_default(
-                default, min_val, max_val, ptype, closed, allow_none
-            )
+        default = sanitize_default(default, min_val, max_val, ptype, closed, allow_none)
+
         if frontend == "st":
-            return st.number_input(
-                label,
-                value=default,
-                min_value=min_val,
-                max_value=max_val,
-                step=1 if ptype == int else 0.01,
-                format="%d" if ptype == int else "%.3f",
-                help=description,
-            )
+            # --- Streamlit type-safe number input ---
+            if ptype == int:
+                cast = int
+                step = 1
+                fmt = "%d"
+            else:
+                cast = float
+                step = 0.01
+                fmt = "%.6f"
+
+            def safe_cast(v):
+                return cast(v) if v is not None else None
+
+            value = safe_cast(default)
+            min_value = safe_cast(min_val)
+            max_value = safe_cast(max_val)
+
+            # omit None bounds to avoid MixedNumericTypesError
+            kwargs = {
+                "label": label,
+                "value": value,
+                "step": step,
+                "format": fmt,
+                "help": description,
+            }
+            if min_value is not None:
+                kwargs["min_value"] = min_value
+            if max_value is not None:
+                kwargs["max_value"] = max_value
+
+            return st.number_input(**kwargs)
+
         else:
+            # --- ipywidgets numeric ---
             if ptype == int:
                 return widgets.BoundedIntText(
                     value=default,
@@ -122,14 +130,15 @@ def render_widgets_from_params(params: dict, frontend="ipywidgets"):
                     tooltip=description,
                 )
 
+    # --- main widget creation loop ---
     user_inputs = {}
 
     for param_name, info in params.items():
         label = param_name.replace("_", " ").capitalize()
-        ptype = info["type"]
+        ptype = info.get("type")
         default = info.get("default")
         description = info.get("description", "")
-        bounds = info.get("bounds", {})
+        bounds = info.get("bounds", {}) or {}
         min_val = bounds.get("min")
         max_val = bounds.get("max")
         closed = bounds.get("closed", "both")
@@ -176,10 +185,10 @@ def render_widgets_from_params(params: dict, frontend="ipywidgets"):
             user_inputs[param_name] = val
             continue
 
-        # --- Numeric ---
-        # --- Optional numeric: render None selector instead of numeric input ---
+        # --- Optional numeric with default None ---
         if ptype in (int, float):
             if allow_none and default is None:
+                # render dropdown [None] instead of numeric field
                 if frontend == "st":
                     val = st.selectbox(label, [None], index=0, help=description)
                 else:
@@ -192,6 +201,7 @@ def render_widgets_from_params(params: dict, frontend="ipywidgets"):
                     )
                 user_inputs[param_name] = val
                 continue
+
             val = render_numeric(
                 label, default, min_val, max_val, ptype, description, closed, allow_none
             )
@@ -228,7 +238,7 @@ def render_widgets_from_params(params: dict, frontend="ipywidgets"):
     if frontend == "ipywidgets":
         display(widgets.VBox(list(user_inputs.values())))
 
-    # --- Separate retrieval function ---
+    # --- Retrieval function ---
     def get_values():
         values = {}
         for k, w in user_inputs.items():
