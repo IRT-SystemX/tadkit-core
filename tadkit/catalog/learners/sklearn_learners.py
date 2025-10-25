@@ -1,20 +1,10 @@
 import numpy as np
 
 from sklearn.neighbors import KernelDensity
-from sklearn.ensemble import IsolationForest
 
-from tadkit.utils.learner_params_parser import enriched_metadata
-
-
-# ---------- AD Learner: IsolationForest ----------
-IsolationForestLearner = IsolationForest
-IsolationForestLearner.required_properties = []
-metadata = enriched_metadata(IsolationForestLearner)
-IsolationForestLearner.metadata = metadata
 
 # ---------- AD Learner: KernelDensityLearner ----------
 KernelDensityLearner = KernelDensity
-KernelDensityLearner.required_properties = []
 
 KernelDensity.oldfit = KernelDensity.fit
 
@@ -37,9 +27,5 @@ def predict(self, X):
 
 
 KernelDensityLearner.predict = predict
-metadata = enriched_metadata(KernelDensityLearner)
-[
-    metadata.pop(key)
-    for key in ["atol", "rtol", "breadth_first", "leaf_size", "metric_params"]
-]
-KernelDensityLearner.metadata = metadata
+
+# @todo: check if monkeypatch really works with api, and see if something can be done anyway
