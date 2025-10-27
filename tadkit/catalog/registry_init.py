@@ -2,8 +2,9 @@
 from tadkit.base.registry import registry
 
 
-from tadkit.catalog.learners.sklearn_learners import (
-    KernelDensityLearner,
+from tadkit.catalog.sklearners import (
+    KDEOutlierDetector,
+    GMMOutlierDetector,
 )
 
 registry.register_learner(
@@ -13,8 +14,14 @@ registry.register_learner(
 )
 
 registry.register_learner(
-    name="KernelDensityLearner",
-    learner=KernelDensityLearner,
+    name="KDEOutlierDetector",
+    learner=KDEOutlierDetector,
+    condition=lambda _: True,
+)
+
+registry.register_learner(
+    name="GMMOutlierDetector",
+    learner=GMMOutlierDetector,
     condition=lambda _: True,
 )
 
@@ -40,7 +47,7 @@ registry.register_learner(  # @todo: default parameter adjustments from _kcpdi_w
 )
 
 registry.register_learner(  # @todo: default parameter adjustments from _sbad_wrapper.py
-    name="DataReconstructionAD",
+    name="DiLAnoDetectm",
     learner="sbad_fnn.models.DiLAnoDetectm",
     condition=lambda fmt: "multiple_time_series" in fmt.available_properties,
     optional=True,
