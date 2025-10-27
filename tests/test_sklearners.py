@@ -7,6 +7,18 @@ from tadkit.catalog.sklearners import (
 )
 
 
+from tadkit.utils.param_spec import (
+    get_param_descriptions,
+    get_default_class_values,
+    params_from_class,
+)
+
+get_param_descriptions(KDEOutlierDetector)
+get_default_class_values(KDEOutlierDetector)
+
+params_from_class(KDEOutlierDetector)
+
+
 n_timestamps = 100
 n_sensors = 5
 timestamps = pd.to_datetime("2024-01-01", utc=True) + pd.Timedelta(1, "h") * np.arange(

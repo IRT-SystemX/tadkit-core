@@ -205,6 +205,8 @@ class WidgetFactory:
 # -------------------------------
 # 3. Main Rendering Function
 # -------------------------------
+
+
 def render_widgets_from_params(params: dict, frontend="ipywidgets"):
     """Render or return parameter specs as widgets, streamlit inputs, or dicts."""
     factory = WidgetFactory(frontend)
@@ -224,23 +226,30 @@ def render_widgets_from_params(params: dict, frontend="ipywidgets"):
         options = info.get("options") or []
         allow_none = bool(info.get("allow_none", False) or (None in options))
 
-        # Numeric
+        # Numeric types
         if ptype in (int, float):
             user_inputs[name] = factory.make_numeric(
                 label, default, min_val, max_val, ptype, description, closed, allow_none
             )
 
-        # Dict
+        # Dict types
         elif ptype == dict:
             user_inputs[name] = factory.make_dict(label, default, description)
 
-        # Dropdown or multi
+        # Categorical or multi-select
         elif ptype in ("categorical", "multi"):
             default_val = (
                 default if default in options else (options[0] if options else None)
             )
             user_inputs[name] = factory.make_dropdown(
                 label, options, default_val, description
+            )
+
+        # Special NoneType with only None allowed
+        elif ptype is type(None) and allow_none:
+            # Use a dropdown with string "None" because ipywidgets cannot display Python None
+            user_inputs[name] = factory.make_dropdown(
+                label, options=[None], default=None, description=description
             )
 
         # Fallback text
@@ -251,21 +260,29 @@ def render_widgets_from_params(params: dict, frontend="ipywidgets"):
     if frontend == "ipywidgets":
         display(widgets.VBox(list(user_inputs.values())))
 
-    # Return a retrieval function
+    # Function to retrieve values
     def get_values():
         if frontend == "no_ui":
             return {k: v for k, v in user_inputs.items()}
+
         values = {}
         for k, w in user_inputs.items():
-            if frontend == "ipywidgets":
-                val = w.value
-            else:
-                val = w  # Streamlit returns raw value
-            values[k] = (
-                json.loads(val)
-                if params[k]["type"] == dict and isinstance(val, str)
-                else val
-            )
+            val = w.value if frontend == "ipywidgets" else w
+
+            # Convert string "None" back to Python None
+            if (
+                params[k]["type"] is None
+                and params[k].get("allow_none", False)
+                and val == "None"
+            ):
+                val = None
+
+            # Deserialize dict if needed
+            if params[k]["type"] == dict and isinstance(val, str):
+                val = json.loads(val)
+
+            values[k] = val
+
         return values
 
     return user_inputs, get_values

@@ -58,6 +58,7 @@ def get_param_descriptions(cls) -> Dict[str, str]:
 def parse_sklearn_constraints(parameter_constraints):
     """
     Parse _parameter_constraints into a structured format for rendering.
+    Handles unconstrained parameters by inferring types from defaults.
     """
 
     def map_type(c):
@@ -98,6 +99,15 @@ def parse_sklearn_constraints(parameter_constraints):
         types = set()
         options = set()
         bounds = {"min": None, "max": None, "closed": "both"}
+
+        if not constraints:  # <-- handle unconstrained
+            param_spec[param_name] = {
+                "type": None,  # type will be inferred later
+                "bounds": bounds,
+                "options": None,
+                "allow_none": True,
+            }
+            continue
 
         if None in constraints:
             types.add(type(None))
@@ -180,6 +190,10 @@ def params_from_class(cls) -> dict:
     defaults = get_default_class_values(cls)
     descriptions = get_param_descriptions(cls)
     constraints = getattr(cls, "_parameter_constraints", {})
+
+    # Ensure every parameter in defaults is in constraints
+    for param in defaults:
+        constraints.setdefault(param, None)
 
     params = {}
 
