@@ -1,9 +1,11 @@
 from typing import Dict, Any
-
 import inspect
-import re
 from numbers import Integral
+
+import math
 from sklearn.utils._param_validation import Interval, StrOptions
+
+UI_INF = 1e6
 
 
 def get_default_class_values(cls) -> Dict[str, Any]:
@@ -16,6 +18,8 @@ def get_default_class_values(cls) -> Dict[str, Any]:
 
 
 def get_param_descriptions(cls) -> Dict[str, str]:
+    import re
+
     doc = inspect.getdoc(cls)
     if not doc:
         return {}
@@ -23,16 +27,17 @@ def get_param_descriptions(cls) -> Dict[str, str]:
     param_descriptions = {}
     lines = doc.splitlines()
     in_params_section = False
-    start_idx = -1
 
+    # locate "Parameters" section
     for i, line in enumerate(lines):
-        if line.strip().lower() == "parameters":
-            if i + 1 < len(lines) and set(lines[i + 1].strip()) == {"-"}:
-                in_params_section = True
-                start_idx = i + 2
-                break
-
-    if not in_params_section:
+        if (
+            line.strip().lower() == "parameters"
+            and i + 1 < len(lines)
+            and set(lines[i + 1].strip()) == {"-"}
+        ):
+            start_idx = i + 2
+            break
+    else:
         return {}
 
     i = start_idx
@@ -55,11 +60,8 @@ def get_param_descriptions(cls) -> Dict[str, str]:
     return param_descriptions
 
 
-def parse_sklearn_constraints(parameter_constraints):
-    """
-    Parse _parameter_constraints into a structured format for rendering.
-    Handles unconstrained parameters by inferring types from defaults.
-    """
+def parse_sklearn_constraints(parameter_constraints) -> Dict[str, Dict[str, Any]]:
+    """Convert sklearn-style constraints to structured type info."""
 
     def map_type(c):
         if isinstance(c, Interval):
@@ -70,11 +72,9 @@ def parse_sklearn_constraints(parameter_constraints):
             if c in {"number", "float"}:
                 return float
             if c == "boolean":
-                return "categorical"
+                return bool
             if c == "random_state":
                 return int
-            if c in {"auto", "warn", "legacy"}:
-                return str
         if isinstance(c, type):
             if issubclass(c, Integral):
                 return int
@@ -100,9 +100,9 @@ def parse_sklearn_constraints(parameter_constraints):
         options = set()
         bounds = {"min": None, "max": None, "closed": "both"}
 
-        if not constraints:  # <-- handle unconstrained
+        if not constraints:
             param_spec[param_name] = {
-                "type": None,  # type will be inferred later
+                "type": None,
                 "bounds": bounds,
                 "options": None,
                 "allow_none": True,
@@ -117,11 +117,14 @@ def parse_sklearn_constraints(parameter_constraints):
                 t = map_type(c)
                 if t:
                     types.add(t)
-                bounds["min"], bounds["max"] = c.left, c.right
-                bounds["closed"] = c.closed  # <—— new
+                bounds["min"], bounds["max"], bounds["closed"] = (
+                    c.left,
+                    c.right,
+                    c.closed,
+                )
             elif isinstance(c, StrOptions):
                 options.update(c.options)
-                types.add("categorical")
+                types.add(str)
             elif isinstance(c, str):
                 t = map_type(c)
                 if t:
@@ -131,47 +134,19 @@ def parse_sklearn_constraints(parameter_constraints):
                     key, val = b
                     val = int(val) if val.is_integer() else val
                     bounds[key] = val
-                elif t is str:
-                    options.add(c)
-                elif c == "boolean":
-                    options.update([True, False])
             elif isinstance(c, type):
                 t = map_type(c)
                 if t:
                     types.add(t)
             elif isinstance(c, set):
                 options.update(c)
-                types.add("categorical")
-            elif c is None:
-                types.add(type(None))
+                types.add(str)
 
-        # Special handling for known tricky params
-        if param_name in {"verbose", "n_jobs"}:
-            if param_name == "verbose":
-                param_spec[param_name] = {
-                    "type": "multi",
-                    "options": [0, 1, 2, 3],
-                    "bounds": bounds,
-                }
-            elif param_name == "n_jobs":
-                # Keep int and None for selection
-                param_spec[param_name] = {
-                    "type": "multi",
-                    "options": [None, -1],  # allow adding numeric range if needed
-                    "bounds": bounds,
-                }
-            continue
-
-        # Finalize type
+        # Determine main type
         if options:
-            selected_type = "multi" if len(types) > 1 else "categorical"
+            selected_type = "categorical"
         else:
-            for t in [float, int, str, bool, "categorical"]:
-                if t in types:
-                    selected_type = t
-                    break
-            else:
-                selected_type = list(types)[0] if types else None
+            selected_type = next(iter(types)) if types else None
 
         param_spec[param_name] = {
             "type": selected_type,
@@ -183,39 +158,173 @@ def parse_sklearn_constraints(parameter_constraints):
     return param_spec
 
 
-def params_from_class(cls) -> dict:
+# --- Composite type resolver ---
+def anchor_type_to_default(entry: Dict[str, Any]) -> Dict[str, Any]:
     """
-    Return parameter info from class __init__ and _parameter_constraints.
+    If parameter has multiple possible types or categories,
+    restrict to the one matching the default’s type.
+    """
+    default = entry.get("default")
+    if default is inspect._empty:
+        return entry
+
+    default_type = type(default)
+    type_field = entry.get("type")
+    options = entry.get("options")
+
+    # if the default is None, keep only None
+    if default is None:
+        entry["type"] = type(None)
+        entry["options"] = None
+        entry["allow_none"] = True
+        return entry
+
+    # if type_field represents a composite (list, tuple, "multi", or set)
+    if isinstance(type_field, (list, tuple, set)) or type_field in (
+        "multi",
+        "categorical",
+    ):
+        entry["type"] = default_type
+
+    # if there are options but default doesn’t match option type
+    if options:
+        if not isinstance(default, str) and isinstance(options[0], str):
+            # default is not str, drop options entirely
+            entry["options"] = None
+        elif isinstance(default, str) and all(
+            isinstance(o, (int, float)) for o in options
+        ):
+            entry["options"] = None
+
+    # if options and allow_none but default not None -> drop allow_none
+    if entry.get("allow_none") and default is not None:
+        entry["allow_none"] = False
+
+    return entry
+
+
+# --- Widget inference ---
+def determine_widget(entry: Dict[str, Any]) -> Dict[str, Any]:
+    """Infer a UI widget and arguments from parameter metadata."""
+    t = entry.get("type")
+    options = entry.get("options")
+    bounds = entry.get("bounds", {"min": None, "max": None})
+    default = entry.get("default")
+    allow_none = entry.get("allow_none", False)
+
+    widget, widget_args = None, {}
+
+    # 1️⃣ Categorical / enum-like
+    if options:
+        widget = "select"
+        opts = list(options)
+        if allow_none:
+            opts = [None] + opts
+        widget_args = {
+            "options": opts,
+            "default": default if default in opts else opts[0],
+        }
+
+    # 2️⃣ Numeric sliders
+    elif t in (int, float):
+        min_val, max_val = bounds.get("min"), bounds.get("max")
+        # clean infinities
+        if isinstance(min_val, (int, float)) and not math.isfinite(min_val):
+            min_val = -UI_INF if t is int else 0.0
+        if isinstance(max_val, (int, float)) and not math.isfinite(max_val):
+            max_val = UI_INF if t is int else 10.0
+        step = 1 if t is int else 0.1
+        widget = "slider"
+        widget_args = {
+            "min": min_val,
+            "max": max_val,
+            "step": step,
+            "default": default if default is not None else (0 if t is int else 0.0),
+        }
+
+    # 3️⃣ Booleans
+    elif t is bool:
+        widget = "checkbox"
+        widget_args["default"] = bool(default)
+
+    # 4️⃣ Callable / dict / list
+    elif t in ("callable", dict, list):
+        widget = "text"
+        widget_args["default"] = str(default) if default is not None else ""
+
+    # 5️⃣ Strings or None
+    elif t in (str, type(None)):
+        widget = "text"
+        widget_args["default"] = "" if default is None else str(default)
+
+    # 6️⃣ Fallback
+    else:
+        widget = "text"
+        widget_args["default"] = str(default) if default is not None else ""
+
+    entry["widget"] = widget
+    entry["widget_args"] = widget_args
+    return entry
+
+
+# --- New unified builder ---
+def params_from_class(cls) -> Dict[str, Dict[str, Any]]:
+    """
+    Combine default values, docstrings, and sklearn parameter constraints
+    into a unified param specification dictionary.
+
+    Returns
+    -------
+    Dict[str, Dict[str, Any]]
+        param_name -> {
+            'default': Any,
+            'type': type or str,
+            'bounds': {'min':..., 'max':..., 'closed':...},
+            'options': list[str] or None,
+            'allow_none': bool,
+            'description': str
+        }
     """
     defaults = get_default_class_values(cls)
-    descriptions = get_param_descriptions(cls)
+    docs = get_param_descriptions(cls)
     constraints = getattr(cls, "_parameter_constraints", {})
 
-    # Ensure every parameter in defaults is in constraints
-    for param in defaults:
-        constraints.setdefault(param, None)
+    parsed_constraints = parse_sklearn_constraints(constraints)
 
-    params = {}
+    all_params = set(defaults) | set(parsed_constraints) | set(docs)
+    spec = {}
 
-    for name, constraint in constraints.items():
-        info = parse_sklearn_constraints({name: constraint})[name]
-        info["default"] = defaults.get(name)
-        info["description"] = descriptions.get(name)
+    for name in all_params:
+        if name.endswith("_"):
+            continue
+        default = defaults.get(name, inspect._empty)
+        entry = {
+            "default": default,
+            "description": docs.get(name, ""),
+        }
 
-        # Multi-type parameters: None, integers, or special strings
-        if info.get("options") and (
-            len(info["options"]) > 1 or None in info["options"]
-        ):
-            info["type"] = "multi"
-            # Default to None if allowed
-            if None in info["options"]:
-                info["default"] = None
+        if name in parsed_constraints:
+            entry.update(parsed_constraints[name])
+        else:
+            entry.update(
+                {
+                    "type": type(defaults[name]).__name__
+                    if name in defaults and defaults[name] is not None
+                    else None,
+                    "bounds": {"min": None, "max": None, "closed": "both"},
+                    "options": None,
+                    "allow_none": defaults.get(name) is None,
+                }
+            )
 
-        # Special case: metric_params (dict) → treat as text input for now
-        if name == "metric_params":
-            info["type"] = dict
-            info["default"] = defaults.get(name)
+        inferred_type = type(default)
+        entry.update(parsed_constraints.get(name, {}))
+        entry["type"] = inferred_type
+        entry["allow_none"] = entry.get("allow_none", False) or default is None
 
-        params[name] = info
+        entry = anchor_type_to_default(entry)
+        entry = determine_widget(entry)
 
-    return params
+        spec[name] = entry
+
+    return spec
