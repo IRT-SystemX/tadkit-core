@@ -5,5 +5,5 @@ from tadkit.utils.ui import render_widgets_from_params
 
 params = params_from_class(LogisticRegression)
 
-widgets = render_widgets_from_params(params, frontend="ipywidgets")
-widgets["n_jobs"].value
+widgets, value_fun = render_widgets_from_params(params, frontend="ipywidgets")
+value_fun()

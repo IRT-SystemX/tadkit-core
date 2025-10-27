@@ -121,7 +121,7 @@ def parse_sklearn_constraints(parameter_constraints):
                     key, val = b
                     val = int(val) if val.is_integer() else val
                     bounds[key] = val
-                elif t == str:
+                elif t is str:
                     options.add(c)
                 elif c == "boolean":
                     options.update([True, False])

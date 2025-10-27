@@ -10,14 +10,14 @@ from tadkit.base.registry import registry
 import tadkit.catalog.registry_init  # ensure registrations happen
 
 
-from visualiser.plots import plot_raw_data, plot_double_data
-from visualiser.session import (
+from plots import plot_raw_data, plot_double_data
+from session import (
     init_session_state,
     reset_session,
     set_stage,
     convert_for_download,
 )
-from visualiser.learning import (
+from learning import (
     prepare_learner_configs,
     compute_anomalies_parallel,
 )
@@ -79,8 +79,8 @@ def main():
             formatter = RawToWideFormatter(data=data, backend="pandas")
             formatter.format()
 
-            registry.print_catalog_classes()
-            registry.list_learners()
+            # registry.print_catalog_classes()
+            # registry.list_learners()
 
             available_learners = registry.match_learners(formatter)
             learners_select = {
