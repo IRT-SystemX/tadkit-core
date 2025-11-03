@@ -3,7 +3,7 @@ import pandas as pd
 import streamlit as st
 
 from tadkit.catalog.rawtowideformatter import RawToWideFormatter
-from tadkit.utils.ui import render_widgets_from_params
+from tadkit.utils.render_widgets_from_params import render_widgets_from_params
 from tadkit.utils.param_spec import params_from_class
 
 from tadkit.base.registry import registry
