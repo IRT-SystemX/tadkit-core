@@ -1,4 +1,4 @@
-from typing import Dict, Any
+from typing import Dict, Any, get_type_hints, get_args, Literal, Union
 import inspect
 from numbers import Integral
 
@@ -26,7 +26,6 @@ def get_param_descriptions(cls) -> Dict[str, str]:
 
     param_descriptions = {}
     lines = doc.splitlines()
-    in_params_section = False
 
     # locate "Parameters" section
     for i, line in enumerate(lines):
@@ -286,11 +285,10 @@ def params_from_class(cls) -> Dict[str, Dict[str, Any]]:
         }
     """
     defaults = get_default_class_values(cls)
+    type_hints = get_type_hints(cls.__init__)
     docs = get_param_descriptions(cls)
     constraints = getattr(cls, "_parameter_constraints", {})
-
     parsed_constraints = parse_sklearn_constraints(constraints)
-
     all_params = set(defaults) | set(parsed_constraints) | set(docs)
     spec = {}
 
@@ -316,6 +314,31 @@ def params_from_class(cls) -> Dict[str, Dict[str, Any]]:
                     "allow_none": defaults.get(name) is None,
                 }
             )
+
+
+        # --- Apply type hints if constraints didn’t already provide type ---
+        if (name not in parsed_constraints) and (name in type_hints):
+            typ = type_hints[name]
+
+            # Literal → categorical
+            if getattr(typ, "__origin__", None) is Literal:
+                entry["type"] = str
+                entry["options"] = list(get_args(typ))
+
+            # Union → pick branch matching default
+            elif getattr(typ, "__origin__", None) is Union:
+                union_types = get_args(typ)
+                if default is None:
+                    entry["type"] = type(None)
+                else:
+                    for t in union_types:
+                        if t is not type(None) and isinstance(default, t):
+                            entry["type"] = t
+                            break
+                    else:
+                        entry["type"] = type(default)
+            else:
+                entry["type"] = typ
 
         inferred_type = type(default)
         entry.update(parsed_constraints.get(name, {}))
