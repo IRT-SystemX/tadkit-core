@@ -1,80 +1,79 @@
-from typing import TypeVar, Type, Sequence, Optional
-
+import inspect
+from typing import Type, Optional
 from tadkit.base.tadlearner import TADLearner
-from tadkit.base.typing import KWParams, ParamsDescription, Array
-
-Transformer = TypeVar("Transformer")
+from tadkit.base.typing import ArrayLike
 
 
 class DecomposableTADLearner(TADLearner):
-    """Abstract class for combining a preprocessor and a AD Learner."""
+    """Abstract base class combining a Preprocessor and a TADLearner."""
 
-    def __init__(self, **params: KWParams):
-        self.preprocesser = self.Preprocesser(**params)
-        self.learner = self.Learner()
+    Preprocessor: Type
+    Learner: Type[TADLearner]
 
-    def fit(self, X: Array, y: Optional[Array] = None) -> "DecomposableTADLearner":
-        if hasattr(self.preprocesser, "fit_transform"):
-            new_X = self.preprocesser.fit_transform(X, y)
+    def __init__(self, **params):
+        """Instantiate preprocessor and learner using relevant subset of kwargs."""
+        pre_sig = inspect.signature(self.Preprocessor.__init__)
+        learner_sig = inspect.signature(self.Learner.__init__)
+
+        pre_params = {k: v for k, v in params.items() if k in pre_sig.parameters}
+        learner_params = {k: v for k, v in params.items() if k in learner_sig.parameters}
+
+        self.preprocessor = self.Preprocessor(**pre_params)
+        self.learner = self.Learner(**learner_params)
+
+    def fit(self, X: ArrayLike, y: Optional[ArrayLike] = None) -> "DecomposableTADLearner":
+        if hasattr(self.preprocessor, "fit_transform"):
+            X_transformed = self.preprocessor.fit_transform(X, y)
         else:
-            if hasattr(self.preprocesser, "fit"):
-                self.preprocesser.fit(X)
-            new_X = self.embed(X)
-        self.learner.fit(new_X)
+            if hasattr(self.preprocessor, "fit"):
+                self.preprocessor.fit(X, y)
+            X_transformed = self.embed(X)
+        self.learner.fit(X_transformed, y)
         return self
 
-    def embed(self, X: Array):
-        if hasattr(self.preprocesser, "transform"):
-            new_X = self.preprocesser.transform(X)
-        else:
-            new_X = self.preprocesser(X)
-        return new_X
+    def embed(self, X: ArrayLike) -> ArrayLike:
+        if hasattr(self.preprocessor, "transform"):
+            return self.preprocessor.transform(X)
+        return self.preprocessor(X)
 
-    def score_samples(self, X: Array) -> Array:
-        if hasattr(self.preprocesser, "transform"):
-            X = self.preprocesser.transform(X)
-        else:
-            X = self.preprocesser(X)
-        return self.learner.score_samples(X)
+    def score_samples(self, X: ArrayLike) -> ArrayLike:
+        X_transformed = self.embed(X)
+        return self.learner.score_samples(X_transformed)
 
 
 def decomposable_tadlearner_factory(
-    Preprocesser: Type[Transformer],
+    Preprocessor: Type,
     Learner: Type[TADLearner],
-    required_properties: Sequence[str],
-    preprocesser_params_description: ParamsDescription,
     name: Optional[str] = None,
 ) -> Type[TADLearner]:
-    """Create a TADLearner class joining a class of preprocessing an a TADLearner subclass.
+    """Create a TADLearner class combining a preprocessor and a learner with a proper __init__ signature."""
 
-    Args:
-        Preprocesser: The preprocessing, must have a fit_transform or transform method.
-        Learner: The processing subclass of TADLearner
-        required_properties: The properties that the input data must satisfies.
-        preprocesser_params_description: Description of the **kwargs of the __init__ method of the
-            preprocessor.
-        name: The Name of the class. Default name if None.
+    cls_name = name or f"{Preprocessor.__name__}{Learner.__name__}"
 
-    Returns:
-        A subclass of TADLearner joining Preprocesser Learner with:
-            * given required_properties and __name__.
-            * Updating the Learner params_description by preprocesser_params_description.
-            * Fit method that fit and transform the preprocessing and fit the learner.
-            * score_samples that transform the preprocessing and scare_samples the learner.
-    """
+    class Wrapped(DecomposableTADLearner):
+        __doc__ = f"{cls_name}: DecomposableTADLearner combining {Preprocessor.__name__} and {Learner.__name__}"
+        __name__ = cls_name
+        __qualname__ = cls_name
 
-    if name is None:
-        name = Preprocesser.__name__ + Learner.__name__
-    params_description = dict(Learner.params_description)
-    params_description.update(preprocesser_params_description)
-    return type(
-        name,
-        (DecomposableTADLearner, Learner),
-        {
-            "Preprocesser": Preprocesser,
-            "Learner": Learner,
-            "required_properties": required_properties,
-            "params_description": preprocesser_params_description,
-            "__name__": name,
-        },
-    )
+    Wrapped.Preprocessor = Preprocessor
+    Wrapped.Learner = Learner
+
+    pre_sig = inspect.signature(Preprocessor.__init__)
+    learner_sig = inspect.signature(Learner.__init__)
+
+    combined_params = [
+        p.replace(kind=inspect.Parameter.KEYWORD_ONLY) if p.kind == inspect.Parameter.VAR_KEYWORD else p
+        for p in list(pre_sig.parameters.values())[1:] + list(learner_sig.parameters.values())[1:]
+    ]
+    combined_sig = inspect.Signature(combined_params)
+
+    def __init__(self, *args, **kwargs):
+        bound = combined_sig.bind(*args, **kwargs)
+        bound.apply_defaults()
+        super(Wrapped, self).__init__(**bound.arguments)
+
+    __init__.__signature__ = combined_sig
+    __init__.__doc__ = f"{cls_name} __init__ combines {Preprocessor.__name__} and {Learner.__name__} parameters"
+    Wrapped.__init__ = __init__
+
+    return Wrapped

@@ -1,6 +1,6 @@
 from typing import Optional, Protocol, runtime_checkable
 
-from tadkit.base.typing import Array
+from tadkit.base.typing import ArrayLike
 
 
 @runtime_checkable
@@ -30,9 +30,9 @@ class TADLearner(Protocol):
         >>> score_sample_pred = learner.score_samples(X_test)
     """
 
-    def fit(self, X: Array, y: Optional[Array] = None) -> "TADLearner": ...
+    def fit(self, X: ArrayLike, y: Optional[ArrayLike] = None) -> "TADLearner": ...
 
-    def score_samples(self, X: Array) -> Array:
+    def score_samples(self, X: ArrayLike) -> ArrayLike:
         """
         The measure of normality of an observation according to the fitted model.
         Scikit-learn compatible.
@@ -50,7 +50,7 @@ class TADLearner(Protocol):
         """
         ...
 
-    def predict(self, X: Array) -> Array:
+    def predict(self, X: ArrayLike) -> ArrayLike:
         """
         Predict if a particular sample is an outlier or not.
         Scikit-learn compatible.

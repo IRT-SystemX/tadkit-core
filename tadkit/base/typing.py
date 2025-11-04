@@ -1,6 +1,5 @@
-from typing import Any, Dict, TypeVar
+from typing import Any, Dict, TypeVar, Union
+import numpy as np
+import pandas as pd
 
-KWParams = Dict[str, Any]
-ParamsDescription = Dict[str, KWParams]
-Array = TypeVar("Array")
-Dataset = TypeVar("Dataset")
+ArrayLike = Union[np.ndarray, list, pd.DataFrame]  # extendable for torch, etc.
