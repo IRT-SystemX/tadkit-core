@@ -39,7 +39,7 @@ registry.register_learner(  # @todo: default parameter adjustments from _cnndrad
     optional=True,
 )
 
-registry.register_learner(  # @todo: default parameter adjustments from _kcpdi_wrapper.py
+registry.register_learner(
     name="KcpLearner",
     learner="kcpdi.kcp_ss_learner.KcpLearner",
     condition=lambda _: True,
@@ -52,19 +52,3 @@ registry.register_learner(  # @todo: default parameter adjustments from _sbad_wr
     condition=lambda fmt: "multiple_time_series" in fmt.available_properties,
     optional=True,
 )
-
-
-# from tadkit.catalog.learners._confiance_components import (
-#     DataReconstructionADLearner,
-#     DiLAnoDetectmLearner,
-#     KcpLearner,
-# )
-
-# learner_classes = {
-#     "cnndrad": DataReconstructionADLearner,
-#     "sbad": DiLAnoDetectmLearner,
-#     "kcpd": KcpLearner,
-#     # "tdaad": TopologicalAnomalyDetector,
-#     "isolation-forest": IsolationForestLearner,
-#     "kernel-density": KernelDensityLearner,
-# }
