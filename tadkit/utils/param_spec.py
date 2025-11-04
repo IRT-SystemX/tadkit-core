@@ -31,7 +31,7 @@ def get_param_descriptions(cls) -> Dict[str, str]:
     # locate "Parameters" section
     for i, line in enumerate(lines):
         if (
-            line.strip().lower() == "parameters"
+            line.strip().lower() in {"parameters", "attributes"}
             and i + 1 < len(lines)
             and set(lines[i + 1].strip()) == {"-"}
         ):
