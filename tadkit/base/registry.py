@@ -101,6 +101,19 @@ class Registry:
                 )
         return
 
+    @staticmethod
+    def print_compliance_miss(learner):
+        missing = []
+        for attr in TADLearner.__annotations__:
+            if not hasattr(learner, attr):
+                missing.append(attr)
+        print("Missing attributes:", missing)
+
+        for name in dir(TADLearner):
+            if callable(getattr(TADLearner, name, None)) and not name.startswith("__"):
+                if not hasattr(learner, name):
+                    print(f"Missing method: {name}")
+
     def _print_class(self, learner_name, learner_class, detailed=False):
         print(f"Class {HEADER}{learner_name=}{ENDC} is registered in TADKit.")
         try:
@@ -110,8 +123,9 @@ class Registry:
                     print(f"{learner_name} is implicit child of TADLearner.")
                 else:
                     print(
-                        f"{FAIL_PROP}{learner_name} somewhat somehow doesn't implicitly inherit from TADLearner.{ENDC}"
+                        f"{FAIL_PROP}{learner_name} doesn't implicitly inherit from TADLearner:{ENDC}"
                     )
+                    self.print_compliance_miss(learner_class)
             Registry._validate_default_init(learner_class, learner_name)
         except ModuleNotFoundError as err:
             print(f"{FAIL}{learner_name} returns {err=}.{ENDC}")
