@@ -111,14 +111,14 @@ def render_widgets_from_params(params: dict, frontend="ipywidgets"):
 
             # Convert string "None" → Python None
             if (
-                params[k].get("type") == type(None)
+                params[k].get("type") is type(None)
                 and params[k].get("allow_none", False)
                 and (val == "None" or val == "")
             ):
                 val = None
 
             # Parse dict if entered as JSON text
-            if params[k].get("type") == dict and isinstance(val, str):
+            if params[k].get("type") is dict and isinstance(val, str):
                 try:
                     val = json.loads(val)
                 except json.JSONDecodeError:

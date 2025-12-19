@@ -315,7 +315,6 @@ def params_from_class(cls) -> Dict[str, Dict[str, Any]]:
                 }
             )
 
-
         # --- Apply type hints if constraints didn’t already provide type ---
         if (name not in parsed_constraints) and (name in type_hints):
             typ = type_hints[name]

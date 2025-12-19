@@ -16,13 +16,13 @@ def sanitize_default(default, min_val, max_val, ptype, closed="both", allow_none
     d, lo, hi = map(cast, (default, min_val, max_val))
     if allow_none and d is None:
         return None
-    eps = 1e-12 if ptype == float else 1
+    eps = 1e-12 if ptype is float else 1
 
     if d is None:
         # no default, fall back to min or type zero
         if lo is not None:
             return lo + eps if closed in ("right", "neither") else lo
-        return 0 if ptype == int else 0.0
+        return 0 if ptype is int else 0.0
 
     # Clamp lower bound
     if lo is not None:
@@ -97,9 +97,11 @@ class WidgetFactory:
         # Streamlit
         def _st_numeric(**kw):
             st = self.st
-            step = 1 if ptype == int else 0.01
-            fmt = "%d" if ptype == int else "%.6f"
-            cast = lambda x: None if x is None else ptype(x)
+            step = 1 if ptype is int else 0.01
+            fmt = "%d" if ptype is int else "%.6f"
+
+            def cast(x):
+                return None if x is None else ptype(x)
 
             args = {
                 "label": label,
@@ -117,7 +119,7 @@ class WidgetFactory:
         # ipywidgets
         def _ipy_numeric(**kw):
             w = self.widgets
-            cls = w.BoundedIntText if ptype == int else w.BoundedFloatText
+            cls = w.BoundedIntText if ptype is int else w.BoundedFloatText
             return cls(
                 value=default,
                 min=min_val if min_val is not None else -1e6,
