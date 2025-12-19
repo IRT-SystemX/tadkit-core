@@ -87,8 +87,8 @@ Requirements:
 ```python
 # Prepare your data
 from tadkit.catalog.rawtowideformatter import RawToWideFormatter
-formatter = RawToWideFormatter()
-X = formalizer.fit_transform(data=your_raw_data, backend="pandas")
+formatter = RawToWideFormatter(data=my_raw_data, backend="pandas")
+X = formatter.format()
 
 # Query the available anomaly detection methods that are compatible with your data (univariate or multivariate, etc.)
 from tadkit.base.registry import registry
@@ -102,7 +102,7 @@ for learner_cls in registry.match_learners(formatter):
     predictions = learner.predict(X)
 ```
 
-The modular architecture allows easy swapping of learners and formalizers for experimentation with different anomaly detection algorithms.
+The modular architecture allows easy swapping of learners and formatters for experimentation with different anomaly detection algorithms.
 
 
 ## 🪸⁠ Deep Dive 🪼
