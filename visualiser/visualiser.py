@@ -2,19 +2,22 @@ import pandas as pd
 
 import streamlit as st
 
-from tadkit.catalog.formalizers import PandasFormalizer
-from tadkit.catalog.learners import installed_learner_classes
-from tadkit.utils.match_formalizer_learners import match_formalizer_learners
+from tadkit.catalog.rawtowideformatter import RawToWideFormatter
+from tadkit.utils.render_widgets_from_params import render_widgets_from_params
+from tadkit.utils.param_spec import params_from_class
 
-from ui.widgets_from_metadata import render_widgets_from_metadata
-from ui.plots import plot_raw_data, plot_double_data
-from utils.session import (
+from tadkit.base.registry import registry
+import tadkit.catalog.registry_init  # ensure registrations happen
+
+
+from plots import plot_raw_data, plot_double_data
+from session import (
     init_session_state,
     reset_session,
     set_stage,
     convert_for_download,
 )
-from utils.learning import (
+from learning import (
     prepare_learner_configs,
     compute_anomalies_parallel,
 )
@@ -30,6 +33,9 @@ st.title("TADkit Timeseries App")
 
 # ------------------------- Main App -------------------------
 def main():
+    if tadkit.catalog.registry_init:
+        pass
+
     plot_container = st.empty().container()
     uploaded_file = st.file_uploader("Choose a CSV file", accept_multiple_files=False)
 
@@ -70,16 +76,21 @@ def main():
                 compute_anomalies_parallel.clear()
                 set_stage(2)
 
-            formalizer = PandasFormalizer(data_df=data, dataframe_type="synchronous")
-            formalizer.formalize()
-            available_learners = match_formalizer_learners(
-                formalizer, installed_learner_classes
-            )
+            formatter = RawToWideFormatter(data=data, backend="pandas")
+            formatter.format()
+
+            # registry.print_catalog_classes()
+            # registry.list_learners()
+
+            available_learners = registry.match_learners(formatter)
+            learners_select = {
+                learner.__name__: learner for learner in available_learners
+            }
 
             selected = st.multiselect(
                 "Choose detectors:",
-                list(available_learners.keys()),
-                st.session_state.selected_learners or list(available_learners.keys()),
+                learners_select.keys(),
+                st.session_state.selected_learners or learners_select.keys(),
             )
             if not selected:
                 st.warning("Please select at least one detector to proceed.")
@@ -91,10 +102,13 @@ def main():
             # Params for each learner
             learner_params = st.session_state.learner_params or {}
             for learner_name in selected:
-                learner_class = available_learners[learner_name]
+                learner_class = learners_select[learner_name]
                 learner_params.setdefault(learner_name, {})
                 with st.expander(learner_name):
-                    new_params = render_widgets_from_metadata(learner_class.metadata)
+                    param_specs = params_from_class(learner_class)
+                    new_params_widget, new_params = render_widgets_from_params(
+                        param_specs, frontend="st"
+                    )
                 learner_params[learner_name] = new_params
             st.session_state.learner_params = learner_params
 
@@ -102,8 +116,13 @@ def main():
         if st.session_state.stage >= 3:
             with st.sidebar:
                 st.markdown("## Learning")
+
                 learner_configs, cache_key = prepare_learner_configs(
-                    selected, learner_params, available_learners
+                    [
+                        learners_select[learner_name]
+                        for learner_name in st.session_state.selected_learners
+                    ],
+                    learner_params,
                 )
                 anomalies, predictions, errors = compute_anomalies_parallel(
                     X=data,

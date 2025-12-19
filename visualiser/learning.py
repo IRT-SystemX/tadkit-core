@@ -1,5 +1,4 @@
 import hashlib
-import importlib
 import json
 from joblib import Parallel, delayed
 
@@ -8,14 +7,13 @@ import pandas as pd
 import streamlit as st
 
 
-def prepare_learner_configs(learner_names, learner_params, available_learners):
+def prepare_learner_configs(learner_classes, learner_params):
     learner_configs = []
-    for name in learner_names:
-        cls = available_learners[name]
-        class_path = f"{cls.__module__}.{cls.__name__}"
-        # @todo: this reloads the class, but the added things like predict in sklearn_learners.py are lost
-        param_items = tuple(sorted(learner_params.get(name, {}).items()))
-        learner_configs.append((name, class_path, param_items))
+    for learner_class in learner_classes:
+        learner_name = learner_class.__name__
+        param_dict = learner_params[learner_name]()
+        param_items = tuple(sorted(param_dict.items()))
+        learner_configs.append((learner_class.__name__, learner_class, param_items))
 
     cache_key = hashlib.md5(
         json.dumps(learner_configs, sort_keys=True, default=str).encode()
@@ -24,24 +22,16 @@ def prepare_learner_configs(learner_names, learner_params, available_learners):
     return tuple(learner_configs), cache_key
 
 
-def import_class(class_path):
-    """Dynamically import a class from a string path."""
-    module_path, class_name = class_path.rsplit(".", 1)
-    module = importlib.import_module(module_path)
-    return getattr(module, class_name)
-
-
 def normalize(a):
     return (
         (a - a.min()) / (a.max() - a.min()) if a.max() != a.min() else np.zeros_like(a)
     )
 
 
-def fit_and_score(X, name, class_path, param_items):
+def fit_and_score(X, name, learner_class, param_items):
     """Fit a learner and return results or error."""
     try:
-        LearnerClass = import_class(class_path)
-        learner = LearnerClass(**dict(param_items))
+        learner = learner_class(**dict(param_items))
         learner.fit(X)
         anomaly_scores = learner.score_samples(X)
         scores = pd.Series(normalize(anomaly_scores), index=X.index)
@@ -89,8 +79,8 @@ def compute_anomalies_parallel(X, learner_configs, cache_key=None, n_jobs=4):
 
     # Run learners in parallel
     results = Parallel(n_jobs=n_jobs)(
-        delayed(fit_and_score)(X, name, class_path, param_items)
-        for name, class_path, param_items in learner_configs
+        delayed(fit_and_score)(X, name, learner_class, param_items)
+        for name, learner_class, param_items in learner_configs
     )
 
     # Construct DataFrames

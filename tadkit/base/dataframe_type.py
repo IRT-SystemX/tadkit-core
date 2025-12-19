@@ -1,26 +1,32 @@
 from enum import Enum
+import pandas as pd
 
 
 class DataFrameType(Enum):
-    """Data type of Dataplatform datasets."""
+    """Data type of datasets: long (asynchronous) vs wide (synchronous)."""
 
-    ASYNCHRONOUS = "asynchronous"
-    """All data have their own "timestamp" x-axis, sensor names are found in the "sensor" column and data is found
-    in the "data" column of the provided dataframe.
-    """
-    SYNCHRONOUS = "synchronous"
-    """All data share a common "timestamp" x-axis, sensor names are in columns of the provided dataframe
-    (except for "id", "filename", "minio", "timestamp" and possible others... tbd more precisely with DataPlatform.)
-    """
+    ASYNCHRONOUS = ("asynchronous", ["timestamp", "sensor", "data"])
+    SYNCHRONOUS = ("synchronous", None)  # columns vary per dataset
+
+    def __init__(self, value, required_columns):
+        self._value_ = value
+        self.required_columns = required_columns
 
     @staticmethod
-    def from_text(name: str):
-        """Converts the string-representation to an Enum-object."""
-        if name.lower() == DataFrameType.ASYNCHRONOUS.value:
+    def from_text(name: str | None):
+        """Convert a string to a DataFrameType enum."""
+        lookup = {t.value: t for t in DataFrameType}
+        try:
+            return lookup[name.lower()]
+        except KeyError:
+            raise ValueError(
+                f"Unknown DataFrameType '{name}'. Must be one of: "
+                f"{', '.join(lookup.keys())}"
+            )
+
+    @staticmethod
+    def infer_from_df(df: pd.DataFrame) -> "DataFrameType":
+        if {"sensor", "data"}.issubset(df.columns):
             return DataFrameType.ASYNCHRONOUS
-        if name.lower() == DataFrameType.SYNCHRONOUS.value:
+        else:
             return DataFrameType.SYNCHRONOUS
-        raise ValueError(
-            "In order to process input data you must know the format"
-            "(DataFrameType.ASYNCHRONOUS or DataFrameType.SYNCHRONOUS)."
-        )
