@@ -52,11 +52,11 @@ It builds upon [![scikit-learn](https://scikit-learn.org/stable/_static/scikit-l
 
 - **Unified Interfaces for Anomaly Detection**
   Provides a coherent set of interfaces for different time-series anomaly detection methods. The main abstractions are:
-  - `Formalizer`: prepares raw data into a machine-learning-friendly format.
-  - `TADLearner`: implements `.fit(X)`, `.score_samples(X)`, and `.predict(X)` for unsupervised anomaly detection.
+  - `Formater`: prepares raw timeseries data into a machine-learning-friendly format.
+  - `TADLearner`: enforces `.fit(X)`, `.score_samples(X)`, and `.predict(X)` coherently for unsupervised anomaly detection.
 
 - **Supports Multiple Detection Methods**
-  Includes methods from scikit-learn and Confiance.ai components ([TDAAD](https://catalog.confiance.ai/records/xvc80-whm36) and [github](https://github.com/IRT-SystemX/tdaad), [SBAD](https://catalog.confiance.ai/records/fkpja-s7546), [KCPD](https://catalog.confiance.ai/records/kxc1c-12x55) and [github](https://github.com/confianceai/kernel-change-point-detection), [CNNDRAD](https://catalog.confiance.ai/records/af2ab-hw426), ...). All learners can be instantiated with default parameters or customized as needed.
+  Includes methods from scikit-learn and Confiance.ai components ([TDAAD](https://catalog.confiance.ai/records/xvc80-whm36) and [github](https://github.com/IRT-SystemX/tdaad), [SBAD](https://catalog.confiance.ai/records/fkpja-s7546), [KCPD](https://catalog.confiance.ai/records/kxc1c-12x55) and [github](https://github.com/confianceai/kernel-change-point-detection), [CNNDRAD](https://catalog.confiance.ai/records/af2ab-hw426), ...). All learners can be instantiated with default parameters.
 
 - **Dynamic Component Loading**
   Only installed components are made available in the system; unavailable components are automatically skipped.
@@ -85,15 +85,15 @@ Requirements:
 
 ## 🚀 Quickstart
 ```python
-from tadkit.formalizers import Formalizer
-
 # Prepare your data
-formalizer = Formalizer()
-X = formalizer.fit_transform(raw_data)
+from tadkit.catalog.rawtowideformatter import RawToWideFormatter
+formatter = RawToWideFormatter()
+X = formalizer.fit_transform(data=your_raw_data, backend="pandas")
 
-# Initialize and fit the learner
-# @TODO
-for name, learner in formalizer.available_learners():
+# Query the available anomaly detection methods that are compatible with your data (univariate or multivariate, etc.)
+from tadkit.base.registry import registry
+for learner_cls in registry.match_learners(formatter):
+    learner = learner_cls()  # instantiate directly
     # Learner calibration
     learner.fit(X)
     # Anomaly scores
@@ -107,63 +107,37 @@ The modular architecture allows easy swapping of learners and formalizers for ex
 
 ## 🪸⁠ Deep Dive 🪼
 
-`tadkit-core` also provides a range of **introductory and example notebooks** to help you explore the interfaces and methods:
-
+TADkit includes a range of **introductory and example notebooks** that are good entry points to understand the proposed features:
 - [Univariate anomaly detection example](examples/highlights/unidim_ad_example.ipynb)
   Learn how to craft your own anomaly detection method for a univariate timeseries.
 - [Interactive anomaly detector demo](examples/highlights/interactive_ad_demo.ipynb)
   Experiment with multiple anomaly detectors concurrently.
 
-### TADkit Formalizer
+### TADkit data ingestion
 
-The `Formalizer` abstract class bridges **raw data and anomaly detection methods**.
-- **PandasFormalizer**: a ready-to-use formalizer for basic tasks.
-- **Custom Formalizers**: required for complex tasks or when a method requires specific data formatting.
+The `Formatter` abstract class provides array-agnostic interface for connecting your data to your anomaly detection algorithm.
 
-**Key properties:**
-- `available_properties`: list of tags for automatic matching with compatible `TADLearner`s.
-- `query_description`: describes parameters of the `formalize` method:
+TADkit offers a functional `RawToWideFormatter` that ingests your timeseries data, converts it to Wide Format and supports both pandas DataFrame and NumPy array outputs.
 
-    {
-        <param_name>: {
-            'description': <str describing the parameter>,
-            'family': <tag like 'time', 'space', 'preprocessing'>,
-            'value_type': <type tag like 'interval_element', 'set_element', 'subset'>,
-            ...
-        },
-        ...
-    }
+### Learning with TADkit
 
-The `formalize(query)` method returns the corresponding query data.
+#### The TADLearner interface
 
-### TADLearner Interface
+`TADLearner` standardizes anomaly detection methods through a protocol that enforces:
+- `.fit(X)`: for calibrating the model,
+- `.score_samples(X)`: for producing anomaly scores (unbounded),
+- `.predict(X)`: for producing anomaly labels (1 = normal, -1 = abnormal)
 
-`TADLearner` standardizes anomaly detection methods.
-Required methods:
-- `.fit(X)`: calibrate the model
-- `.score_samples(X)`: produce anomaly scores
-- `.predict(X)`: produce anomaly labels (1 = normal, -1 = abnormal)
+#### Catalog of methods
 
-**Key attributes:**
-- `required_properties`: ensures compatibility with `Formalizer.available_properties`.
-- `params_description`: dictionary describing model parameters.
-
-### Integrated Libraries
-
-`TADLearner` format includes Confiance.ai and standard methods:
-
+TADkit provides a catalog of methods enforcing the `TADLearner` interface, including the methods from the [Confiance.ai](https://www.confiance.ai/) program:
 - **CNNDRAD**: two-step deep 1D-CNN for anomaly detection (representation learning + reconstruction score) - [catalog.confiance.ai/records/af2ab-hw426](https://catalog.confiance.ai/records/af2ab-hw426)
 - **TDAAD**: topological data embedding + minimum covariance determinant analysis [catalog.confiance.ai/records/ve158-h4h60](https://catalog.confiance.ai/records/ve158-h4h60) and [github](https://github.com/IRT-SystemX/tdaad)
 - **KCPD**: Kernel Change Point analysis for anomalies - [catalog.confiance.ai/records/6atzy-3yn05](https://catalog.confiance.ai/records/6atzy-3yn05) and [github](https://github.com/confianceai/kernel-change-point-detection)
 - **SBAD**: counterfactual-based multivariate anomaly detection and diagnosis - [catalog.confiance.ai/records/npea5-hhw40](https://catalog.confiance.ai/records/npea5-hhw40)
-
 > Access to some libraries requires Confiance.ai credentials.
 
-### Creating Your Own TADLearner
-
-Tools for custom learners:
-- `sklearn_tadlearner_factory`: wraps a scikit-learn model into a `TADLearner`
-- `decomposable_tadlearner_factory`: creates a learner pipeline from a preprocessor + learner
+The TADkit catalog also includes base learners such as Kernel density-based anomaly detection, Gaussian mixtures anomaly detection, etc...
 
 
 ## 📚 Documentation & Resources
@@ -192,7 +166,7 @@ sphinx-build -M html docs/source docs/build -W --keep-going
 <p align="center">
   Tadkit-core is developed by
   <a href="https://www.irt-systemx.fr/en/" title="IRT SystemX">
-   <img src="https://www.irt-systemx.fr/wp-content/uploads/2013/03/system-x-logo.jpeg"  height="70">
+   <img src="https://www.irt-systemx.fr/wp-content/themes/systemx/assets/medias/logo-systemx.svg" height="70">
   </a>and supported by the
 <a href="https://www.trustworthy-ai-foundation.eu/" title="European Trustworthy AI association">
 <img src="https://www.trustworthy-ai-association.eu/wp-content/uploads/2025/07/cropped-M0302_LOGO-ETAIA_BLANC_2000px-1-300x100.png"  height="90">
