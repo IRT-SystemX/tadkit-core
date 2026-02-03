@@ -24,8 +24,7 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 COPY . .
 RUN uv pip install -r requirements.txt .
-# RUN uv pip install --system -r requirements.txt .
-RUN uv pip install git+https://github.com/IRT-SystemX/tdaad@opt
+RUN uv pip install -r optional_requirements.txt
 
 ENV PYTHONPATH=/app
 
