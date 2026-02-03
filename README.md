@@ -56,7 +56,7 @@ It builds upon [![scikit-learn](https://scikit-learn.org/stable/_static/scikit-l
   - `TADLearner`: enforces `.fit(X)`, `.score_samples(X)`, and `.predict(X)` coherently for unsupervised anomaly detection.
 
 - **Supports Multiple Detection Methods**
-  Includes methods from scikit-learn and Confiance.ai components ([TDAAD](https://catalog.confiance.ai/records/xvc80-whm36) and [github](https://github.com/IRT-SystemX/tdaad), [SBAD](https://catalog.confiance.ai/records/fkpja-s7546), [KCPD](https://catalog.confiance.ai/records/kxc1c-12x55) and [github](https://github.com/confianceai/kernel-change-point-detection), [CNNDRAD](https://catalog.confiance.ai/records/af2ab-hw426), ...). All learners can be instantiated with default parameters.
+  Includes methods from scikit-learn and Confiance.ai components ([TDAAD](https://catalog.trustworthy-ai-association.eu/records/dkvhy-nk328) and [github](https://github.com/IRT-SystemX/tdaad), [SBAD](https://catalog.confiance.ai/records/fkpja-s7546), [KCPD](https://catalog.trustworthy-ai-association.eu/records/x3vpy-r3587) and [github](https://github.com/confianceai/kernel-change-point-detection), [CNNDRAD](https://catalog.confiance.ai/records/af2ab-hw426), ...). All learners can be instantiated with default parameters.
 
 - **Dynamic Component Loading**
   Only installed components are made available in the system; unavailable components are automatically skipped.
@@ -131,10 +131,10 @@ TADkit offers a functional `RawToWideFormatter` that ingests your timeseries dat
 #### Catalog of methods
 
 TADkit provides a catalog of methods enforcing the `TADLearner` interface, including the methods from the [Confiance.ai](https://www.confiance.ai/) program:
-- **CNNDRAD**: two-step deep 1D-CNN for anomaly detection (representation learning + reconstruction score) - [catalog.confiance.ai/records/af2ab-hw426](https://catalog.confiance.ai/records/af2ab-hw426)
-- **TDAAD**: topological data embedding + minimum covariance determinant analysis [catalog.confiance.ai/records/ve158-h4h60](https://catalog.confiance.ai/records/ve158-h4h60) and [github](https://github.com/IRT-SystemX/tdaad)
-- **KCPD**: Kernel Change Point analysis for anomalies - [catalog.confiance.ai/records/6atzy-3yn05](https://catalog.confiance.ai/records/6atzy-3yn05) and [github](https://github.com/confianceai/kernel-change-point-detection)
-- **SBAD**: counterfactual-based multivariate anomaly detection and diagnosis - [catalog.confiance.ai/records/npea5-hhw40](https://catalog.confiance.ai/records/npea5-hhw40)
+- **CNNDRAD**: two-step deep 1D-CNN for anomaly detection (representation learning + reconstruction score) - [Catalog page](https://catalog.confiance.ai/records/af2ab-hw426)
+- **TDAAD**: topological data embedding + minimum covariance determinant analysis [Catalog page](https://catalog.trustworthy-ai-association.eu/records/dkvhy-nk328) and [github](https://github.com/IRT-SystemX/tdaad)
+- **KCPD**: Kernel Change Point analysis for anomalies - [Catalog page](https://catalog.trustworthy-ai-association.eu/records/x3vpy-r3587) and [github](https://github.com/etaia/kernel-change-point-detection)
+- **SBAD**: counterfactual-based multivariate anomaly detection and diagnosis - [Catalog page](https://catalog.confiance.ai/records/npea5-hhw40)
 > Access to some libraries requires Confiance.ai credentials.
 
 The TADkit catalog also includes base learners such as Kernel density-based anomaly detection, Gaussian mixtures anomaly detection, etc...
