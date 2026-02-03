@@ -38,7 +38,7 @@
 
 ---
 # TADkit – Timeseries Anomaly Detection kit
-Website and documentation : https://irt-systemx.github.io/tadkit-core/
+Website and documentation : [irt-systemx.github.io/tadkit-core/](https://irt-systemx.github.io/tadkit-core/)
 
 
 ## Overview
@@ -56,7 +56,7 @@ It builds upon [![scikit-learn](https://scikit-learn.org/stable/_static/scikit-l
   - `TADLearner`: enforces `.fit(X)`, `.score_samples(X)`, and `.predict(X)` coherently for unsupervised anomaly detection.
 
 - **Supports Multiple Detection Methods**
-  Includes methods from scikit-learn and Confiance.ai components ([TDAAD](https://catalog.trustworthy-ai-association.eu/records/dkvhy-nk328) and [github](https://github.com/IRT-SystemX/tdaad), [SBAD](https://catalog.confiance.ai/records/fkpja-s7546), [KCPD](https://catalog.trustworthy-ai-association.eu/records/x3vpy-r3587) and [github](https://github.com/confianceai/kernel-change-point-detection), [CNNDRAD](https://catalog.confiance.ai/records/af2ab-hw426), ...). All learners can be instantiated with default parameters.
+  Includes methods from scikit-learn and Confiance.ai components ([TDAAD](https://catalog.trustworthy-ai-association.eu/records/dkvhy-nk328) and [KCPD](https://catalog.trustworthy-ai-association.eu/records/x3vpy-r3587)). All learners can be instantiated with default parameters.
 
 - **Dynamic Component Loading**
   Only installed components are made available in the system; unavailable components are automatically skipped.
@@ -130,12 +130,13 @@ TADkit offers a functional `RawToWideFormatter` that ingests your timeseries dat
 
 #### Catalog of methods
 
-TADkit provides a catalog of methods enforcing the `TADLearner` interface, including the methods from the [Confiance.ai](https://www.confiance.ai/) program:
-- **CNNDRAD**: two-step deep 1D-CNN for anomaly detection (representation learning + reconstruction score) - [Catalog page](https://catalog.confiance.ai/records/af2ab-hw426)
+TADkit provides a catalog of methods following the `TADLearner` interface, including methods from the [Confiance.ai](https://www.confiance.ai/) program:
 - **TDAAD**: topological data embedding + minimum covariance determinant analysis [Catalog page](https://catalog.trustworthy-ai-association.eu/records/dkvhy-nk328) and [github](https://github.com/IRT-SystemX/tdaad)
 - **KCPD**: Kernel Change Point analysis for anomalies - [Catalog page](https://catalog.trustworthy-ai-association.eu/records/x3vpy-r3587) and [github](https://github.com/etaia/kernel-change-point-detection)
+
+The following methods from the Confiance.ai program were also originally supported, but are no longer accessible:
+- **CNNDRAD**: two-step deep 1D-CNN for anomaly detection (representation learning + reconstruction score) - [Catalog page](https://catalog.confiance.ai/records/af2ab-hw426)
 - **SBAD**: counterfactual-based multivariate anomaly detection and diagnosis - [Catalog page](https://catalog.confiance.ai/records/npea5-hhw40)
-> Access to some libraries requires Confiance.ai credentials.
 
 The TADkit catalog also includes base learners such as Kernel density-based anomaly detection, Gaussian mixtures anomaly detection, etc...
 
@@ -145,27 +146,15 @@ The TADkit catalog also includes base learners such as Kernel density-based anom
 - [📖 Full API Documentation](https://irt-systemx.github.io/tadkit-core/)
 - [🧪 Examples](examples/)
 - [🛠 Contributing Guide](CONTRIBUTING.md)
-- [🗒 Changelog](CHANGELOG.md)
+- [🗒 Changelog](Changelog.md)
 
-
-
-## Document generation
-
-To regenerate the documentation, rerun the following commands from the project root, adapting if
-necessary:
-
-```
-pip install -r docs/docs_requirements.txt -r requirements.txt
-sphinx-apidoc -o docs/source/generated tadkit
-sphinx-build -M html docs/source docs/build -W --keep-going
-```
 
 
 ## Contributors and Support
 
 This work has been supported by the French government under the "France 2030” program, as part of the SystemX Technological Research Institute within the **Confiance.ai** project. 
 
-TDAAD is developed by
+TADkit is developed by
 [IRT SystemX](https://www.irt-systemx.fr/en/)
 and supported by the
 [European Trustworthy AI Association](https://www.trustworthy-ai-foundation.eu/)
