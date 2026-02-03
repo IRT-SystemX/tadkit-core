@@ -17,7 +17,7 @@ Welcome to tadkit-core's documentation!
 
    guidelines
    changelog
-   generated/tadkit
+   modules
 
 
 
