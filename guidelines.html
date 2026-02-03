@@ -57,7 +57,6 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#documentation-resources">📚 Documentation &amp; Resources</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#document-generation">Document generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#contributors-and-support">Contributors and Support</a></li>
 </ul>
 </li>
@@ -154,16 +153,16 @@ Experiment with multiple anomaly detectors concurrently.</p></li>
 </section>
 <section id="catalog-of-methods">
 <h4>Catalog of methods<a class="headerlink" href="#catalog-of-methods" title="Link to this heading"></a></h4>
-<p>TADkit provides a catalog of methods enforcing the <code class="docutils literal notranslate"><span class="pre">TADLearner</span></code> interface, including the methods from the <a class="reference external" href="https://www.confiance.ai/">Confiance.ai</a> program:</p>
+<p>TADkit provides a catalog of methods following the <code class="docutils literal notranslate"><span class="pre">TADLearner</span></code> interface, including methods from the <a class="reference external" href="https://www.confiance.ai/">Confiance.ai</a> program:</p>
 <ul class="simple">
-<li><p><strong>CNNDRAD</strong>: two-step deep 1D-CNN for anomaly detection (representation learning + reconstruction score) - <a class="reference external" href="https://catalog.confiance.ai/records/af2ab-hw426">Catalog page</a></p></li>
 <li><p><strong>TDAAD</strong>: topological data embedding + minimum covariance determinant analysis <a class="reference external" href="https://catalog.trustworthy-ai-association.eu/records/dkvhy-nk328">Catalog page</a> and <a class="reference external" href="https://github.com/IRT-SystemX/tdaad">github</a></p></li>
 <li><p><strong>KCPD</strong>: Kernel Change Point analysis for anomalies - <a class="reference external" href="https://catalog.trustworthy-ai-association.eu/records/x3vpy-r3587">Catalog page</a> and <a class="reference external" href="https://github.com/etaia/kernel-change-point-detection">github</a></p></li>
+</ul>
+<p>The following methods from the Confiance.ai program were also originally supported, but are no longer accessible:</p>
+<ul class="simple">
+<li><p><strong>CNNDRAD</strong>: two-step deep 1D-CNN for anomaly detection (representation learning + reconstruction score) - <a class="reference external" href="https://catalog.confiance.ai/records/af2ab-hw426">Catalog page</a></p></li>
 <li><p><strong>SBAD</strong>: counterfactual-based multivariate anomaly detection and diagnosis - <a class="reference external" href="https://catalog.confiance.ai/records/npea5-hhw40">Catalog page</a></p></li>
 </ul>
-<blockquote>
-<div><p>Access to some libraries requires Confiance.ai credentials.</p>
-</div></blockquote>
 <p>The TADkit catalog also includes base learners such as Kernel density-based anomaly detection, Gaussian mixtures anomaly detection, etc…</p>
 </section>
 </section>
@@ -174,23 +173,13 @@ Experiment with multiple anomaly detectors concurrently.</p></li>
 <li><p><a class="reference external" href="https://irt-systemx.github.io/tadkit-core/">📖 Full API Documentation</a></p></li>
 <li><p><a class="reference internal" href="#examples/"><span class="xref myst">🧪 Examples</span></a></p></li>
 <li><p><a class="reference internal" href="#CONTRIBUTING.md"><span class="xref myst">🛠 Contributing Guide</span></a></p></li>
-<li><p><a class="reference internal" href="#CHANGELOG.md"><span class="xref myst">🗒 Changelog</span></a></p></li>
+<li><p><a class="reference internal" href="#Changelog.md"><span class="xref myst">🗒 Changelog</span></a></p></li>
 </ul>
-</section>
-<section id="document-generation">
-<h2>Document generation<a class="headerlink" href="#document-generation" title="Link to this heading"></a></h2>
-<p>To regenerate the documentation, rerun the following commands from the project root, adapting if
-necessary:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">docs</span><span class="o">/</span><span class="n">docs_requirements</span><span class="o">.</span><span class="n">txt</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
-<span class="n">sphinx</span><span class="o">-</span><span class="n">apidoc</span> <span class="o">-</span><span class="n">o</span> <span class="n">docs</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">generated</span> <span class="n">tadkit</span>
-<span class="n">sphinx</span><span class="o">-</span><span class="n">build</span> <span class="o">-</span><span class="n">M</span> <span class="n">html</span> <span class="n">docs</span><span class="o">/</span><span class="n">source</span> <span class="n">docs</span><span class="o">/</span><span class="n">build</span> <span class="o">-</span><span class="n">W</span> <span class="o">--</span><span class="n">keep</span><span class="o">-</span><span class="n">going</span>
-</pre></div>
-</div>
 </section>
 <section id="contributors-and-support">
 <h2>Contributors and Support<a class="headerlink" href="#contributors-and-support" title="Link to this heading"></a></h2>
 <p>This work has been supported by the French government under the “France 2030” program, as part of the SystemX Technological Research Institute within the <strong>Confiance.ai</strong> project.</p>
-<p>TDAAD is developed by
+<p>TADkit is developed by
 <a class="reference external" href="https://www.irt-systemx.fr/en/">IRT SystemX</a>
 and supported by the
 <a class="reference external" href="https://www.trustworthy-ai-foundation.eu/">European Trustworthy AI Association</a></p>
