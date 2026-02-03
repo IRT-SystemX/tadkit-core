@@ -34,7 +34,7 @@ Contributors and Support
 This work has been supported by the French government under the "France 2030" program,
 as part of the SystemX Technological Research Institute within the **Confiance.ai** project.
 
-TDAAD is developed by
+TADkit is developed by
 `IRT SystemX <https://www.irt-systemx.fr/en/>`_
 and supported by the
 `European Trustworthy AI Association <https://www.trustworthy-ai-foundation.eu/>`_
