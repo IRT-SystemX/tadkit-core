@@ -30,7 +30,8 @@ class TADLearner(Protocol):
         >>> score_sample_pred = learner.score_samples(X_test)
     """
 
-    def fit(self, X: ArrayLike, y: Optional[ArrayLike] = None) -> "TADLearner": ...
+    def fit(self, X: ArrayLike, y: Optional[ArrayLike] = None) -> "TADLearner":
+        ...
 
     def score_samples(self, X: ArrayLike) -> ArrayLike:
         """
