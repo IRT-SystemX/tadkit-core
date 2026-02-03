@@ -68,8 +68,8 @@ tadkit/base/basedensitydetector.py:37:8: W0201: Attribute '_input_index' defined
 ************* Module tadkit.base.tadlearner
 tadkit/base/tadlearner.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 tadkit/base/tadlearner.py:33:4: C0116: Missing function or method docstring (missing-function-docstring)
-tadkit/base/tadlearner.py:51:8: W2301: Unnecessary ellipsis constant (unnecessary-ellipsis)
-tadkit/base/tadlearner.py:69:8: W2301: Unnecessary ellipsis constant (unnecessary-ellipsis)
+tadkit/base/tadlearner.py:52:8: W2301: Unnecessary ellipsis constant (unnecessary-ellipsis)
+tadkit/base/tadlearner.py:70:8: W2301: Unnecessary ellipsis constant (unnecessary-ellipsis)
 ************* Module tadkit.base.registry
 tadkit/base/registry.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 tadkit/base/registry.py:72:19: W0718: Catching too general exception Exception (broad-exception-caught)
