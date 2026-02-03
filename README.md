@@ -163,12 +163,9 @@ sphinx-build -M html docs/source docs/build -W --keep-going
 
 ## Contributors and Support
 
-<p align="center">
-  Tadkit-core is developed by
-  <a href="https://www.irt-systemx.fr/en/" title="IRT SystemX">
-   <img src="https://www.irt-systemx.fr/wp-content/themes/systemx/assets/medias/logo-systemx.svg" height="70">
-  </a>and supported by the
-<a href="https://www.trustworthy-ai-foundation.eu/" title="European Trustworthy AI association">
-<img src="https://www.trustworthy-ai-association.eu/wp-content/uploads/2025/07/cropped-M0302_LOGO-ETAIA_BLANC_2000px-1-300x100.png"  height="90">
-</a>
-</p>
+This work has been supported by the French government under the "France 2030” program, as part of the SystemX Technological Research Institute within the **Confiance.ai** project. 
+
+TDAAD is developed by
+[IRT SystemX](https://www.irt-systemx.fr/en/)
+and supported by the
+[European Trustworthy AI Association](https://www.trustworthy-ai-foundation.eu/)
