@@ -56,7 +56,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#tadkit-utils-clean-query-module">tadkit.utils.clean_query module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#tadkit-utils-not-imported-wrapper-module">tadkit.utils.not_imported_wrapper module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-tadkit.utils.tadlearner_factory">tadkit.utils.tadlearner_factory module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tadkit-utils-tadlearner-factory-module">tadkit.utils.tadlearner_factory module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-tadkit.utils">Module contents</a></li>
 </ul>
 </li>
@@ -99,7 +99,7 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="tadkit.utils.widget.html">tadkit.utils.widget package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tadkit.utils.widget.html#module-tadkit.utils.widget">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tadkit.utils.widget.html#module-contents">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -114,31 +114,8 @@
 <section id="tadkit-utils-not-imported-wrapper-module">
 <h2>tadkit.utils.not_imported_wrapper module<a class="headerlink" href="#tadkit-utils-not-imported-wrapper-module" title="Link to this heading"></a></h2>
 </section>
-<section id="module-tadkit.utils.tadlearner_factory">
-<span id="tadkit-utils-tadlearner-factory-module"></span><h2>tadkit.utils.tadlearner_factory module<a class="headerlink" href="#module-tadkit.utils.tadlearner_factory" title="Link to this heading"></a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="tadkit.utils.tadlearner_factory.tadlearner_factory">
-<span class="sig-prename descclassname"><span class="pre">tadkit.utils.tadlearner_factory.</span></span><span class="sig-name descname"><span class="pre">tadlearner_factory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Estimator</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">required_properties</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params_description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../tadkit.base.html#tadkit.base.tadlearner.TADLearner" title="tadkit.base.tadlearner.TADLearner"><span class="pre">TADLearner</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/tadkit/utils/tadlearner_factory.html#tadlearner_factory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.utils.tadlearner_factory.tadlearner_factory" title="Link to this definition"></a></dt>
-<dd><p>Wrap a sklearn anomaly detection model to a TADLearner.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>Model</strong> – sklearn type model- to wrapp, possessing get_params, fit and score_samples methods.</p></li>
-<li><p><strong>required_properties</strong> – The properties that the input data must satisfies.</p></li>
-<li><p><strong>params_description</strong> – Description of the kwargs of the __init__ method that is exposed.</p></li>
-<li><p><strong>name</strong> – The Name of the class. Default name if None.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><dl class="simple">
-<dt>A subclass of TADLearner wrapping Model with given required_properties, params_description</dt><dd><p>and __name__.</p>
-</dd>
-</dl>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
+<section id="tadkit-utils-tadlearner-factory-module">
+<h2>tadkit.utils.tadlearner_factory module<a class="headerlink" href="#tadkit-utils-tadlearner-factory-module" title="Link to this heading"></a></h2>
 </section>
 <section id="module-tadkit.utils">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tadkit.utils" title="Link to this heading"></a></h2>

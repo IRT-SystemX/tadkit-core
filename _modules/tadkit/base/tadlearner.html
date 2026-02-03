@@ -72,9 +72,9 @@
            <div itemprop="articleBody">
              
   <h1>Source code for tadkit.base.tadlearner</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">runtime_checkable</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">runtime_checkable</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">tadkit.base.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParamsDescription</span><span class="p">,</span> <span class="n">Array</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tadkit.base.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArrayLike</span>
 
 
 <div class="viewcode-block" id="TADLearner">
@@ -106,17 +106,14 @@
 <span class="sd">        &gt;&gt;&gt; score_sample_pred = learner.score_samples(X_test)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">required_properties</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">params_description</span><span class="p">:</span> <span class="n">ParamsDescription</span> <span class="o">=</span> <span class="p">{}</span>
-
 <div class="viewcode-block" id="TADLearner.fit">
 <a class="viewcode-back" href="../../../tadkit.base.html#tadkit.base.tadlearner.TADLearner.fit">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Array</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;TADLearner&quot;</span><span class="p">:</span> <span class="o">...</span></div>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;TADLearner&quot;</span><span class="p">:</span> <span class="o">...</span></div>
 
 
 <div class="viewcode-block" id="TADLearner.score_samples">
 <a class="viewcode-back" href="../../../tadkit.base.html#tadkit.base.tadlearner.TADLearner.score_samples">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">score_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">score_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArrayLike</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The measure of normality of an observation according to the fitted model.</span>
 <span class="sd">        Scikit-learn compatible.</span>
@@ -137,7 +134,7 @@
 
 <div class="viewcode-block" id="TADLearner.predict">
 <a class="viewcode-back" href="../../../tadkit.base.html#tadkit.base.tadlearner.TADLearner.predict">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArrayLike</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Predict if a particular sample is an outlier or not.</span>
 <span class="sd">        Scikit-learn compatible.</span>

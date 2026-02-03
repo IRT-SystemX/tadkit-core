@@ -4,6 +4,14 @@ tadkit.base package
 Submodules
 ----------
 
+tadkit.base.basedensitydetector module
+--------------------------------------
+
+.. automodule:: tadkit.base.basedensitydetector
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 tadkit.base.dataframe\_type module
 ----------------------------------
 
@@ -12,10 +20,18 @@ tadkit.base.dataframe\_type module
    :undoc-members:
    :show-inheritance:
 
-tadkit.base.formalizer module
------------------------------
+tadkit.base.formatter module
+----------------------------
 
-.. automodule:: tadkit.base.formalizer
+.. automodule:: tadkit.base.formatter
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tadkit.base.registry module
+---------------------------
+
+.. automodule:: tadkit.base.registry
    :members:
    :undoc-members:
    :show-inheritance:

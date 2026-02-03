@@ -77,91 +77,181 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 </section>
+<section id="module-tadkit.base.basedensitydetector">
+<span id="tadkit-base-basedensitydetector-module"></span><h2>tadkit.base.basedensitydetector module<a class="headerlink" href="#module-tadkit.base.basedensitydetector" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tadkit.base.basedensitydetector.BaseDensityOutlierDetector">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tadkit.base.basedensitydetector.</span></span><span class="sig-name descname"><span class="pre">BaseDensityOutlierDetector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">contamination</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tadkit/base/basedensitydetector.html#BaseDensityOutlierDetector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.base.basedensitydetector.BaseDensityOutlierDetector" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">OutlierMixin</span></code></p>
+<p>Base class for density-based outlier detection.</p>
+<dl>
+<dt>Subclasses must implement:</dt><dd><ul>
+<li><p>_fit_density(X)</p></li>
+<li><p>_score_density(X)</p>
+<blockquote>
+<div><p>Accepts pandas DataFrame/Series but works internally with NumPy arrays.
+Returns results with same index as input if input is pandas.</p>
+</div></blockquote>
+</li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tadkit.base.basedensitydetector.BaseDensityOutlierDetector.contamination">
+<span class="sig-name descname"><span class="pre">contamination</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#tadkit.base.basedensitydetector.BaseDensityOutlierDetector.contamination" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tadkit.base.basedensitydetector.BaseDensityOutlierDetector.decision_function">
+<span class="sig-name descname"><span class="pre">decision_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Series</span></span></span><a class="reference internal" href="_modules/tadkit/base/basedensitydetector.html#BaseDensityOutlierDetector.decision_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.base.basedensitydetector.BaseDensityOutlierDetector.decision_function" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tadkit.base.basedensitydetector.BaseDensityOutlierDetector.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tadkit/base/basedensitydetector.html#BaseDensityOutlierDetector.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.base.basedensitydetector.BaseDensityOutlierDetector.fit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tadkit.base.basedensitydetector.BaseDensityOutlierDetector.offset_">
+<span class="sig-name descname"><span class="pre">offset_</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#tadkit.base.basedensitydetector.BaseDensityOutlierDetector.offset_" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tadkit.base.basedensitydetector.BaseDensityOutlierDetector.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Series</span></span></span><a class="reference internal" href="_modules/tadkit/base/basedensitydetector.html#BaseDensityOutlierDetector.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.base.basedensitydetector.BaseDensityOutlierDetector.predict" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tadkit.base.basedensitydetector.BaseDensityOutlierDetector.score_samples">
+<span class="sig-name descname"><span class="pre">score_samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Series</span></span></span><a class="reference internal" href="_modules/tadkit/base/basedensitydetector.html#BaseDensityOutlierDetector.score_samples"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.base.basedensitydetector.BaseDensityOutlierDetector.score_samples" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
 <section id="module-tadkit.base.dataframe_type">
 <span id="tadkit-base-dataframe-type-module"></span><h2>tadkit.base.dataframe_type module<a class="headerlink" href="#module-tadkit.base.dataframe_type" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="tadkit.base.dataframe_type.DataFrameType">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tadkit.base.dataframe_type.</span></span><span class="sig-name descname"><span class="pre">DataFrameType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tadkit/base/dataframe_type.html#DataFrameType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.base.dataframe_type.DataFrameType" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
-<p>Data type of Dataplatform datasets.</p>
+<p>Data type of datasets: long (asynchronous) vs wide (synchronous).</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="tadkit.base.dataframe_type.DataFrameType.ASYNCHRONOUS">
 <span class="sig-name descname"><span class="pre">ASYNCHRONOUS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'asynchronous'</span></em><a class="headerlink" href="#tadkit.base.dataframe_type.DataFrameType.ASYNCHRONOUS" title="Link to this definition"></a></dt>
-<dd><p>All data have their own “timestamp” x-axis, sensor names are found in the “sensor” column and data is found
-in the “data” column of the provided dataframe.</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="tadkit.base.dataframe_type.DataFrameType.SYNCHRONOUS">
 <span class="sig-name descname"><span class="pre">SYNCHRONOUS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'synchronous'</span></em><a class="headerlink" href="#tadkit.base.dataframe_type.DataFrameType.SYNCHRONOUS" title="Link to this definition"></a></dt>
-<dd><p>All data share a common “timestamp” x-axis, sensor names are in columns of the provided dataframe
-(except for “id”, “filename”, “minio”, “timestamp” and possible others… tbd more precisely with DataPlatform.)</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="tadkit.base.dataframe_type.DataFrameType.from_text">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tadkit/base/dataframe_type.html#DataFrameType.from_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.base.dataframe_type.DataFrameType.from_text" title="Link to this definition"></a></dt>
-<dd><p>Converts the string-representation to an Enum-object.</p>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tadkit/base/dataframe_type.html#DataFrameType.from_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.base.dataframe_type.DataFrameType.from_text" title="Link to this definition"></a></dt>
+<dd><p>Convert a string to a DataFrameType enum.</p>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tadkit.base.dataframe_type.DataFrameType.infer_from_df">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">infer_from_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#tadkit.base.dataframe_type.DataFrameType" title="tadkit.base.dataframe_type.DataFrameType"><span class="pre">DataFrameType</span></a></span></span><a class="reference internal" href="_modules/tadkit/base/dataframe_type.html#DataFrameType.infer_from_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.base.dataframe_type.DataFrameType.infer_from_df" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
 </section>
-<section id="module-tadkit.base.formalizer">
-<span id="tadkit-base-formalizer-module"></span><h2>tadkit.base.formalizer module<a class="headerlink" href="#module-tadkit.base.formalizer" title="Link to this heading"></a></h2>
+<section id="module-tadkit.base.formatter">
+<span id="tadkit-base-formatter-module"></span><h2>tadkit.base.formatter module<a class="headerlink" href="#module-tadkit.base.formatter" title="Link to this heading"></a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="tadkit.base.formalizer.Formalizer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tadkit.base.formalizer.</span></span><span class="sig-name descname"><span class="pre">Formalizer</span></span><a class="reference internal" href="_modules/tadkit/base/formalizer.html#Formalizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.base.formalizer.Formalizer" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="tadkit.base.formatter.Formatter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tadkit.base.formatter.</span></span><span class="sig-name descname"><span class="pre">Formatter</span></span><a class="reference internal" href="_modules/tadkit/base/formatter.html#Formatter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.base.formatter.Formatter" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
-<p>Abstract class of data formalizer (provider).
-Transforms Data from Confiance DataProvider into standard Data for ML pipelines.</p>
+<p>Abstract base class for all formalizers.
+Provides array-agnostic interface for ML pipelines.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="tadkit.base.formalizer.Formalizer.formalize">
-<span class="sig-name descname"><span class="pre">formalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tadkit/base/formalizer.html#Formalizer.formalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.base.formalizer.Formalizer.formalize" title="Link to this definition"></a></dt>
-<dd><p>Take a data query and return associated data.</p>
+<dt class="sig sig-object py" id="tadkit.base.formatter.Formatter.add_property">
+<span class="sig-name descname"><span class="pre">add_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tadkit/base/formatter.html#Formatter.add_property"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.base.formatter.Formatter.add_property" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tadkit.base.formatter.Formatter.add_query_description">
+<span class="sig-name descname"><span class="pre">add_query_description</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tadkit/base/formatter.html#Formatter.add_query_description"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.base.formatter.Formatter.add_query_description" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tadkit.base.formatter.Formatter.available_properties">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">available_properties</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#tadkit.base.formatter.Formatter.available_properties" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tadkit.base.formatter.Formatter.default_query">
+<span class="sig-name descname"><span class="pre">default_query</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/tadkit/base/formatter.html#Formatter.default_query"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.base.formatter.Formatter.default_query" title="Link to this definition"></a></dt>
+<dd><p>Return default query parameters based on query_description.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="tadkit.base.formalizer.Formalizer.no_data_leakage">
-<span class="sig-name descname"><span class="pre">no_data_leakage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#tadkit.base.formalizer.Formalizer.no_data_leakage" title="Link to this definition"></a></dt>
-<dd><p>Check if no leakage from a first data query to a second.</p>
+<dt class="sig sig-object py" id="tadkit.base.formatter.Formatter.format">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">query</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/tadkit/base/formatter.html#Formatter.format"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.base.formatter.Formatter.format" title="Link to this definition"></a></dt>
+<dd><p>Transform raw data into standard array-like format.
+Return type depends on backend (numpy array, pandas DataFrame, etc.)</p>
 </dd></dl>
 
-<dl>
-<dt>Properties:</dt><dd><p>query_description: Get the description of a data query.
-available_properties: Get the properties that the formalized data satisfies.</p>
-</dd>
-<dt>Example of usage:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">MyFormalizer</span><span class="p">,</span> <span class="n">Formalizer</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">formalizer</span> <span class="o">=</span> <span class="n">MyFormalizer</span><span class="p">(</span><span class="o">**</span><span class="n">args_init</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">formalizer</span><span class="o">.</span><span class="n">available_properties</span>  <span class="c1"># The provided property of the formalized data</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">formalizer</span><span class="o">.</span><span class="n">query_description</span>  <span class="c1"># The description of the queries</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">query_train</span> <span class="o">=</span> <span class="o">...</span>  <span class="c1"># Query to create data, following the query description</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">query_test</span> <span class="o">=</span> <span class="o">...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X_test</span> <span class="o">=</span> <span class="n">formalizer</span><span class="o">.</span><span class="n">formalize</span><span class="p">(</span><span class="n">query_test</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X_train</span> <span class="o">=</span> <span class="n">formalizer</span><span class="o">.</span><span class="n">formalize</span><span class="p">(</span><span class="n">query_train</span><span class="p">)</span>
-</pre></div>
-</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="tadkit.base.formatter.Formatter.query_description">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">query_description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#tadkit.base.formatter.Formatter.query_description" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tadkit.base.formatter.Formatter.remove_property">
+<span class="sig-name descname"><span class="pre">remove_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tadkit/base/formatter.html#Formatter.remove_property"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.base.formatter.Formatter.remove_property" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-tadkit.base.registry">
+<span id="tadkit-base-registry-module"></span><h2>tadkit.base.registry module<a class="headerlink" href="#module-tadkit.base.registry" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tadkit.base.registry.Registry">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tadkit.base.registry.</span></span><span class="sig-name descname"><span class="pre">Registry</span></span><a class="reference internal" href="_modules/tadkit/base/registry.html#Registry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.base.registry.Registry" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Registry for dynamically tracking and matching learner classes.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tadkit.base.registry.Registry.list_learners">
+<span class="sig-name descname"><span class="pre">list_learners</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/tadkit/base/registry.html#Registry.list_learners"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.base.registry.Registry.list_learners" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tadkit.base.registry.Registry.match_learners">
+<span class="sig-name descname"><span class="pre">match_learners</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">formatter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/tadkit/base/registry.html#Registry.match_learners"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.base.registry.Registry.match_learners" title="Link to this definition"></a></dt>
+<dd><p>Return learner classes compatible with the given formatter.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tadkit.base.registry.Registry.print_catalog_classes">
+<span class="sig-name descname"><span class="pre">print_catalog_classes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">detailed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tadkit/base/registry.html#Registry.print_catalog_classes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.base.registry.Registry.print_catalog_classes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tadkit.base.registry.Registry.print_compliance_miss">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">print_compliance_miss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learner</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tadkit/base/registry.html#Registry.print_compliance_miss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.base.registry.Registry.print_compliance_miss" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tadkit.base.registry.Registry.register_learner">
+<span class="sig-name descname"><span class="pre">register_learner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">condition</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tadkit/base/registry.html#Registry.register_learner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.base.registry.Registry.register_learner" title="Link to this definition"></a></dt>
+<dd><p>Register a learner with a compatibility condition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Display name for the learner.</p></li>
+<li><p><strong>learner</strong> (<em>class</em><em> or </em><em>str</em>) – The learner class OR an import path (“module.submodule.ClassName”).</p></li>
+<li><p><strong>condition</strong> (<em>callable</em><em>(</em><em>formatter</em><em>) </em><em>-&gt; bool</em>) – Determines whether this learner is compatible.</p></li>
+<li><p><strong>optional</strong> (<em>bool</em>) – If True, missing imports are ignored instead of raising.</p></li>
+</ul>
 </dd>
 </dl>
-<dl class="py property">
-<dt class="sig sig-object py" id="tadkit.base.formalizer.Formalizer.available_properties">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">available_properties</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#tadkit.base.formalizer.Formalizer.available_properties" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="tadkit.base.formalizer.Formalizer.default_query">
-<span class="sig-name descname"><span class="pre">default_query</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tadkit/base/formalizer.html#Formalizer.default_query"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.base.formalizer.Formalizer.default_query" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="id0">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">formalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Array</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Array</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/tadkit/base/formalizer.html#Formalizer.formalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="tadkit.base.formalizer.Formalizer.query_description">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">query_description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#tadkit.base.formalizer.Formalizer.query_description" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -210,18 +300,13 @@ required_properties: Get the properties that the input data must satisfies. See 
 </pre></div>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="id1">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Array</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#tadkit.base.tadlearner.TADLearner" title="tadkit.base.tadlearner.TADLearner"><span class="pre">TADLearner</span></a></span></span><a class="reference internal" href="_modules/tadkit/base/tadlearner.html#TADLearner.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="tadkit.base.tadlearner.TADLearner.params_description">
-<span class="sig-name descname"><span class="pre">params_description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Number</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Number</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#tadkit.base.tadlearner.TADLearner.params_description" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#tadkit.base.tadlearner.TADLearner" title="tadkit.base.tadlearner.TADLearner"><span class="pre">TADLearner</span></a></span></span><a class="reference internal" href="_modules/tadkit/base/tadlearner.html#TADLearner.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="id2">
-<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Array</span></span></span><a class="reference internal" href="_modules/tadkit/base/tadlearner.html#TADLearner.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/tadkit/base/tadlearner.html#TADLearner.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
 <dd><p>Predict if a particular sample is an outlier or not.
 Scikit-learn compatible.</p>
 <dl class="field-list simple">
@@ -238,14 +323,9 @@ be considered as an inlier according to the fitted model.</p>
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="tadkit.base.tadlearner.TADLearner.required_properties">
-<span class="sig-name descname"><span class="pre">required_properties</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#tadkit.base.tadlearner.TADLearner.required_properties" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 <dl class="py method">
-<dt class="sig sig-object py" id="id3">
-<span class="sig-name descname"><span class="pre">score_samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Array</span></span></span><a class="reference internal" href="_modules/tadkit/base/tadlearner.html#TADLearner.score_samples"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">score_samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/tadkit/base/tadlearner.html#TADLearner.score_samples"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
 <dd><p>The measure of normality of an observation according to the fitted model.
 Scikit-learn compatible.</p>
 <dl class="field-list simple">

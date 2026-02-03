@@ -76,7 +76,7 @@
   <section id="welcome-to-tadkit-core-s-documentation">
 <h1>Welcome to tadkit-core’s documentation!<a class="headerlink" href="#welcome-to-tadkit-core-s-documentation" title="Link to this heading"></a></h1>
 <div align="center">
-    <img src="_static/TADkit.png" width="60%" alt="Tadkit Logo" />
+    <img src="_static/Logo_ConfianceAI.png" width="20%" alt="Confiance.ai Logo" />
     <h1 style="font-size: large; font-weight: bold;">tadkit-core</h1>
 </div>
 <div align="center">
@@ -109,34 +109,48 @@
     </a>
 </div>
 <br>
-<p><code class="docutils literal notranslate"><span class="pre">TADkit</span></code>: <strong>Time-series Anomaly Detection kit</strong> is a set of tools for anomaly detection of time series data.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">tadkit-core</span></code> python package provides <strong>interfaces for anomaly detection</strong> that allows coherent and concurrent use of the various <strong>time-series anomaly detection methods</strong> developed in Confiance.ai (TDAAD, SBAD, KCPD, CNNDRAD, …).</p>
-<p>The <strong>interfaces for anomaly detection</strong> consist in a <code class="docutils literal notranslate"><span class="pre">Formalizer</span></code> abstract class for preparing raw data into machine-learning format,
-and in a <code class="docutils literal notranslate"><span class="pre">TADLearner</span></code> abstract class implementing <code class="docutils literal notranslate"><span class="pre">.fit(X)</span></code>, <code class="docutils literal notranslate"><span class="pre">.score_samples(X)</span></code> and <code class="docutils literal notranslate"><span class="pre">.predict(X)</span></code> routines for the unsupervised machine learning task of anomaly detection. You can find more detail in next sections and in the docstring.</p>
-<p>The <strong>time-series anomaly detection methods</strong> contained in TADkit are either from standard libraries such as <a class="reference external" href="https://scikit-learn.org/">scikit-learn</a>, or are autonomous Confiance.ai components. They are made available through the component as a dictionary of classes <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">tadkit.catalog.learners</span> <span class="pre">import</span> <span class="pre">installed_learner_classes</span></code>, to be instantiated with the right parameters - and all parameters come with default values.
-The package has been designed with the following philosophy:</p>
+<hr class="docutils" />
+<section id="tadkit-timeseries-anomaly-detection-kit">
+<h2>TADkit – Timeseries Anomaly Detection kit<a class="headerlink" href="#tadkit-timeseries-anomaly-detection-kit" title="Link to this heading"></a></h2>
+<p>Website and documentation : https://irt-systemx.github.io/tadkit-core/</p>
+<section id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">tadkit-core</span></code> is a <strong>flexible and extensible Python toolkit for detecting anomalies in time-series data</strong>. It empowers data scientists and developers to quickly identify unusual patterns, monitor system behavior, and build predictive models—all with a modular design that makes integration and customization straightforward.</p>
+<p>It builds upon <a class="reference external" href="https://scikit-learn.org/"><img alt="scikit-learn" src="https://scikit-learn.org/stable/_static/scikit-learn-logo-small.png" /></a> <strong><a class="reference external" href="https://scikit-learn.org/">scikit-learn</a></strong> for interfacing anomaly detection algorithms.</p>
+</section>
+<section id="key-features">
+<h3>🔍 Key Features<a class="headerlink" href="#key-features" title="Link to this heading"></a></h3>
 <ul class="simple">
-<li><p>if installed, the relevant Confiance.ai anomaly detection components are imported and made ready to use as a <code class="docutils literal notranslate"><span class="pre">TADLearner</span></code>,</p></li>
-<li><p>else the component will simply not appear in the tadkit installed learner set.</p></li>
+<li><p><strong>Unified Interfaces for Anomaly Detection</strong>
+Provides a coherent set of interfaces for different time-series anomaly detection methods. The main abstractions are:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">Formater</span></code>: prepares raw timeseries data into a machine-learning-friendly format.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TADLearner</span></code>: enforces <code class="docutils literal notranslate"><span class="pre">.fit(X)</span></code>, <code class="docutils literal notranslate"><span class="pre">.score_samples(X)</span></code>, and <code class="docutils literal notranslate"><span class="pre">.predict(X)</span></code> coherently for unsupervised anomaly detection.</p></li>
 </ul>
-<p>The <code class="docutils literal notranslate"><span class="pre">tadkit-core</span></code> python package contains multiple introductory or example notebooks using these interfaces and methods, for crafting a unique <a class="reference internal" href="examples/highlights/unidim_ad_example.html"><span class="std std-doc">univariate anomaly detection method</span></a>, <a class="reference internal" href="examples/highlights/interactive_ad_demo.html"><span class="std std-doc">using and chosing anomaly detectors concurrently</span></a>.</p>
-<p>The following scheme represents the TADkit “galaxy” as it stands currently.</p>
-<p><img alt="tadkit scheme" src="_images/tadkit-galaxy.png" />
-An <em>imported</em> arrows means that the external Confiance.ai component will be found in TADkit if installed, and a <em>to be integrated</em> arrow means that that Confiance.ai component cannot be found <em>through</em> TADkit yet, awaiting further developments.</p>
+</li>
+<li><p><strong>Supports Multiple Detection Methods</strong>
+Includes methods from scikit-learn and Confiance.ai components (<a class="reference external" href="https://catalog.confiance.ai/records/xvc80-whm36">TDAAD</a> and <a class="reference external" href="https://github.com/IRT-SystemX/tdaad">github</a>, <a class="reference external" href="https://catalog.confiance.ai/records/fkpja-s7546">SBAD</a>, <a class="reference external" href="https://catalog.confiance.ai/records/kxc1c-12x55">KCPD</a> and <a class="reference external" href="https://github.com/confianceai/kernel-change-point-detection">github</a>, <a class="reference external" href="https://catalog.confiance.ai/records/af2ab-hw426">CNNDRAD</a>, …). All learners can be instantiated with default parameters.</p></li>
+<li><p><strong>Dynamic Component Loading</strong>
+Only installed components are made available in the system; unavailable components are automatically skipped.</p></li>
+<li><p><strong>Extensible and Modular</strong>
+Designed for easy integration of new anomaly detection methods and smooth scaling across different datasets and applications.</p></li>
+</ul>
+</section>
+</section>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="guidelines.html">📖 Guidelines</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="guidelines.html#set-up-a-clean-virtual-environnement">Set up a clean virtual environnement</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guidelines.html#install-the-library-restricted-access">Install the library (restricted access)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guidelines.html#basic-tadkit-run-anomaly-detection-confiance-methods-on-your-data">🎮 Basic TADkit: run anomaly detection Confiance methods on your data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guidelines.html#tadkit-interfaces-and-confiance-methods-catalog">TADkit Interfaces and Confiance methods catalog</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guidelines.html#structure-of-the-project">Structure of the project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guidelines.html#quickstart">🚀 Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guidelines.html#deep-dive">🪸⁠ Deep Dive 🪼</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guidelines.html#documentation-resources">📚 Documentation &amp; Resources</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guidelines.html#document-generation">Document generation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="guidelines.html#license">License</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guidelines.html#contributors-and-support">Contributors and Support</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">🔄 Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v-1-2-0-2025-12-31-current">v 1.2.0 (2025-12-31, current)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v-1-1-1-2025-10-23">v 1.1.1 (2025-10-23)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v-1-1-0-2025-03-31">v 1.1.0 (2025-03-31)</a></li>
 </ul>
 </li>

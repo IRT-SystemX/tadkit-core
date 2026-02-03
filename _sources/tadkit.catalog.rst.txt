@@ -1,14 +1,32 @@
 tadkit.catalog package
 ======================
 
-Subpackages
------------
+Submodules
+----------
 
-.. toctree::
-   :maxdepth: 4
+tadkit.catalog.rawtowideformatter module
+----------------------------------------
 
-   tadkit.catalog.formalizers
-   tadkit.catalog.learners
+.. automodule:: tadkit.catalog.rawtowideformatter
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tadkit.catalog.registry\_init module
+------------------------------------
+
+.. automodule:: tadkit.catalog.registry_init
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tadkit.catalog.sklearners module
+--------------------------------
+
+.. automodule:: tadkit.catalog.sklearners
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 Module contents
 ---------------

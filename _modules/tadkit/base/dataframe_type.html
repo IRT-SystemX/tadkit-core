@@ -73,35 +73,44 @@
              
   <h1>Source code for tadkit.base.dataframe_type</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 
 <div class="viewcode-block" id="DataFrameType">
 <a class="viewcode-back" href="../../../tadkit.base.html#tadkit.base.dataframe_type.DataFrameType">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">DataFrameType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Data type of Dataplatform datasets.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Data type of datasets: long (asynchronous) vs wide (synchronous).&quot;&quot;&quot;</span>
 
-    <span class="n">ASYNCHRONOUS</span> <span class="o">=</span> <span class="s2">&quot;asynchronous&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;All data have their own &quot;timestamp&quot; x-axis, sensor names are found in the &quot;sensor&quot; column and data is found</span>
-<span class="sd">    in the &quot;data&quot; column of the provided dataframe.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">SYNCHRONOUS</span> <span class="o">=</span> <span class="s2">&quot;synchronous&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;All data share a common &quot;timestamp&quot; x-axis, sensor names are in columns of the provided dataframe</span>
-<span class="sd">    (except for &quot;id&quot;, &quot;filename&quot;, &quot;minio&quot;, &quot;timestamp&quot; and possible others... tbd more precisely with DataPlatform.)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ASYNCHRONOUS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;asynchronous&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">,</span> <span class="s2">&quot;sensor&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">])</span>
+    <span class="n">SYNCHRONOUS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;synchronous&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>  <span class="c1"># columns vary per dataset</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">required_columns</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_value_</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required_columns</span> <span class="o">=</span> <span class="n">required_columns</span>
 
 <div class="viewcode-block" id="DataFrameType.from_text">
 <a class="viewcode-back" href="../../../tadkit.base.html#tadkit.base.dataframe_type.DataFrameType.from_text">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">from_text</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts the string-representation to an Enum-object.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">DataFrameType</span><span class="o">.</span><span class="n">ASYNCHRONOUS</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_text</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert a string to a DataFrameType enum.&quot;&quot;&quot;</span>
+        <span class="n">lookup</span> <span class="o">=</span> <span class="p">{</span><span class="n">t</span><span class="o">.</span><span class="n">value</span><span class="p">:</span> <span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">DataFrameType</span><span class="p">}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">lookup</span><span class="p">[</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Unknown DataFrameType &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;. Must be one of: &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lookup</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DataFrameType.infer_from_df">
+<a class="viewcode-back" href="../../../tadkit.base.html#tadkit.base.dataframe_type.DataFrameType.infer_from_df">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">infer_from_df</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DataFrameType&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">{</span><span class="s2">&quot;sensor&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">}</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">DataFrameType</span><span class="o">.</span><span class="n">ASYNCHRONOUS</span>
-        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">DataFrameType</span><span class="o">.</span><span class="n">SYNCHRONOUS</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">DataFrameType</span><span class="o">.</span><span class="n">SYNCHRONOUS</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;In order to process input data you must know the format&quot;</span>
-            <span class="s2">&quot;(DataFrameType.ASYNCHRONOUS or DataFrameType.SYNCHRONOUS).&quot;</span>
-        <span class="p">)</span></div>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">DataFrameType</span><span class="o">.</span><span class="n">SYNCHRONOUS</span></div>
 </div>
 
 </pre></div>

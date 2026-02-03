@@ -74,45 +74,111 @@
              
   <section id="tadkit-catalog-package">
 <h1>tadkit.catalog package<a class="headerlink" href="#tadkit-catalog-package" title="Link to this heading"></a></h1>
-<section id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="tadkit.catalog.formalizers.html">tadkit.catalog.formalizers package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tadkit.catalog.formalizers.html#module-tadkit.catalog.formalizers">Module contents</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="tadkit.catalog.formalizers.html#tadkit.catalog.formalizers.PandasFormalizer"><code class="docutils literal notranslate"><span class="pre">PandasFormalizer</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="tadkit.catalog.formalizers.html#tadkit.catalog.formalizers.PandasFormalizer.formalize"><code class="docutils literal notranslate"><span class="pre">PandasFormalizer.formalize()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="tadkit.catalog.formalizers.html#tadkit.catalog.formalizers.PandasFormalizer.add_available_properties"><code class="docutils literal notranslate"><span class="pre">PandasFormalizer.add_available_properties()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="tadkit.catalog.formalizers.html#tadkit.catalog.formalizers.PandasFormalizer.add_query_description"><code class="docutils literal notranslate"><span class="pre">PandasFormalizer.add_query_description()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="tadkit.catalog.formalizers.html#tadkit.catalog.formalizers.PandasFormalizer.available_properties"><code class="docutils literal notranslate"><span class="pre">PandasFormalizer.available_properties</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="tadkit.catalog.formalizers.html#id0"><code class="docutils literal notranslate"><span class="pre">PandasFormalizer.formalize()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="tadkit.catalog.formalizers.html#tadkit.catalog.formalizers.PandasFormalizer.get_space_set"><code class="docutils literal notranslate"><span class="pre">PandasFormalizer.get_space_set()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="tadkit.catalog.formalizers.html#tadkit.catalog.formalizers.PandasFormalizer.get_timestamps"><code class="docutils literal notranslate"><span class="pre">PandasFormalizer.get_timestamps()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="tadkit.catalog.formalizers.html#tadkit.catalog.formalizers.PandasFormalizer.query_description"><code class="docutils literal notranslate"><span class="pre">PandasFormalizer.query_description</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="tadkit.catalog.formalizers.html#tadkit.catalog.formalizers.PandasFormalizer.remove_available_properties"><code class="docutils literal notranslate"><span class="pre">PandasFormalizer.remove_available_properties()</span></code></a></li>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-tadkit.catalog.rawtowideformatter">
+<span id="tadkit-catalog-rawtowideformatter-module"></span><h2>tadkit.catalog.rawtowideformatter module<a class="headerlink" href="#module-tadkit.catalog.rawtowideformatter" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tadkit.catalog.rawtowideformatter.RawToWideFormatter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tadkit.catalog.rawtowideformatter.</span></span><span class="sig-name descname"><span class="pre">RawToWideFormatter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'numpy'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tadkit/catalog/rawtowideformatter.html#RawToWideFormatter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.catalog.rawtowideformatter.RawToWideFormatter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="tadkit.base.html#tadkit.base.formatter.Formatter" title="tadkit.base.formatter.Formatter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Formatter</span></code></a></p>
+<p>A Formatter that supports both pandas DataFrame and NumPy array outputs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>pd.DataFrame</em><em> or </em><em>np.ndarray</em>) – Input data.</p></li>
+<li><p><strong>backend</strong> (<em>str</em>) – ‘pandas’ or ‘numpy’.</p></li>
+<li><p><strong>timestamps</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – Required if data is a NumPy array.</p></li>
+<li><p><strong>columns</strong> (<em>list</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Column names for NumPy arrays.</p></li>
 </ul>
-</li>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="tadkit.catalog.rawtowideformatter.RawToWideFormatter.format">
+<span class="sig-name descname"><span class="pre">format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_period</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resample_freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tadkit/catalog/rawtowideformatter.html#RawToWideFormatter.format"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.catalog.rawtowideformatter.RawToWideFormatter.format" title="Link to this definition"></a></dt>
+<dd><p>Slice and optionally resample the data, using backend-specific resampling.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-tadkit.catalog.registry_init">
+<span id="tadkit-catalog-registry-init-module"></span><h2>tadkit.catalog.registry_init module<a class="headerlink" href="#module-tadkit.catalog.registry_init" title="Link to this heading"></a></h2>
+</section>
+<section id="module-tadkit.catalog.sklearners">
+<span id="tadkit-catalog-sklearners-module"></span><h2>tadkit.catalog.sklearners module<a class="headerlink" href="#module-tadkit.catalog.sklearners" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tadkit.catalog.sklearners.CustomScoreOutlierDetector">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tadkit.catalog.sklearners.</span></span><span class="sig-name descname"><span class="pre">CustomScoreOutlierDetector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">score_func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contamination</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tadkit/catalog/sklearners.html#CustomScoreOutlierDetector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.catalog.sklearners.CustomScoreOutlierDetector" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="tadkit.base.html#tadkit.base.basedensitydetector.BaseDensityOutlierDetector" title="tadkit.base.basedensitydetector.BaseDensityOutlierDetector"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDensityOutlierDetector</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>score_func</strong> (<em>callable</em>) – Function X -&gt; scores (higher = inliers). Must accept 2D array and return 1D array.</p></li>
+<li><p><strong>contamination</strong> (<em>float</em><em>, </em><em>default=0.1</em>) – Proportion of outliers. Must be in (0, 0.5).</p></li>
 </ul>
-</li>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tadkit.catalog.sklearners.CustomScoreOutlierDetector.score_func">
+<span class="sig-name descname"><span class="pre">score_func</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#tadkit.catalog.sklearners.CustomScoreOutlierDetector.score_func" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tadkit.catalog.sklearners.GMMOutlierDetector">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tadkit.catalog.sklearners.</span></span><span class="sig-name descname"><span class="pre">GMMOutlierDetector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">covariance_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'full'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg_covar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'kmeans'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">means_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precisions_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warm_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contamination</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tadkit/catalog/sklearners.html#GMMOutlierDetector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.catalog.sklearners.GMMOutlierDetector" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="tadkit.base.html#tadkit.base.basedensitydetector.BaseDensityOutlierDetector" title="tadkit.base.basedensitydetector.BaseDensityOutlierDetector"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDensityOutlierDetector</span></code></a></p>
+<p>Density-based outlier detection using GaussianMixture.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_components</strong> (<em>int</em><em>, </em><em>default=1</em>) – The number of mixture components.</p></li>
+<li><p><strong>covariance_type</strong> (<em>{'full'</em><em>, </em><em>'tied'</em><em>, </em><em>'diag'</em><em>, </em><em>'spherical'}</em><em>, </em><em>default='full'</em>) – Type of covariance parameters to use.</p></li>
+<li><p><strong>tol</strong> (<em>float</em><em>, </em><em>default=1e-3</em>) – Convergence threshold.</p></li>
+<li><p><strong>reg_covar</strong> (<em>float</em><em>, </em><em>default=1e-6</em>) – Non-negative regularization added to the diagonal of covariance matrices.</p></li>
+<li><p><strong>max_iter</strong> (<em>int</em><em>, </em><em>default=100</em>) – The number of EM iterations to perform.</p></li>
+<li><p><strong>n_init</strong> (<em>int</em><em>, </em><em>default=1</em>) – The number of initializations to perform. The best result is kept.</p></li>
+<li><p><strong>init_params</strong> (<em>{'kmeans'</em><em>, </em><em>'random'}</em><em>, </em><em>default='kmeans'</em>) – Method used to initialize the weights, means, and precisions.</p></li>
+<li><p><strong>weights_init</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_components</em><em>,</em><em>)</em><em>, </em><em>default=None</em>) – The user-provided initial weights.</p></li>
+<li><p><strong>means_init</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_components</em><em>, </em><em>n_features</em><em>)</em><em>, </em><em>default=None</em>) – The user-provided initial means.</p></li>
+<li><p><strong>precisions_init</strong> (<em>array-like</em><em>, </em><em>default=None</em>) – The user-provided initial precisions.</p></li>
+<li><p><strong>random_state</strong> (<em>int</em><em>, </em><em>RandomState instance</em><em>, </em><em>default=None</em>) – Controls the random seed.</p></li>
+<li><p><strong>warm_start</strong> (<em>bool</em><em>, </em><em>default=False</em>) – If True, reuse the solution of the last fitting.</p></li>
+<li><p><strong>verbose</strong> (<em>int</em><em>, </em><em>default=0</em>) – Enable verbose output.</p></li>
+<li><p><strong>verbose_interval</strong> (<em>int</em><em>, </em><em>default=10</em>) – Number of iteration steps between printing progress.</p></li>
+<li><p><strong>contamination</strong> (<em>float</em><em>, </em><em>default=0.1</em>) – Proportion of outliers in the dataset.</p></li>
 </ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="tadkit.catalog.learners.html">tadkit.catalog.learners package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tadkit.catalog.learners.html#module-tadkit.catalog.learners">Module contents</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="tadkit.catalog.learners.html#tadkit.catalog.learners.IsolationForestLearner"><code class="docutils literal notranslate"><span class="pre">IsolationForestLearner</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="tadkit.catalog.learners.html#tadkit.catalog.learners.KernelDensityLearner"><code class="docutils literal notranslate"><span class="pre">KernelDensityLearner</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="tadkit.catalog.learners.html#tadkit.catalog.learners.ScaledKernelDensityLearner"><code class="docutils literal notranslate"><span class="pre">ScaledKernelDensityLearner</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="tadkit.catalog.learners.html#tadkit.catalog.learners.ScaledKernelDensityLearner.params_description"><code class="docutils literal notranslate"><span class="pre">ScaledKernelDensityLearner.params_description</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="tadkit.catalog.learners.html#tadkit.catalog.learners.ScaledKernelDensityLearner.required_properties"><code class="docutils literal notranslate"><span class="pre">ScaledKernelDensityLearner.required_properties</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="tadkit.catalog.learners.html#tadkit.catalog.learners.ScaledKernelDensityLearner.set_score_request"><code class="docutils literal notranslate"><span class="pre">ScaledKernelDensityLearner.set_score_request()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="tadkit.catalog.learners.html#tadkit.catalog.learners.ScaledKernelDensityLearner.steps"><code class="docutils literal notranslate"><span class="pre">ScaledKernelDensityLearner.steps</span></code></a></li>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tadkit.catalog.sklearners.KDEOutlierDetector">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tadkit.catalog.sklearners.</span></span><span class="sig-name descname"><span class="pre">KDEOutlierDetector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bandwidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gaussian'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">breadth_first</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leaf_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contamination</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tadkit/catalog/sklearners.html#KDEOutlierDetector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tadkit.catalog.sklearners.KDEOutlierDetector" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="tadkit.base.html#tadkit.base.basedensitydetector.BaseDensityOutlierDetector" title="tadkit.base.basedensitydetector.BaseDensityOutlierDetector"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDensityOutlierDetector</span></code></a></p>
+<p>Density-based outlier detection using KernelDensity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bandwidth</strong> (<em>float</em><em>, </em><em>default=1.0</em>) – The bandwidth of the kernel.</p></li>
+<li><p><strong>algorithm</strong> (<em>{'kd_tree'</em><em>, </em><em>'ball_tree'</em><em>, </em><em>'auto'}</em><em>, </em><em>default='auto'</em>) – The tree algorithm to use.</p></li>
+<li><p><strong>kernel</strong> (<em>str</em><em>, </em><em>default='gaussian'</em>) – The kernel to use. Valid kernels are
+[‘gaussian’, ‘tophat’, ‘epanechnikov’, ‘exponential’, ‘linear’, ‘cosine’].</p></li>
+<li><p><strong>metric</strong> (<em>str</em><em>, </em><em>default='euclidean'</em>) – The distance metric to use.</p></li>
+<li><p><strong>atol</strong> (<em>float</em><em>, </em><em>default=0</em>) – The desired absolute tolerance of the result.</p></li>
+<li><p><strong>rtol</strong> (<em>float</em><em>, </em><em>default=0</em>) – The desired relative tolerance of the result.</p></li>
+<li><p><strong>breadth_first</strong> (<em>bool</em><em>, </em><em>default=True</em>) – If true, use a breadth-first approach to the problem.</p></li>
+<li><p><strong>leaf_size</strong> (<em>int</em><em>, </em><em>default=40</em>) – Leaf size passed to BallTree or KDTree.</p></li>
+<li><p><strong>metric_params</strong> (<em>dict</em><em>, </em><em>default=None</em>) – Additional parameters for the metric function.</p></li>
+<li><p><strong>contamination</strong> (<em>float</em><em>, </em><em>default=0.1</em>) – Proportion of outliers in the data set.</p></li>
 </ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</div>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="module-tadkit.catalog">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tadkit.catalog" title="Link to this heading"></a></h2>

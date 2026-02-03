@@ -72,128 +72,35 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">pprint</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">IsolationForest</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
-
-<span class="n">PROJECT_DIR</span> <span class="o">=</span> <span class="s1">&#39;..&#39;</span>
-<span class="k">if</span> <span class="n">PROJECT_DIR</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">PROJECT_DIR</span><span class="p">)</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">tadkit.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">TADLearner</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">tadkit.catalog.formalizers</span><span class="w"> </span><span class="kn">import</span> <span class="n">PandasFormalizer</span>
-</pre></div>
-</div>
-</div>
-</div>
-<section id="synthetic-data-simulation">
+  <section id="synthetic-data-simulation">
 <h1>Synthetic data simulation<a class="headerlink" href="#synthetic-data-simulation" title="Link to this heading"></a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tadkit.utils.synthetic_ornstein_uhlenbeck</span><span class="w"> </span><span class="kn">import</span> <span class="n">synthetise_ornstein_uhlenbeck_data</span>
-<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">synthetise_ornstein_uhlenbeck_data</span><span class="p">(</span><span class="n">n_rows</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_cols_x</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">((</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: &gt;
-</pre></div>
-</div>
-<img alt="../../_images/ed979b81c7e40d9c69a81ea4902a4a243bd372ada9c5eb7b8ba8e273ece5175e.png" src="../../_images/ed979b81c7e40d9c69a81ea4902a4a243bd372ada9c5eb7b8ba8e273ece5175e.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([((</span><span class="n">X</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="mf">.5</span><span class="p">),</span> <span class="n">y</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: &gt;
-</pre></div>
-</div>
-<img alt="../../_images/cf30e551d0193be012e77cbfc8a8502cd4ceb5898d9b458250e8a770d713f742.png" src="../../_images/cf30e551d0193be012e77cbfc8a8502cd4ceb5898d9b458250e8a770d713f742.png" />
-</div>
-</div>
-</section>
-<section id="formalizer">
-<h1>Formalizer<a class="headerlink" href="#formalizer" title="Link to this heading"></a></h1>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">formalizer</span> <span class="o">=</span> <span class="n">PandasFormalizer</span><span class="p">(</span>
-        <span class="n">data_df</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
-        <span class="n">dataframe_type</span><span class="o">=</span><span class="s2">&quot;synchronous&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">formalizer</span><span class="o">.</span><span class="n">available_properties</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;pandas&#39;, &#39;fixed_time_step&#39;]
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pprint</span><span class="p">(</span><span class="n">formalizer</span><span class="o">.</span><span class="n">query_description</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;resampling&#39;: {&#39;default&#39;: False,
-                &#39;description&#39;: &#39;Resampling of the target query&#39;,
-                &#39;family&#39;: &#39;bool&#39;},
- &#39;resampling_resolution&#39;: {&#39;default&#39;: 120,
-                           &#39;description&#39;: &#39;If resampling, resampling &#39;
-                                          &#39;resolution in seconds.&#39;,
-                           &#39;family&#39;: &#39;time&#39;,
-                           &#39;start&#39;: 60,
-                           &#39;stop&#39;: 3600},
- &#39;target_period&#39;: {&#39;default&#39;: (Timestamp(&#39;2021-01-01 00:00:00&#39;),
-                               Timestamp(&#39;2021-02-11 15:00:00&#39;)),
-                   &#39;description&#39;: &#39;Time period for your query.&#39;,
-                   &#39;family&#39;: &#39;time_interval&#39;,
-                   &#39;start&#39;: Timestamp(&#39;2021-01-01 00:00:00&#39;),
-                   &#39;stop&#39;: Timestamp(&#39;2021-02-11 15:00:00&#39;)},
- &#39;target_space&#39;: {&#39;default&#39;: Index([&#39;X0&#39;, &#39;X1&#39;, &#39;X2&#39;, &#39;X3&#39;, &#39;X4&#39;], dtype=&#39;object&#39;),
-                  &#39;description&#39;: &#39;List of sensors used for your query.&#39;,
-                  &#39;family&#39;: &#39;space&#39;,
-                  &#39;set&#39;: Index([&#39;X0&#39;, &#39;X1&#39;, &#39;X2&#39;, &#39;X3&#39;, &#39;X4&#39;], dtype=&#39;object&#39;)}}
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">formalizer</span><span class="o">.</span><span class="n">formalize</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">columns_0</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;X1&#39;</span><span class="p">,</span> <span class="s1">&#39;X2&#39;</span><span class="p">],</span>
-                     <span class="n">time_interval</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;2021-01-01 02:00:00&#39;</span><span class="p">,</span> <span class="s1">&#39;2021-02-02&#39;</span><span class="p">],</span>
-                     <span class="n">target_space</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span>
-                     <span class="n">resampling</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                     <span class="n">resampling_resolution</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ouagen</span><span class="w"> </span><span class="kn">import</span> <span class="n">ornstein_uhlenbeck_anomaly</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">/</span> <span class="n">t</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">pre_X</span><span class="p">,</span> <span class="n">pre_y</span> <span class="o">=</span> <span class="n">ornstein_uhlenbeck_anomaly</span><span class="p">(</span>
+    <span class="n">t</span><span class="p">,</span>
+    <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">noise_scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">mean_reverting</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">anomaly_freq</span><span class="o">=</span><span class="mf">.1</span><span class="p">,</span>
+    <span class="n">anomaly_duration</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span>
+    <span class="n">anomaly_scale</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="s1">&#39;2021-01-01&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;h&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pre_X</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;X</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pre_X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pre_y</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">])</span>
+<span class="n">display</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">async_X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span><span class="n">value_vars</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+    <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;variable&quot;</span><span class="p">:</span> <span class="s2">&quot;sensor&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;data&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">async_X</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -221,6 +128,21 @@
       <th>X2</th>
       <th>X3</th>
       <th>X4</th>
+      <th>X5</th>
+      <th>X6</th>
+      <th>X7</th>
+      <th>X8</th>
+      <th>X9</th>
+      <th>X10</th>
+      <th>X11</th>
+      <th>X12</th>
+      <th>X13</th>
+      <th>X14</th>
+      <th>X15</th>
+      <th>X16</th>
+      <th>X17</th>
+      <th>X18</th>
+      <th>X19</th>
     </tr>
   </thead>
   <tbody>
@@ -231,38 +153,113 @@
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
     </tr>
     <tr>
-      <th>2021-01-01 00:01:00</th>
-      <td>0.000088</td>
-      <td>0.000412</td>
-      <td>0.000449</td>
-      <td>-0.000373</td>
-      <td>-0.000491</td>
+      <th>2021-01-01 01:00:00</th>
+      <td>0.005252</td>
+      <td>0.024728</td>
+      <td>0.026952</td>
+      <td>-0.022360</td>
+      <td>-0.029462</td>
+      <td>0.028039</td>
+      <td>-0.007014</td>
+      <td>0.012071</td>
+      <td>-0.024431</td>
+      <td>0.027290</td>
+      <td>-0.008894</td>
+      <td>-0.029470</td>
+      <td>-0.015765</td>
+      <td>0.024170</td>
+      <td>0.006056</td>
+      <td>-0.019567</td>
+      <td>0.052675</td>
+      <td>0.054966</td>
+      <td>0.037385</td>
+      <td>0.035398</td>
     </tr>
     <tr>
-      <th>2021-01-01 00:02:00</th>
-      <td>0.000175</td>
-      <td>0.000824</td>
-      <td>0.000898</td>
-      <td>-0.000745</td>
-      <td>-0.000982</td>
+      <th>2021-01-01 02:00:00</th>
+      <td>0.027888</td>
+      <td>-0.032840</td>
+      <td>0.062813</td>
+      <td>-0.024298</td>
+      <td>-0.024962</td>
+      <td>0.007937</td>
+      <td>-0.027353</td>
+      <td>0.033791</td>
+      <td>-0.059576</td>
+      <td>0.030615</td>
+      <td>-0.041340</td>
+      <td>-0.041302</td>
+      <td>0.028096</td>
+      <td>0.013593</td>
+      <td>-0.032369</td>
+      <td>-0.030601</td>
+      <td>0.055585</td>
+      <td>0.082502</td>
+      <td>0.046551</td>
+      <td>0.018346</td>
     </tr>
     <tr>
-      <th>2021-01-01 00:03:00</th>
-      <td>0.000263</td>
-      <td>0.001236</td>
-      <td>0.001348</td>
-      <td>-0.001118</td>
-      <td>-0.001473</td>
+      <th>2021-01-01 03:00:00</th>
+      <td>-0.006903</td>
+      <td>-0.060266</td>
+      <td>0.034705</td>
+      <td>-0.011602</td>
+      <td>-0.023157</td>
+      <td>-0.018953</td>
+      <td>0.003918</td>
+      <td>0.043048</td>
+      <td>-0.005327</td>
+      <td>0.018585</td>
+      <td>-0.049878</td>
+      <td>-0.077205</td>
+      <td>0.015227</td>
+      <td>-0.014894</td>
+      <td>-0.046688</td>
+      <td>-0.023597</td>
+      <td>0.076257</td>
+      <td>0.045855</td>
+      <td>0.041023</td>
+      <td>-0.013725</td>
     </tr>
     <tr>
-      <th>2021-01-01 00:04:00</th>
-      <td>0.000350</td>
-      <td>0.001649</td>
-      <td>0.001797</td>
-      <td>-0.001491</td>
-      <td>-0.001964</td>
+      <th>2021-01-01 04:00:00</th>
+      <td>0.041263</td>
+      <td>-0.051675</td>
+      <td>-0.021960</td>
+      <td>0.007861</td>
+      <td>0.001067</td>
+      <td>-0.053171</td>
+      <td>0.041826</td>
+      <td>-0.002919</td>
+      <td>0.031187</td>
+      <td>0.003237</td>
+      <td>-0.069468</td>
+      <td>-0.150257</td>
+      <td>-0.005190</td>
+      <td>-0.035196</td>
+      <td>-0.033748</td>
+      <td>-0.084091</td>
+      <td>0.091617</td>
+      <td>0.078086</td>
+      <td>0.077962</td>
+      <td>-0.021141</td>
     </tr>
     <tr>
       <th>...</th>
@@ -271,78 +268,337 @@
       <td>...</td>
       <td>...</td>
       <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
     </tr>
     <tr>
-      <th>2021-02-11 14:56:00</th>
-      <td>-0.584958</td>
-      <td>0.942160</td>
-      <td>0.571343</td>
-      <td>-0.897471</td>
-      <td>0.755402</td>
+      <th>2021-02-11 11:00:00</th>
+      <td>-0.045880</td>
+      <td>-0.710766</td>
+      <td>-0.097687</td>
+      <td>1.036003</td>
+      <td>0.674646</td>
+      <td>0.726933</td>
+      <td>0.529645</td>
+      <td>0.031269</td>
+      <td>0.890464</td>
+      <td>-0.861574</td>
+      <td>-0.490439</td>
+      <td>-0.239189</td>
+      <td>-0.129772</td>
+      <td>-0.522085</td>
+      <td>0.307080</td>
+      <td>0.145893</td>
+      <td>0.437884</td>
+      <td>-0.842048</td>
+      <td>0.190714</td>
+      <td>0.357574</td>
     </tr>
     <tr>
-      <th>2021-02-11 14:57:00</th>
-      <td>-0.585516</td>
-      <td>0.941845</td>
-      <td>0.571196</td>
-      <td>-0.897901</td>
-      <td>0.755519</td>
+      <th>2021-02-11 12:00:00</th>
+      <td>-0.042093</td>
+      <td>-0.749522</td>
+      <td>-0.106187</td>
+      <td>1.042480</td>
+      <td>0.636715</td>
+      <td>0.668605</td>
+      <td>0.487211</td>
+      <td>0.003060</td>
+      <td>0.909014</td>
+      <td>-0.847666</td>
+      <td>-0.548754</td>
+      <td>-0.219306</td>
+      <td>-0.158270</td>
+      <td>-0.566806</td>
+      <td>0.305682</td>
+      <td>0.200074</td>
+      <td>0.402115</td>
+      <td>-0.870675</td>
+      <td>0.148192</td>
+      <td>0.400314</td>
     </tr>
     <tr>
-      <th>2021-02-11 14:58:00</th>
-      <td>-0.586074</td>
-      <td>0.941530</td>
-      <td>0.571048</td>
-      <td>-0.898330</td>
-      <td>0.755637</td>
+      <th>2021-02-11 13:00:00</th>
+      <td>-0.039539</td>
+      <td>-0.816215</td>
+      <td>-0.103101</td>
+      <td>1.023325</td>
+      <td>0.670355</td>
+      <td>0.665394</td>
+      <td>0.430242</td>
+      <td>0.038435</td>
+      <td>0.844820</td>
+      <td>-0.885687</td>
+      <td>-0.529422</td>
+      <td>-0.166633</td>
+      <td>-0.132188</td>
+      <td>-0.563205</td>
+      <td>0.275267</td>
+      <td>0.167789</td>
+      <td>0.399349</td>
+      <td>-0.837403</td>
+      <td>0.114430</td>
+      <td>0.363303</td>
     </tr>
     <tr>
-      <th>2021-02-11 14:59:00</th>
-      <td>-0.586633</td>
-      <td>0.941214</td>
-      <td>0.570901</td>
-      <td>-0.898760</td>
-      <td>0.755755</td>
+      <th>2021-02-11 14:00:00</th>
+      <td>0.045796</td>
+      <td>-0.803112</td>
+      <td>-0.105205</td>
+      <td>1.049967</td>
+      <td>0.643303</td>
+      <td>0.664459</td>
+      <td>0.465075</td>
+      <td>0.069509</td>
+      <td>0.930086</td>
+      <td>-0.889746</td>
+      <td>-0.534425</td>
+      <td>-0.147937</td>
+      <td>-0.141524</td>
+      <td>-0.562967</td>
+      <td>0.289132</td>
+      <td>0.150164</td>
+      <td>0.399101</td>
+      <td>-0.806114</td>
+      <td>0.096359</td>
+      <td>0.326373</td>
     </tr>
     <tr>
       <th>2021-02-11 15:00:00</th>
-      <td>-0.587191</td>
-      <td>0.940899</td>
-      <td>0.570754</td>
-      <td>-0.899189</td>
-      <td>0.755873</td>
+      <td>-0.002016</td>
+      <td>-0.804371</td>
+      <td>-0.100574</td>
+      <td>1.069136</td>
+      <td>0.639176</td>
+      <td>0.651138</td>
+      <td>0.487456</td>
+      <td>0.093443</td>
+      <td>0.904328</td>
+      <td>-0.890001</td>
+      <td>-0.555217</td>
+      <td>-0.210177</td>
+      <td>-0.177874</td>
+      <td>-0.493351</td>
+      <td>0.298163</td>
+      <td>0.221578</td>
+      <td>0.377257</td>
+      <td>-0.785403</td>
+      <td>0.082574</td>
+      <td>0.288254</td>
     </tr>
   </tbody>
 </table>
-<p>59941 rows × 5 columns</p>
-</div></div></div>
+<p>1000 rows × 20 columns</p>
+</div></div><div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>sensor</th>
+      <th>data</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2021-01-01 00:00:00</th>
+      <td>X0</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>2021-01-01 01:00:00</th>
+      <td>X0</td>
+      <td>0.005252</td>
+    </tr>
+    <tr>
+      <th>2021-01-01 02:00:00</th>
+      <td>X0</td>
+      <td>0.027888</td>
+    </tr>
+    <tr>
+      <th>2021-01-01 03:00:00</th>
+      <td>X0</td>
+      <td>-0.006903</td>
+    </tr>
+    <tr>
+      <th>2021-01-01 04:00:00</th>
+      <td>X0</td>
+      <td>0.041263</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2021-02-11 11:00:00</th>
+      <td>X19</td>
+      <td>0.357574</td>
+    </tr>
+    <tr>
+      <th>2021-02-11 12:00:00</th>
+      <td>X19</td>
+      <td>0.400314</td>
+    </tr>
+    <tr>
+      <th>2021-02-11 13:00:00</th>
+      <td>X19</td>
+      <td>0.363303</td>
+    </tr>
+    <tr>
+      <th>2021-02-11 14:00:00</th>
+      <td>X19</td>
+      <td>0.326373</td>
+    </tr>
+    <tr>
+      <th>2021-02-11 15:00:00</th>
+      <td>X19</td>
+      <td>0.288254</td>
+    </tr>
+  </tbody>
+</table>
+<p>20000 rows × 2 columns</p>
+</div></div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: &gt;
+</pre></div>
+</div>
+<img alt="../../_images/e810d12ddcbfbf0d7dd462d56081082f73670cc56efef7fc8c2016a285fb84aa.png" src="../../_images/e810d12ddcbfbf0d7dd462d56081082f73670cc56efef7fc8c2016a285fb84aa.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([((</span><span class="n">X</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="mf">.5</span><span class="p">),</span> <span class="n">y</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: &gt;
+</pre></div>
+</div>
+<img alt="../../_images/7ebabb2c83bfff31380861656e5b1266d2099ab583dff68fa418d3063febc2f2.png" src="../../_images/7ebabb2c83bfff31380861656e5b1266d2099ab583dff68fa418d3063febc2f2.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tadkit.catalog.rawtowideformatter</span><span class="w"> </span><span class="kn">import</span> <span class="n">RawToWideFormatter</span>
+
+<span class="n">formatter</span> <span class="o">=</span> <span class="n">RawToWideFormatter</span><span class="p">(</span>
+        <span class="n">data</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
+        <span class="c1"># timestamps=X.index,</span>
+        <span class="n">backend</span><span class="o">=</span><span class="s2">&quot;pandas&quot;</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">formatter</span><span class="o">.</span><span class="n">available_properties</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;synchronous&#39;, &#39;pandas_backend&#39;, &#39;fixed_time_step&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">formatter</span><span class="o">.</span><span class="n">query_description</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;target_period&#39;: {&#39;description&#39;: &#39;Time period to select&#39;, &#39;family&#39;: &#39;time_interval&#39;, &#39;start&#39;: np.datetime64(&#39;2021-01-01T00:00:00.000000000&#39;), &#39;stop&#39;: np.datetime64(&#39;2021-02-11T15:00:00.000000000&#39;), &#39;default&#39;: (np.datetime64(&#39;2021-01-01T00:00:00.000000000&#39;), np.datetime64(&#39;2021-02-11T15:00:00.000000000&#39;))}, &#39;target_space&#39;: {&#39;description&#39;: &#39;Columns or sensors to select&#39;, &#39;family&#39;: &#39;space&#39;, &#39;set&#39;: [&#39;X0&#39;, &#39;X1&#39;, &#39;X2&#39;, &#39;X3&#39;, &#39;X4&#39;, &#39;X5&#39;, &#39;X6&#39;, &#39;X7&#39;, &#39;X8&#39;, &#39;X9&#39;, &#39;X10&#39;, &#39;X11&#39;, &#39;X12&#39;, &#39;X13&#39;, &#39;X14&#39;, &#39;X15&#39;, &#39;X16&#39;, &#39;X17&#39;, &#39;X18&#39;, &#39;X19&#39;], &#39;default&#39;: [&#39;X0&#39;, &#39;X1&#39;, &#39;X2&#39;, &#39;X3&#39;, &#39;X4&#39;, &#39;X5&#39;, &#39;X6&#39;, &#39;X7&#39;, &#39;X8&#39;, &#39;X9&#39;, &#39;X10&#39;, &#39;X11&#39;, &#39;X12&#39;, &#39;X13&#39;, &#39;X14&#39;, &#39;X15&#39;, &#39;X16&#39;, &#39;X17&#39;, &#39;X18&#39;, &#39;X19&#39;]}, &#39;resample&#39;: {&#39;description&#39;: &#39;Resample data?&#39;, &#39;family&#39;: &#39;bool&#39;, &#39;default&#39;: False}, &#39;resample_freq&#39;: {&#39;description&#39;: &#39;Resampling frequency in seconds.&#39;, &#39;family&#39;: &#39;time&#39;, &#39;start&#39;: 60, &#39;default&#39;: 120, &#39;stop&#39;: 3600}}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">query_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">query_widget_selection</span>
+
+<span class="n">query_dict</span> <span class="o">=</span> <span class="n">query_widget_selection</span><span class="p">(</span><span class="n">formatter</span><span class="o">.</span><span class="n">query_description</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "517a7040b69d416d9b77927ff600de70", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "626f5880bb2d4c489c46f0d6935f03e2", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "6389b84b9beb486b844f5a6a1e9e82e2", "version_major": 2, "version_minor": 0}</script><script type="application/vnd.jupyter.widget-view+json">{"model_id": "ff0ef0bf202d474989de697561b9b8c9", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">query_translated</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">widget</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">widget</span> <span class="ow">in</span> <span class="n">query_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+<span class="n">formatter</span><span class="o">.</span><span class="n">backend</span> <span class="o">=</span> <span class="s2">&quot;numpy&quot;</span>
+<span class="n">query</span> <span class="o">=</span> <span class="n">formatter</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">query_translated</span><span class="p">)</span>
+<span class="n">query</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[ 0.        ,  0.        ,  0.        , ...,  0.        ,
+         0.        ,  0.        ],
+       [ 0.00525208,  0.02472789,  0.02695162, ...,  0.05496634,
+         0.03738528,  0.03539777],
+       [ 0.0278881 , -0.03284016,  0.06281325, ...,  0.08250195,
+         0.04655068,  0.01834615],
+       ...,
+       [-0.09361403, -0.88180157,  0.00947269, ..., -0.88462024,
+         0.12293536,  0.69455948],
+       [-0.07396143, -0.9167913 , -0.04366985, ..., -0.81078897,
+         0.15956877,  0.69222348],
+       [-0.08287074, -0.90335556, -0.11737827, ..., -0.84533462,
+         0.08865186,  0.68593266]], shape=(985, 20))
+</pre></div>
+</div>
+</div>
 </div>
 </section>
 <section id="learners">
 <h1>Learners<a class="headerlink" href="#learners" title="Link to this heading"></a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">IsolationForest</span><span class="p">,</span> <span class="n">TADLearner</span><span class="p">))</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">tadkit.utils.tadlearner_factory</span><span class="w"> </span><span class="kn">import</span> <span class="n">tadlearner_factory</span>
-<span class="n">IsolationForestLearner</span> <span class="o">=</span> <span class="n">tadlearner_factory</span><span class="p">(</span><span class="n">IsolationForest</span><span class="p">,</span> <span class="p">[],</span> <span class="p">{})</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">IsolationForestLearner</span><span class="p">,</span> <span class="n">TADLearner</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">IsolationForest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tadkit.base.tadlearner</span><span class="w"> </span><span class="kn">import</span> <span class="n">TADLearner</span>
+
+<span class="nb">isinstance</span><span class="p">(</span><span class="n">IsolationForest</span><span class="p">,</span> <span class="n">TADLearner</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>False
-True
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tadkit.utils.decomposable_tadlearner</span><span class="w"> </span><span class="kn">import</span> <span class="n">decomposable_tadlearner_factory</span>
-
-<span class="n">StandardForestLearner</span> <span class="o">=</span> <span class="n">decomposable_tadlearner_factory</span><span class="p">(</span><span class="n">StandardScaler</span><span class="p">,</span> <span class="n">IsolationForestLearner</span><span class="p">,</span> <span class="p">[],</span> <span class="p">{})</span>
-<span class="n">learner</span> <span class="o">=</span> <span class="n">StandardForestLearner</span><span class="p">()</span>
-<span class="n">learner</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="n">learner</span> <span class="o">=</span> <span class="n">IsolationForest</span><span class="p">()</span>
 <span class="n">learner</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 <span class="n">anom_score</span> <span class="o">=</span> <span class="o">-</span><span class="n">learner</span><span class="o">.</span><span class="n">score_samples</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
@@ -540,9 +796,7 @@ clickable and can be expanded/collapsed.
 /* Toggleable content - dropdown */
 
 #sk-container-id-1 div.sk-toggleable__content {
-  max-height: 0;
-  max-width: 0;
-  overflow: hidden;
+  display: none;
   text-align: left;
   /* unfitted */
   background-color: var(--sklearn-color-unfitted-level-0);
@@ -568,9 +822,9 @@ clickable and can be expanded/collapsed.
 
 #sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {
   /* Expand drop-down */
-  max-height: 200px;
-  max-width: 100%;
-  overflow: auto;
+  display: block;
+  width: 100%;
+  overflow: visible;
 }
 
 #sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
@@ -775,7 +1029,213 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
   /* fitted */
   background-color: var(--sklearn-color-fitted-level-3);
 }
-</style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>StandardScalerIsolationForest()</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox" checked><label for="sk-estimator-id-1" class="sk-toggleable__label  sk-toggleable__label-arrow"><div><div>StandardScalerIsolationForest</div></div><div><span class="sk-estimator-doc-link ">i<span>Not fitted</span></span></div></label><div class="sk-toggleable__content "><pre>StandardScalerIsolationForest()</pre></div> </div></div></div></div></div><img alt="../../_images/534fb26c7f0faa10031bdb89eb9e08761182a7cc0d5b37666a27d259d054a97c.png" src="../../_images/534fb26c7f0faa10031bdb89eb9e08761182a7cc0d5b37666a27d259d054a97c.png" />
+
+.estimator-table summary {
+    padding: .5rem;
+    font-family: monospace;
+    cursor: pointer;
+}
+
+.estimator-table details[open] {
+    padding-left: 0.1rem;
+    padding-right: 0.1rem;
+    padding-bottom: 0.3rem;
+}
+
+.estimator-table .parameters-table {
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.estimator-table .parameters-table tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+.estimator-table .parameters-table tr:nth-child(even) {
+    background-color: #f6f6f6;
+}
+
+.estimator-table .parameters-table tr:hover {
+    background-color: #e0e0e0;
+}
+
+.estimator-table table td {
+    border: 1px solid rgba(106, 105, 104, 0.232);
+}
+
+.user-set td {
+    color:rgb(255, 94, 0);
+    text-align: left;
+}
+
+.user-set td.value pre {
+    color:rgb(255, 94, 0) !important;
+    background-color: transparent !important;
+}
+
+.default td {
+    color: black;
+    text-align: left;
+}
+
+.user-set td i,
+.default td i {
+    color: black;
+}
+
+.copy-paste-icon {
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0NDggNTEyIj48IS0tIUZvbnQgQXdlc29tZSBGcmVlIDYuNy4yIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlL2ZyZWUgQ29weXJpZ2h0IDIwMjUgRm9udGljb25zLCBJbmMuLS0+PHBhdGggZD0iTTIwOCAwTDMzMi4xIDBjMTIuNyAwIDI0LjkgNS4xIDMzLjkgMTQuMWw2Ny45IDY3LjljOSA5IDE0LjEgMjEuMiAxNC4xIDMzLjlMNDQ4IDMzNmMwIDI2LjUtMjEuNSA0OC00OCA0OGwtMTkyIDBjLTI2LjUgMC00OC0yMS41LTQ4LTQ4bDAtMjg4YzAtMjYuNSAyMS41LTQ4IDQ4LTQ4ek00OCAxMjhsODAgMCAwIDY0LTY0IDAgMCAyNTYgMTkyIDAgMC0zMiA2NCAwIDAgNDhjMCAyNi41LTIxLjUgNDgtNDggNDhMNDggNTEyYy0yNi41IDAtNDgtMjEuNS00OC00OEwwIDE3NmMwLTI2LjUgMjEuNS00OCA0OC00OHoiLz48L3N2Zz4=);
+    background-repeat: no-repeat;
+    background-size: 14px 14px;
+    background-position: 0;
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+}
+</style><body><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>IsolationForest()</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox" checked><label for="sk-estimator-id-1" class="sk-toggleable__label fitted sk-toggleable__label-arrow"><div><div>IsolationForest</div></div><div><a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.7/modules/generated/sklearn.ensemble.IsolationForest.html">?<span>Documentation for IsolationForest</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></div></label><div class="sk-toggleable__content fitted" data-param-prefix="">
+        <div class="estimator-table">
+            <details>
+                <summary>Parameters</summary>
+                <table class="parameters-table">
+                  <tbody>
+                    
+        <tr class="default">
+            <td><i class="copy-paste-icon"
+                 onclick="copyToClipboard('n_estimators',
+                          this.parentElement.nextElementSibling)"
+            ></i></td>
+            <td class="param">n_estimators&nbsp;</td>
+            <td class="value">100</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><i class="copy-paste-icon"
+                 onclick="copyToClipboard('max_samples',
+                          this.parentElement.nextElementSibling)"
+            ></i></td>
+            <td class="param">max_samples&nbsp;</td>
+            <td class="value">&#x27;auto&#x27;</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><i class="copy-paste-icon"
+                 onclick="copyToClipboard('contamination',
+                          this.parentElement.nextElementSibling)"
+            ></i></td>
+            <td class="param">contamination&nbsp;</td>
+            <td class="value">&#x27;auto&#x27;</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><i class="copy-paste-icon"
+                 onclick="copyToClipboard('max_features',
+                          this.parentElement.nextElementSibling)"
+            ></i></td>
+            <td class="param">max_features&nbsp;</td>
+            <td class="value">1.0</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><i class="copy-paste-icon"
+                 onclick="copyToClipboard('bootstrap',
+                          this.parentElement.nextElementSibling)"
+            ></i></td>
+            <td class="param">bootstrap&nbsp;</td>
+            <td class="value">False</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><i class="copy-paste-icon"
+                 onclick="copyToClipboard('n_jobs',
+                          this.parentElement.nextElementSibling)"
+            ></i></td>
+            <td class="param">n_jobs&nbsp;</td>
+            <td class="value">None</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><i class="copy-paste-icon"
+                 onclick="copyToClipboard('random_state',
+                          this.parentElement.nextElementSibling)"
+            ></i></td>
+            <td class="param">random_state&nbsp;</td>
+            <td class="value">None</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><i class="copy-paste-icon"
+                 onclick="copyToClipboard('verbose',
+                          this.parentElement.nextElementSibling)"
+            ></i></td>
+            <td class="param">verbose&nbsp;</td>
+            <td class="value">0</td>
+        </tr>
+    
+
+        <tr class="default">
+            <td><i class="copy-paste-icon"
+                 onclick="copyToClipboard('warm_start',
+                          this.parentElement.nextElementSibling)"
+            ></i></td>
+            <td class="param">warm_start&nbsp;</td>
+            <td class="value">False</td>
+        </tr>
+    
+                  </tbody>
+                </table>
+            </details>
+        </div>
+    </div></div></div></div></div><script>function copyToClipboard(text, element) {
+    // Get the parameter prefix from the closest toggleable content
+    const toggleableContent = element.closest('.sk-toggleable__content');
+    const paramPrefix = toggleableContent ? toggleableContent.dataset.paramPrefix : '';
+    const fullParamName = paramPrefix ? `${paramPrefix}${text}` : text;
+
+    const originalStyle = element.style;
+    const computedStyle = window.getComputedStyle(element);
+    const originalWidth = computedStyle.width;
+    const originalHTML = element.innerHTML.replace('Copied!', '');
+
+    navigator.clipboard.writeText(fullParamName)
+        .then(() => {
+            element.style.width = originalWidth;
+            element.style.color = 'green';
+            element.innerHTML = "Copied!";
+
+            setTimeout(() => {
+                element.innerHTML = originalHTML;
+                element.style = originalStyle;
+            }, 2000);
+        })
+        .catch(err => {
+            console.error('Failed to copy:', err);
+            element.style.color = 'red';
+            element.innerHTML = "Failed!";
+            setTimeout(() => {
+                element.innerHTML = originalHTML;
+                element.style = originalStyle;
+            }, 2000);
+        });
+    return false;
+}
+
+document.querySelectorAll('.fa-regular.fa-copy').forEach(function(element) {
+    const toggleableContent = element.closest('.sk-toggleable__content');
+    const paramPrefix = toggleableContent ? toggleableContent.dataset.paramPrefix : '';
+    const paramName = element.parentElement.nextElementSibling.textContent.trim();
+    const fullParamName = paramPrefix ? `${paramPrefix}${paramName}` : paramName;
+
+    element.setAttribute('title', fullParamName);
+});
+</script></body></div><img alt="../../_images/a01789de1b7efe58b288fb6761ada2cce1b5ab64db3a53cc425ae93b1560742d.png" src="../../_images/a01789de1b7efe58b288fb6761ada2cce1b5ab64db3a53cc425ae93b1560742d.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -853,11 +1313,33 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
       <th>X3_ema1</th>
       <th>X4_ema0</th>
       <th>X4_ema1</th>
+      <th>...</th>
+      <th>X15_ema0</th>
+      <th>X15_ema1</th>
+      <th>X16_ema0</th>
+      <th>X16_ema1</th>
+      <th>X17_ema0</th>
+      <th>X17_ema1</th>
+      <th>X18_ema0</th>
+      <th>X18_ema1</th>
+      <th>X19_ema0</th>
+      <th>X19_ema1</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>2021-01-01 00:00:00</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>...</td>
       <td>0.000000</td>
       <td>0.000000</td>
       <td>0.000000</td>
@@ -881,45 +1363,89 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
       <td>0.022051</td>
       <td>0.028259</td>
       <td>0.029055</td>
+      <td>...</td>
+      <td>0.018768</td>
+      <td>0.019297</td>
+      <td>-0.050525</td>
+      <td>-0.051948</td>
+      <td>-0.052723</td>
+      <td>-0.054208</td>
+      <td>-0.035860</td>
+      <td>-0.036870</td>
+      <td>-0.033953</td>
+      <td>-0.034910</td>
     </tr>
     <tr>
       <th>2021-01-01 02:00:00</th>
-      <td>-0.031711</td>
-      <td>-0.032745</td>
-      <td>-0.048762</td>
-      <td>-0.050794</td>
-      <td>-0.001294</td>
-      <td>-0.002048</td>
-      <td>0.037732</td>
-      <td>0.039390</td>
-      <td>0.037896</td>
-      <td>0.039748</td>
+      <td>-0.026544</td>
+      <td>-0.027432</td>
+      <td>0.032468</td>
+      <td>0.032724</td>
+      <td>-0.059195</td>
+      <td>-0.061580</td>
+      <td>0.022432</td>
+      <td>0.023659</td>
+      <td>0.022790</td>
+      <td>0.024216</td>
+      <td>...</td>
+      <td>0.028586</td>
+      <td>0.029913</td>
+      <td>-0.051255</td>
+      <td>-0.054102</td>
+      <td>-0.076983</td>
+      <td>-0.080616</td>
+      <td>-0.043187</td>
+      <td>-0.045400</td>
+      <td>-0.016212</td>
+      <td>-0.017612</td>
     </tr>
     <tr>
       <th>2021-01-01 03:00:00</th>
-      <td>-0.015200</td>
-      <td>-0.016647</td>
-      <td>-0.069807</td>
-      <td>-0.073777</td>
-      <td>-0.007043</td>
-      <td>-0.007985</td>
-      <td>0.054845</td>
-      <td>0.058025</td>
-      <td>-0.014293</td>
-      <td>-0.012868</td>
+      <td>0.007910</td>
+      <td>0.007258</td>
+      <td>0.057449</td>
+      <td>0.059319</td>
+      <td>-0.029818</td>
+      <td>-0.033011</td>
+      <td>0.009338</td>
+      <td>0.010811</td>
+      <td>0.020129</td>
+      <td>0.022103</td>
+      <td>...</td>
+      <td>0.020701</td>
+      <td>0.022593</td>
+      <td>-0.068992</td>
+      <td>-0.073743</td>
+      <td>-0.038690</td>
+      <td>-0.043363</td>
+      <td>-0.036123</td>
+      <td>-0.039322</td>
+      <td>0.015212</td>
+      <td>0.014260</td>
     </tr>
     <tr>
       <th>2021-01-01 04:00:00</th>
-      <td>-0.067253</td>
-      <td>-0.070574</td>
-      <td>-0.048571</td>
-      <td>-0.053855</td>
-      <td>-0.062409</td>
-      <td>-0.065097</td>
-      <td>0.030707</td>
-      <td>0.034709</td>
-      <td>0.041473</td>
-      <td>0.044046</td>
+      <td>-0.038613</td>
+      <td>-0.040344</td>
+      <td>0.046865</td>
+      <td>0.050029</td>
+      <td>0.025752</td>
+      <td>0.023329</td>
+      <td>-0.009712</td>
+      <td>-0.008532</td>
+      <td>-0.003929</td>
+      <td>-0.002092</td>
+      <td>...</td>
+      <td>0.077882</td>
+      <td>0.081941</td>
+      <td>-0.080909</td>
+      <td>-0.087874</td>
+      <td>-0.068027</td>
+      <td>-0.074551</td>
+      <td>-0.070080</td>
+      <td>-0.075210</td>
+      <td>0.021705</td>
+      <td>0.021378</td>
     </tr>
     <tr>
       <th>...</th>
@@ -933,92 +1459,148 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
       <td>...</td>
       <td>...</td>
       <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
     </tr>
     <tr>
       <th>2021-02-11 11:00:00</th>
-      <td>-0.051206</td>
-      <td>-0.211574</td>
-      <td>0.117038</td>
-      <td>0.144954</td>
-      <td>-0.001470</td>
-      <td>0.090219</td>
-      <td>-0.091695</td>
-      <td>-0.115633</td>
-      <td>0.091504</td>
-      <td>0.073529</td>
+      <td>0.036233</td>
+      <td>0.162953</td>
+      <td>-0.157976</td>
+      <td>-0.312027</td>
+      <td>-0.054504</td>
+      <td>-0.208378</td>
+      <td>0.062005</td>
+      <td>0.036372</td>
+      <td>0.167697</td>
+      <td>0.220710</td>
+      <td>...</td>
+      <td>0.100072</td>
+      <td>0.190646</td>
+      <td>0.084005</td>
+      <td>0.003536</td>
+      <td>-0.137007</td>
+      <td>-0.136692</td>
+      <td>0.030745</td>
+      <td>0.084516</td>
+      <td>0.230806</td>
+      <td>0.086975</td>
     </tr>
     <tr>
       <th>2021-02-11 12:00:00</th>
-      <td>-0.028717</td>
-      <td>-0.187681</td>
-      <td>0.081779</td>
-      <td>0.111612</td>
-      <td>0.058907</td>
-      <td>0.150990</td>
-      <td>-0.060468</td>
-      <td>-0.085780</td>
-      <td>0.081817</td>
-      <td>0.066394</td>
+      <td>0.031122</td>
+      <td>0.156971</td>
+      <td>-0.114354</td>
+      <td>-0.269502</td>
+      <td>-0.044127</td>
+      <td>-0.197121</td>
+      <td>0.053261</td>
+      <td>0.029482</td>
+      <td>0.197236</td>
+      <td>0.255073</td>
+      <td>...</td>
+      <td>0.044017</td>
+      <td>0.134582</td>
+      <td>0.114886</td>
+      <td>0.038763</td>
+      <td>-0.103956</td>
+      <td>-0.106573</td>
+      <td>0.070277</td>
+      <td>0.125286</td>
+      <td>0.180390</td>
+      <td>0.043624</td>
     </tr>
     <tr>
       <th>2021-02-11 13:00:00</th>
-      <td>-0.007902</td>
-      <td>-0.164897</td>
-      <td>0.104148</td>
-      <td>0.136504</td>
-      <td>-0.004352</td>
-      <td>0.086338</td>
-      <td>-0.138787</td>
-      <td>-0.167659</td>
-      <td>0.096796</td>
-      <td>0.084312</td>
+      <td>0.027402</td>
+      <td>0.152287</td>
+      <td>-0.045716</td>
+      <td>-0.200011</td>
+      <td>-0.045285</td>
+      <td>-0.197445</td>
+      <td>0.069461</td>
+      <td>0.047966</td>
+      <td>0.156919</td>
+      <td>0.218379</td>
+      <td>...</td>
+      <td>0.073188</td>
+      <td>0.164565</td>
+      <td>0.112851</td>
+      <td>0.040956</td>
+      <td>-0.131628</td>
+      <td>-0.137917</td>
+      <td>0.099793</td>
+      <td>0.156854</td>
+      <td>0.208530</td>
+      <td>0.079523</td>
     </tr>
     <tr>
       <th>2021-02-11 14:00:00</th>
-      <td>0.077915</td>
-      <td>-0.074720</td>
-      <td>0.158832</td>
-      <td>0.195215</td>
-      <td>0.010635</td>
-      <td>0.100374</td>
-      <td>-0.104210</td>
-      <td>-0.135619</td>
-      <td>0.077579</td>
-      <td>0.067452</td>
+      <td>-0.055569</td>
+      <td>0.066028</td>
+      <td>-0.056419</td>
+      <td>-0.210175</td>
+      <td>-0.041419</td>
+      <td>-0.192647</td>
+      <td>0.041071</td>
+      <td>0.021030</td>
+      <td>0.176463</td>
+      <td>0.242045</td>
+      <td>...</td>
+      <td>0.087108</td>
+      <td>0.179678</td>
+      <td>0.108483</td>
+      <td>0.040636</td>
+      <td>-0.156268</td>
+      <td>-0.166872</td>
+      <td>0.113054</td>
+      <td>0.172512</td>
+      <td>0.235442</td>
+      <td>0.114847</td>
     </tr>
     <tr>
       <th>2021-02-11 15:00:00</th>
-      <td>0.106862</td>
-      <td>-0.040657</td>
-      <td>0.170498</td>
-      <td>0.211182</td>
-      <td>0.018675</td>
-      <td>0.107702</td>
-      <td>-0.075242</td>
-      <td>-0.108337</td>
-      <td>0.067626</td>
-      <td>0.059545</td>
+      <td>-0.007441</td>
+      <td>0.112270</td>
+      <td>-0.052909</td>
+      <td>-0.206035</td>
+      <td>-0.044171</td>
+      <td>-0.194557</td>
+      <td>0.021008</td>
+      <td>0.001835</td>
+      <td>0.173221</td>
+      <td>0.242778</td>
+      <td>...</td>
+      <td>0.015053</td>
+      <td>0.106770</td>
+      <td>0.125008</td>
+      <td>0.061618</td>
+      <td>-0.169757</td>
+      <td>-0.184996</td>
+      <td>0.121663</td>
+      <td>0.183728</td>
+      <td>0.262397</td>
+      <td>0.150856</td>
     </tr>
   </tbody>
 </table>
-<p>1000 rows × 10 columns</p>
+<p>1000 rows × 40 columns</p>
 </div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">EMAForestLearner</span> <span class="o">=</span> <span class="n">decomposable_tadlearner_factory</span><span class="p">(</span><span class="n">ExponantialMean</span><span class="p">,</span> <span class="n">IsolationForestLearner</span><span class="p">,</span> <span class="p">[],</span> <span class="p">{</span>
-    <span class="s1">&#39;lags&#39;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;Lags typical time of exponential mean&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;family&#39;</span><span class="p">:</span> <span class="s1">&#39;preprossing&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;value_type&#39;</span><span class="p">:</span> <span class="s1">&#39;set&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;start&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="p">},</span>
-    <span class="s1">&#39;sub_X&#39;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;Value substract from to the lags&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;family&#39;</span><span class="p">:</span> <span class="s1">&#39;preprossing&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;value_type&#39;</span><span class="p">:</span> <span class="s1">&#39;bool&#39;</span><span class="p">,</span>
-    <span class="p">},</span>
-<span class="p">})</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tadkit.utils.decomposable_tadlearner</span><span class="w"> </span><span class="kn">import</span> <span class="n">decomposable_tadlearner_factory</span>
+
+<span class="n">EMAForestLearner</span> <span class="o">=</span> <span class="n">decomposable_tadlearner_factory</span><span class="p">(</span><span class="n">ExponantialMean</span><span class="p">,</span> <span class="n">IsolationForest</span><span class="p">)</span>
 <span class="n">learner</span> <span class="o">=</span> <span class="n">EMAForestLearner</span><span class="p">(</span><span class="n">lags</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">geomspace</span><span class="p">(</span><span class="mf">.1</span> <span class="o">*</span> <span class="n">DAY</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">DAY</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">sub_X</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">learner</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 <span class="n">learner</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
@@ -1035,422 +1617,10 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><style>#sk-container-id-2 {
-  /* Definition of color scheme common for light and dark mode */
-  --sklearn-color-text: #000;
-  --sklearn-color-text-muted: #666;
-  --sklearn-color-line: gray;
-  /* Definition of color scheme for unfitted estimators */
-  --sklearn-color-unfitted-level-0: #fff5e6;
-  --sklearn-color-unfitted-level-1: #f6e4d2;
-  --sklearn-color-unfitted-level-2: #ffe0b3;
-  --sklearn-color-unfitted-level-3: chocolate;
-  /* Definition of color scheme for fitted estimators */
-  --sklearn-color-fitted-level-0: #f0f8ff;
-  --sklearn-color-fitted-level-1: #d4ebff;
-  --sklearn-color-fitted-level-2: #b3dbfd;
-  --sklearn-color-fitted-level-3: cornflowerblue;
-
-  /* Specific color for light theme */
-  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
-  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
-  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
-  --sklearn-color-icon: #696969;
-
-  @media (prefers-color-scheme: dark) {
-    /* Redefinition of color scheme for dark theme */
-    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
-    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
-    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
-    --sklearn-color-icon: #878787;
-  }
-}
-
-#sk-container-id-2 {
-  color: var(--sklearn-color-text);
-}
-
-#sk-container-id-2 pre {
-  padding: 0;
-}
-
-#sk-container-id-2 input.sk-hidden--visually {
-  border: 0;
-  clip: rect(1px 1px 1px 1px);
-  clip: rect(1px, 1px, 1px, 1px);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-}
-
-#sk-container-id-2 div.sk-dashed-wrapped {
-  border: 1px dashed var(--sklearn-color-line);
-  margin: 0 0.4em 0.5em 0.4em;
-  box-sizing: border-box;
-  padding-bottom: 0.4em;
-  background-color: var(--sklearn-color-background);
-}
-
-#sk-container-id-2 div.sk-container {
-  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
-     but bootstrap.min.css set `[hidden] { display: none !important; }`
-     so we also need the `!important` here to be able to override the
-     default hidden behavior on the sphinx rendered scikit-learn.org.
-     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
-  display: inline-block !important;
-  position: relative;
-}
-
-#sk-container-id-2 div.sk-text-repr-fallback {
-  display: none;
-}
-
-div.sk-parallel-item,
-div.sk-serial,
-div.sk-item {
-  /* draw centered vertical line to link estimators */
-  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
-  background-size: 2px 100%;
-  background-repeat: no-repeat;
-  background-position: center center;
-}
-
-/* Parallel-specific style estimator block */
-
-#sk-container-id-2 div.sk-parallel-item::after {
-  content: "";
-  width: 100%;
-  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
-  flex-grow: 1;
-}
-
-#sk-container-id-2 div.sk-parallel {
-  display: flex;
-  align-items: stretch;
-  justify-content: center;
-  background-color: var(--sklearn-color-background);
-  position: relative;
-}
-
-#sk-container-id-2 div.sk-parallel-item {
-  display: flex;
-  flex-direction: column;
-}
-
-#sk-container-id-2 div.sk-parallel-item:first-child::after {
-  align-self: flex-end;
-  width: 50%;
-}
-
-#sk-container-id-2 div.sk-parallel-item:last-child::after {
-  align-self: flex-start;
-  width: 50%;
-}
-
-#sk-container-id-2 div.sk-parallel-item:only-child::after {
-  width: 0;
-}
-
-/* Serial-specific style estimator block */
-
-#sk-container-id-2 div.sk-serial {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: var(--sklearn-color-background);
-  padding-right: 1em;
-  padding-left: 1em;
-}
-
-
-/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
-clickable and can be expanded/collapsed.
-- Pipeline and ColumnTransformer use this feature and define the default style
-- Estimators will overwrite some part of the style using the `sk-estimator` class
-*/
-
-/* Pipeline and ColumnTransformer style (default) */
-
-#sk-container-id-2 div.sk-toggleable {
-  /* Default theme specific background. It is overwritten whether we have a
-  specific estimator or a Pipeline/ColumnTransformer */
-  background-color: var(--sklearn-color-background);
-}
-
-/* Toggleable label */
-#sk-container-id-2 label.sk-toggleable__label {
-  cursor: pointer;
-  display: flex;
-  width: 100%;
-  margin-bottom: 0;
-  padding: 0.5em;
-  box-sizing: border-box;
-  text-align: center;
-  align-items: start;
-  justify-content: space-between;
-  gap: 0.5em;
-}
-
-#sk-container-id-2 label.sk-toggleable__label .caption {
-  font-size: 0.6rem;
-  font-weight: lighter;
-  color: var(--sklearn-color-text-muted);
-}
-
-#sk-container-id-2 label.sk-toggleable__label-arrow:before {
-  /* Arrow on the left of the label */
-  content: "▸";
-  float: left;
-  margin-right: 0.25em;
-  color: var(--sklearn-color-icon);
-}
-
-#sk-container-id-2 label.sk-toggleable__label-arrow:hover:before {
-  color: var(--sklearn-color-text);
-}
-
-/* Toggleable content - dropdown */
-
-#sk-container-id-2 div.sk-toggleable__content {
-  max-height: 0;
-  max-width: 0;
-  overflow: hidden;
-  text-align: left;
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-0);
-}
-
-#sk-container-id-2 div.sk-toggleable__content.fitted {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-0);
-}
-
-#sk-container-id-2 div.sk-toggleable__content pre {
-  margin: 0.2em;
-  border-radius: 0.25em;
-  color: var(--sklearn-color-text);
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-0);
-}
-
-#sk-container-id-2 div.sk-toggleable__content.fitted pre {
-  /* unfitted */
-  background-color: var(--sklearn-color-fitted-level-0);
-}
-
-#sk-container-id-2 input.sk-toggleable__control:checked~div.sk-toggleable__content {
-  /* Expand drop-down */
-  max-height: 200px;
-  max-width: 100%;
-  overflow: auto;
-}
-
-#sk-container-id-2 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
-  content: "▾";
-}
-
-/* Pipeline/ColumnTransformer-specific style */
-
-#sk-container-id-2 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
-  color: var(--sklearn-color-text);
-  background-color: var(--sklearn-color-unfitted-level-2);
-}
-
-#sk-container-id-2 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
-  background-color: var(--sklearn-color-fitted-level-2);
-}
-
-/* Estimator-specific style */
-
-/* Colorize estimator box */
-#sk-container-id-2 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-2);
-}
-
-#sk-container-id-2 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-2);
-}
-
-#sk-container-id-2 div.sk-label label.sk-toggleable__label,
-#sk-container-id-2 div.sk-label label {
-  /* The background is the default theme color */
-  color: var(--sklearn-color-text-on-default-background);
-}
-
-/* On hover, darken the color of the background */
-#sk-container-id-2 div.sk-label:hover label.sk-toggleable__label {
-  color: var(--sklearn-color-text);
-  background-color: var(--sklearn-color-unfitted-level-2);
-}
-
-/* Label box, darken color on hover, fitted */
-#sk-container-id-2 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
-  color: var(--sklearn-color-text);
-  background-color: var(--sklearn-color-fitted-level-2);
-}
-
-/* Estimator label */
-
-#sk-container-id-2 div.sk-label label {
-  font-family: monospace;
-  font-weight: bold;
-  display: inline-block;
-  line-height: 1.2em;
-}
-
-#sk-container-id-2 div.sk-label-container {
-  text-align: center;
-}
-
-/* Estimator-specific */
-#sk-container-id-2 div.sk-estimator {
-  font-family: monospace;
-  border: 1px dotted var(--sklearn-color-border-box);
-  border-radius: 0.25em;
-  box-sizing: border-box;
-  margin-bottom: 0.5em;
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-0);
-}
-
-#sk-container-id-2 div.sk-estimator.fitted {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-0);
-}
-
-/* on hover */
-#sk-container-id-2 div.sk-estimator:hover {
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-2);
-}
-
-#sk-container-id-2 div.sk-estimator.fitted:hover {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-2);
-}
-
-/* Specification for estimator info (e.g. "i" and "?") */
-
-/* Common style for "i" and "?" */
-
-.sk-estimator-doc-link,
-a:link.sk-estimator-doc-link,
-a:visited.sk-estimator-doc-link {
-  float: right;
-  font-size: smaller;
-  line-height: 1em;
-  font-family: monospace;
-  background-color: var(--sklearn-color-background);
-  border-radius: 1em;
-  height: 1em;
-  width: 1em;
-  text-decoration: none !important;
-  margin-left: 0.5em;
-  text-align: center;
-  /* unfitted */
-  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
-  color: var(--sklearn-color-unfitted-level-1);
-}
-
-.sk-estimator-doc-link.fitted,
-a:link.sk-estimator-doc-link.fitted,
-a:visited.sk-estimator-doc-link.fitted {
-  /* fitted */
-  border: var(--sklearn-color-fitted-level-1) 1pt solid;
-  color: var(--sklearn-color-fitted-level-1);
-}
-
-/* On hover */
-div.sk-estimator:hover .sk-estimator-doc-link:hover,
-.sk-estimator-doc-link:hover,
-div.sk-label-container:hover .sk-estimator-doc-link:hover,
-.sk-estimator-doc-link:hover {
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-3);
-  color: var(--sklearn-color-background);
-  text-decoration: none;
-}
-
-div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
-.sk-estimator-doc-link.fitted:hover,
-div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
-.sk-estimator-doc-link.fitted:hover {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-3);
-  color: var(--sklearn-color-background);
-  text-decoration: none;
-}
-
-/* Span, style for the box shown on hovering the info icon */
-.sk-estimator-doc-link span {
-  display: none;
-  z-index: 9999;
-  position: relative;
-  font-weight: normal;
-  right: .2ex;
-  padding: .5ex;
-  margin: .5ex;
-  width: min-content;
-  min-width: 20ex;
-  max-width: 50ex;
-  color: var(--sklearn-color-text);
-  box-shadow: 2pt 2pt 4pt #999;
-  /* unfitted */
-  background: var(--sklearn-color-unfitted-level-0);
-  border: .5pt solid var(--sklearn-color-unfitted-level-3);
-}
-
-.sk-estimator-doc-link.fitted span {
-  /* fitted */
-  background: var(--sklearn-color-fitted-level-0);
-  border: var(--sklearn-color-fitted-level-3);
-}
-
-.sk-estimator-doc-link:hover span {
-  display: block;
-}
-
-/* "?"-specific style due to the `<a>` HTML tag */
-
-#sk-container-id-2 a.estimator_doc_link {
-  float: right;
-  font-size: 1rem;
-  line-height: 1em;
-  font-family: monospace;
-  background-color: var(--sklearn-color-background);
-  border-radius: 1rem;
-  height: 1rem;
-  width: 1rem;
-  text-decoration: none;
-  /* unfitted */
-  color: var(--sklearn-color-unfitted-level-1);
-  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
-}
-
-#sk-container-id-2 a.estimator_doc_link.fitted {
-  /* fitted */
-  border: var(--sklearn-color-fitted-level-1) 1pt solid;
-  color: var(--sklearn-color-fitted-level-1);
-}
-
-/* On hover */
-#sk-container-id-2 a.estimator_doc_link:hover {
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-3);
-  color: var(--sklearn-color-background);
-  text-decoration: none;
-}
-
-#sk-container-id-2 a.estimator_doc_link.fitted:hover {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-3);
-}
-</style><div id="sk-container-id-2" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>ExponantialMeanIsolationForest()</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-2" type="checkbox" checked><label for="sk-estimator-id-2" class="sk-toggleable__label  sk-toggleable__label-arrow"><div><div>ExponantialMeanIsolationForest</div></div><div><span class="sk-estimator-doc-link ">i<span>Not fitted</span></span></div></label><div class="sk-toggleable__content "><pre>ExponantialMeanIsolationForest()</pre></div> </div></div></div></div></div></div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;tadkit.utils.decomposable_tadlearner.ExponantialMeanIsolationForest at 0x221da1c5e80&gt;
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1460,10 +1630,10 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.lines.Line2D at 0x29528e1e630&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.lines.Line2D at 0x221dba8c4a0&gt;
 </pre></div>
 </div>
-<img alt="../../_images/72f498cc100e3a50b56f7d114cb1dfd428b60bb30e7f9c2c665114aba1d8bee9.png" src="../../_images/72f498cc100e3a50b56f7d114cb1dfd428b60bb30e7f9c2c665114aba1d8bee9.png" />
+<img alt="../../_images/a153f0c00c2b55dfce166d472b2d8e51bcc00e6732a5d3b297d3a68f92a6d56d.png" src="../../_images/a153f0c00c2b55dfce166d472b2d8e51bcc00e6732a5d3b297d3a68f92a6d56d.png" />
 </div>
 </div>
 </section>

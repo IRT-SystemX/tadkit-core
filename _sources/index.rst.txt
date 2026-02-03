@@ -8,7 +8,7 @@ Welcome to tadkit-core's documentation!
 
 .. include:: ../../README.md
    :parser: myst_parser.sphinx_
-   :end-before: ## 🚀 Install
+   :end-before: ## 🛠 Installation
 
 
 .. toctree::
