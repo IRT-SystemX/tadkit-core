@@ -29,7 +29,7 @@ init_session_state()
 pd.options.plotting.backend = "plotly"
 st.set_page_config(layout="wide")
 st.title("TADkit Timeseries App")
-
+st.set_page_config(page_title="TADkit")
 
 # ------------------------- Main App -------------------------
 def main():
