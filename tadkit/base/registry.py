@@ -1,6 +1,6 @@
 # tadkit/learners/registry.py
 import importlib
-from typing import Any, Callable, Dict, List, Type, Union
+from typing import Any, Callable, Dict, List, Type, Union, Optional
 import inspect
 
 from tadkit.base.tadlearner import TADLearner
@@ -62,12 +62,17 @@ class Registry:
     # -----------------------
     # Matching
     # -----------------------
-    def match_learners(self, formatter: Any) -> List[Type]:
+    def match_learners(self, formatter: Optional[Any] = None) -> List[Type]:
         """Return learner classes compatible with the given formatter."""
         matches = []
         for name, info in self._learners.items():
             try:
-                if info["condition"](formatter):
+                condition = info["condition"]
+                if formatter is None:
+                    result = True
+                else:
+                    result = condition(formatter)
+                if result:
                     matches.append(info["class"])
             except Exception as e:
                 print(f"[registry] Learner '{name}' failed match check: {e}")
