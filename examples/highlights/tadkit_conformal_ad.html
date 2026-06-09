@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TADKit - CAD, Conformal Anomaly Detection demonstrator &mdash; tadkit-core 1.1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=fc837d61"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            tadkit-core
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../guidelines.html">📖 Guidelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">🔄 Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">🔎 Package tadkit</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">tadkit-core</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">TADKit - CAD, Conformal Anomaly Detection demonstrator</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/examples/highlights/tadkit_conformal_ad.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tadkit-cad-conformal-anomaly-detection-demonstrator">
+<h1>TADKit - CAD, Conformal Anomaly Detection demonstrator<a class="headerlink" href="#tadkit-cad-conformal-anomaly-detection-demonstrator" title="Link to this heading"></a></h1>
+<p>This notebook demonstrates how to implement the CAD framework by combining TADkit learners with the PUNCC library.</p>
+<p>NB: note that the focus is on technical inter-operability, not functional results.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;TF_CPP_MIN_LOG_LEVEL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;3&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ouagen</span><span class="w"> </span><span class="kn">import</span> <span class="n">ornstein_uhlenbeck_anomaly</span>
+
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">/</span> <span class="n">t</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">pre_X</span><span class="p">,</span> <span class="n">pre_y</span> <span class="o">=</span> <span class="n">ornstein_uhlenbeck_anomaly</span><span class="p">(</span>
+    <span class="n">t</span><span class="p">,</span>
+    <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">noise_scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">mean_reverting</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">anomaly_freq</span><span class="o">=</span><span class="mf">.1</span><span class="p">,</span>
+    <span class="n">anomaly_duration</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span>
+    <span class="n">anomaly_scale</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="s1">&#39;2021-01-01&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;h&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pre_X</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;X</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pre_X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pre_y</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">])</span>
+<span class="n">async_X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span><span class="n">value_vars</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+    <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;variable&quot;</span><span class="p">:</span> <span class="s2">&quot;sensor&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;data&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="n">oua</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">oua</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Axes: &gt;
+</pre></div>
+</div>
+<img alt="../../_images/88ceecf2c74adb36ebb9a36ff94529167c296c532eb6aec6e80f67bb18b627de.png" src="../../_images/88ceecf2c74adb36ebb9a36ff94529167c296c532eb6aec6e80f67bb18b627de.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cut1</span><span class="p">,</span> <span class="n">cut2</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">3</span><span class="p">],</span> <span class="n">X</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">//</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">cut1</span><span class="p">,</span> <span class="n">cut2</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(Timestamp(&#39;2021-01-14 21:00:00&#39;), Timestamp(&#39;2021-01-28 18:00:00&#39;))
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_train</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">loc</span><span class="p">[:</span><span class="n">cut1</span><span class="p">,</span> <span class="p">:]</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">loc</span><span class="p">[:</span><span class="n">cut1</span><span class="p">]</span>
+<span class="n">X_calib</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">cut1</span><span class="p">:</span><span class="n">cut2</span><span class="p">:,</span> <span class="p">:]</span>
+<span class="n">y_calib</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">cut1</span><span class="p">:</span><span class="n">cut2</span><span class="p">]</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axvspan</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_train</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axvspan</span><span class="p">(</span><span class="n">X_calib</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_calib</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/23766abdaf3a42ad6a2a9f52dc5e3db65a47041451382cc7bc57e9a032961290.png" src="../../_images/23766abdaf3a42ad6a2a9f52dc5e3db65a47041451382cc7bc57e9a032961290.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tadkit.base.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">registry</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tadkit.catalog.registry_init</span>  <span class="c1"># ensure registrations happen</span>
+
+<span class="n">registry</span><span class="o">.</span><span class="n">print_catalog_classes</span><span class="p">()</span>
+<span class="n">registry</span><span class="o">.</span><span class="n">list_learners</span><span class="p">()</span>
+<span class="n">registry</span><span class="o">.</span><span class="n">match_learners</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[TADkit registered Catalog]
+Class learner_name=&#39;IsolationForest&#39; is registered in TADKit.
+IsolationForest is operational in this environment.
+IsolationForest is implicit child of TADLearner.
+Class learner_name=&#39;KDEOutlierDetector&#39; is registered in TADKit.
+KDEOutlierDetector is operational in this environment.
+KDEOutlierDetector is implicit child of TADLearner.
+Class learner_name=&#39;GMMOutlierDetector&#39; is registered in TADKit.
+GMMOutlierDetector is operational in this environment.
+GMMOutlierDetector is implicit child of TADLearner.
+Class learner_name=&#39;TopologicalAnomalyDetector&#39; is registered in TADKit.
+TopologicalAnomalyDetector is operational in this environment.
+TopologicalAnomalyDetector is implicit child of TADLearner.
+Class learner_name=&#39;KcpLearner&#39; is registered in TADKit.
+KcpLearner is operational in this environment.
+KcpLearner is implicit child of TADLearner.
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[sklearn.ensemble._iforest.IsolationForest,
+ tadkit.catalog.sklearners.KDEOutlierDetector,
+ tadkit.catalog.sklearners.GMMOutlierDetector,
+ tdaad.anomaly_detectors.TopologicalAnomalyDetector,
+ kcpdi.kcp_ss_learner.KcpLearner]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># puncc imports and wrapper</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deel.puncc.anomaly_detection</span><span class="w"> </span><span class="kn">import</span> <span class="n">SplitCAD</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deel.puncc.api.prediction</span><span class="w"> </span><span class="kn">import</span> <span class="n">BasePredictor</span>
+<span class="c1"># The nonconformity scores are defined as the IF scores (anomaly score).</span>
+<span class="c1"># By default, score_samples return the opposite of IF scores.</span>
+<span class="c1"># We need to redefine the predict to output the nonconformity scores.</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ADPredictor</span><span class="p">(</span><span class="n">BasePredictor</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="k">return</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">score_samples</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># We set the maximum false detection rate to 5%</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.05</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">learner_class</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">match_learners</span><span class="p">()[</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">name</span> <span class="o">=</span> <span class="n">learner_class</span><span class="o">.</span><span class="vm">__name__</span>
+
+<span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">results</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">learner</span> <span class="o">=</span> <span class="n">learner_class</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">results</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">-score&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">learner</span><span class="o">.</span><span class="n">score_samples</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">results</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">-predict&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="p">(</span><span class="n">learner</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span>
+
+<span class="n">if_predictor</span> <span class="o">=</span> <span class="n">ADPredictor</span><span class="p">(</span><span class="n">learner_class</span><span class="p">())</span>
+<span class="c1"># Instantiate CAD on top of IF predictor</span>
+<span class="n">if_cad</span> <span class="o">=</span> <span class="n">SplitCAD</span><span class="p">(</span><span class="n">if_predictor</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">if_cad</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">z_fit</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span> <span class="n">z_calib</span><span class="o">=</span><span class="n">X_calib</span><span class="p">)</span>
+
+<span class="c1"># The method `predict` is calledµ on the new data points</span>
+<span class="c1"># to test which are anomalous and which are not</span>
+<span class="n">results</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">-cad-predict&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">if_cad</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">results</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="n">y</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">subplots</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([&lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;, &lt;Axes: &gt;], dtype=object)
+</pre></div>
+</div>
+<img alt="../../_images/9fabe00cc50136d74cd08eb290ebca678d3ffa50f53384c068bb31cfc9a662e5.png" src="../../_images/9fabe00cc50136d74cd08eb290ebca678d3ffa50f53384c068bb31cfc9a662e5.png" />
+</div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, IRT-SystemX.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
